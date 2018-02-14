@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/historial"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.herprogramacion.peopleapp.ui.Prestamo.DetallePrestamo">
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:background="@color/white"
+        android:paddingBottom="8dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp">
+
+        <View
+            android:id="@+id/vertical_separatorr"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="6dp"
+            android:background="#000"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/fech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="26dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Fecha:"
+            android:textColor="@color/negro87"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vertical_separator"
+            tools:layout_editor_absoluteY="25dp" />
+
+        <EditText
+            android:id="@+id/fechaBuscar"
+            android:layout_width="175dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="66dp"
+            android:layout_marginTop="20dp"
+            android:ems="8"
+            android:inputType="textPersonName"
+            android:text="Fecha a Buscar"
+            android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="@+id/fech"
+            app:layout_constraintTop_toBottomOf="@+id/vertical_separator" />
+
+
+        <TextView
+            android:id="@+id/monto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:text="Total en Cobros:"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/negro87"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fech" />
+
+        <TextView
+            android:id="@+id/montoTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="20dp"
+            android:text="RD$ 0.00"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/completedStatus"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fech" />
+
+
+        <View
+            android:id="@+id/vertical_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="#000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/montoTotal" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="visible">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/reciclador"
+                android:layout_width="315dp"
+                android:layout_height="404dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#d32f2f</color>
+    <color name="colorPrimaryDark">#c72c2c</color>
+    <color name="colorAccent">#FFFFFF</color>
+
+    <color name="mora">#d32f2f</color>
+
+
+    <!-- Paleta #1 -->
+    <color name="azul700">#1976D2</color>
+    <color name="azul500">#2196F3</color>
+    <color name="azul100">#BBDEFB</color>
+
+    <!-- Paleta #2 -->
+    <color name="rosa500">#EC407A</color>
+
+    <!-- Opacidad texto, iconos y divisores -->
+    <color name="negro87">#202020</color>
+    <color name="negro54">#737373</color>
+    <color name="negro12">#dcdcdc</color>
+
+
+    <!-- Estados de citas medicas -->
+    <color name="cancelledStatus">#e57373</color>
+    <color name="activeStatus">#64B5F6</color>
+    <color name="completedStatus">#81C784</color>
+
+
+
+    <color name="bg_login">#26ae90</color>
+    <color name="bg_register">#2e3237</color>
+    <color name="bg_main">#428bca</color>
+    <color name="white">#ffffff</color>
+    <color name="input_login">#222222</color>
+    <color name="input_login_hint">#999999</color>
+    <color name="input_register">#888888</color>
+    <color name="input_register_bg">#3b4148</color>
+    <color name="input_register_hint">#5e6266</color>
+    <color name="btn_login">#26ae90</color>
+    <color name="btn_login_bg">#eceef1</color>
+    <color name="lbl_name">#333333</color>
+    <color name="btn_logut_bg">#ff6861</color>
+
+    <color name="naranja">  #a5790a  </color>
+    <color name="GRIS"> #493c3a</color>
+    <color name="mr">  #7f3914</color>
+
+    <color name="background_header_seccion_inicio">#4B4B4B</color>
+    <color name="color_light">#ffffff</color>
+
+
+
+
+
+
+
+</resources>

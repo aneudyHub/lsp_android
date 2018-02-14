@@ -1,0 +1,24 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="margenes_fab">16dp</dimen>
+
+    <!-- Listas -->
+    <dimen name="altura_item_lista_simple">48dp</dimen>
+    <dimen name="tamano_texto_item_lista">16sp</dimen>
+    <dimen name="padding_horizontal_item_lista">16dp</dimen>
+    <dimen name="padding_superior_item_lista">8dp</dimen>
+
+
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="tab">16dp</dimen>
+    <dimen name="profile_width">75dp</dimen>
+    <dimen name="profile_height">75dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+</resources>

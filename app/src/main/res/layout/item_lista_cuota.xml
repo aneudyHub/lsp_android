@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
+
+    <!-- Indicador de estado -->
+    <View
+        android:id="@+id/indicator_appointment_status"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:background="#E0E0E0" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/cuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6sp"
+            android:textColor="@color/mr"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="# 3" />
+
+        <View
+            android:id="@+id/vertical_separator"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:background="#E0E0E0"
+            app:layout_constraintLeft_toRightOf="@+id/cuota"
+            app:layout_constraintStart_toEndOf="@+id/cuota"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/nombre_cliente"
+            style="@style/Base.TextAppearance.AppCompat.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/negro87"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Consulta Medicina General" />
+
+        <TextView
+            android:id="@+id/cedula_cliente"
+            style="@style/Base.TextAppearance.AppCompat.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/negro87"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
+            tools:text="0000000000" />
+
+
+        <TextView
+            android:id="@+id/direccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:maxLines="5"
+            android:paddingBottom="10dp"
+            android:paddingRight="16dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/GRIS"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/cedula_cliente"
+            tools:text="Clínica Central" />
+
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/naranja"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/direccion"
+            tools:text="Clínica Central" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="01/01/2017"
+            android:id="@+id/fecha"
+            app:layout_constraintTop_toBottomOf="@+id/direccion"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0000"
+            android:id="@+id/idPrestamo"
+            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textStyle="italic" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0000"
+            android:textColor="@color/naranja"
+            android:id="@+id/celular"
+            app:layout_constraintTop_toBottomOf="@+id/fecha"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textStyle="italic" />
+
+
+
+        <TextView
+            android:id="@+id/telefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/naranja"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/fecha"
+            tools:text="0000000000" />
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
+
+    <!-- Indicador de estado -->
+    <View
+        android:id="@+id/appointment_status"
+        android:layout_width="11dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:background="#E0E0E0" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:paddingRight="16dp"
+        android:paddingTop="8dp">
+
+        <View
+            android:id="@+id/vertical_separator"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="12dp"
+            android:background="#E0E0E0"
+            app:layout_constraintLeft_toRightOf="@+id/ct"
+            app:layout_constraintStart_toEndOf="@+id/ct"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginStart="16dp"
+            android:text="Cuota #"
+            android:id="@+id/ct"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/num_cuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="72dp"
+            android:maxLines="5"
+            android:paddingBottom="10dp"
+            android:textColor="@color/GRIS"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintLeft_toRightOf="@+id/ct"
+            tools:layout_editor_absoluteY="0dp"
+            tools:text="0"
+            tools:ignore="MissingConstraints" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginStart="16dp"
+            android:text="Capital"
+            android:id="@+id/val"
+            app:layout_constraintTop_toBottomOf="@+id/num_cuota"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/capital"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:maxLines="1"
+            android:textColor="@color/naranja"
+            app:layout_constraintLeft_toRightOf="@+id/val"
+            app:layout_constraintStart_toStartOf="@+id/val"
+            app:layout_constraintTop_toBottomOf="@+id/num_cuota"
+            tools:text="Clínica Central" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginStart="16dp"
+            android:text="Interes"
+            android:id="@+id/intr"
+            app:layout_constraintTop_toBottomOf="@+id/capital"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/interes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingTop="2dp"
+            android:textColor="@color/naranja"
+            app:layout_constraintLeft_toLeftOf="@+id/intr"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/capital"
+            tools:text="Clínica Central" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_marginStart="16dp"
+            android:text="Mora"
+            android:id="@+id/mr"
+            app:layout_constraintTop_toBottomOf="@+id/interes"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="76dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingTop="2dp"
+            android:textColor="@color/naranja"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/interes"
+            tools:text="Clínica Central" />
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="01/01/2017"
+            android:id="@+id/fecha"
+            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textStyle="italic" />
+
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
