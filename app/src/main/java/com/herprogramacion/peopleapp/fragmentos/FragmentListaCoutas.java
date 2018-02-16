@@ -20,6 +20,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,14 +46,14 @@ import java.util.ArrayList;
 public class FragmentListaCoutas extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdaptadorCuotas.OnItemClickListener,SearchView.OnQueryTextListener{
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    private int REQ_DET=100;
     // Referencias UI
     private RecyclerView reciclador;
     private LinearLayoutManager layoutManager;
     private AdaptadorCuotas adaptador;
-    private int REQ_DET=100;
-
-    SwipeRefreshLayout swipeRefreshLayout;
-    ConstraintLayout mInfoNoData;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ConstraintLayout mInfoNoData;
+    private BroadcastReceiver receptorSync;
 
 
     @Override
@@ -61,10 +62,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
+
     }
-
-    private BroadcastReceiver receptorSync;
-
 
     @Nullable
     @Override

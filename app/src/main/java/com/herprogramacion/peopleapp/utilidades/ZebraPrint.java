@@ -44,6 +44,7 @@ public class ZebraPrint {
     private Double totalPagado;
     private String nombreCobrador;
     private Double totalMora;
+    private String telefono;
 
     private final String TAG_IMPRESION = "Normal";
     private final String TAG_REIMPRESION = "Reimprimir";
@@ -58,7 +59,8 @@ public class ZebraPrint {
     private String imp_dat = "";
     private Recibo receipt;
 
-    public ZebraPrint(Context context, String TAG,String fechaPago, String numPrestamo, String nombreCliente, String detalleFactura, Double totalPagado, String nombreCobrador) {
+    public ZebraPrint(Context context, String TAG,String fechaPago, String numPrestamo, String nombreCliente,
+                      String detalleFactura, Double totalPagado,Double totalMora, String nombreCobrador,String telefono) {
         this._context = context;
         this.imp_dat=TAG;
         this.fechaPago = fechaPago;
@@ -66,7 +68,9 @@ public class ZebraPrint {
         this.nombreCliente = nombreCliente;
         this.detalleFactura = detalleFactura;
         this.totalPagado = totalPagado;
+        this.totalMora = totalMora;
         this.nombreCobrador = nombreCobrador;
+        this.telefono = telefono;
     }
 
 
@@ -713,12 +717,14 @@ public class ZebraPrint {
             //cpclConfigLabel = imprime_detalles(cpclConfigLabel,SeparaLineas("Saldo Cuota(s) No. 10/46;650.00;Saldo Cuota(s) No. 11/46;650.00;", ";"), caracteres_X_linea, Final_Linea);//ConceptoPago
             //Log.e("DETALLE",detalleFactura);
             cpclConfigLabel = imprime_detalles(cpclConfigLabel,SeparaLineas(detalleFactura, ";"), caracteres_X_linea, Final_Linea);//ConceptoPago
-
+            Log.e("TOTAL-MORA",String.valueOf(totalMora));
             //Double f = Double.valueOf(cliente.balance) -  Double.valueOf(param_post.get(0).getValue());
             cpclConfigLabel += linea_entera + Final_Linea +
+                    Resolve.dos_columna("TOTAL P-MORA", caracteres_X_linea, String.valueOf(totalMora)) + Final_Linea +
                     Resolve.dos_columna("TOTAL PAGADO", caracteres_X_linea, String.valueOf(totalPagado)) + Final_Linea +
                     //Resolve.dos_columna("TOTAL PENDIENTE", caracteres_X_linea,"6700") + Final_Linea +
                     Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(telefono, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +

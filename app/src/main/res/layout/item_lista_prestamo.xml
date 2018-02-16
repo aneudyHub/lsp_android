@@ -58,17 +58,12 @@
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
             tools:text="Clínica Central" />
 
-
-
-
-
         <TextView
             android:id="@+id/telefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:maxLines="5"
-            android:paddingBottom="10dp"
             android:paddingRight="16dp"
             android:paddingTop="2dp"
             android:textColor="@color/GRIS"
@@ -77,7 +72,20 @@
             app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
             tools:text="Clínica Central" />
 
-
+        <TextView
+            android:id="@+id/celular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="5"
+            android:layout_marginStart="3dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="16dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/GRIS"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/telefono"
+            tools:text="Clínica Central" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -86,7 +94,7 @@
             android:layout_marginStart="3dp"
             android:text="Valor"
             android:id="@+id/val"
-            app:layout_constraintTop_toBottomOf="@+id/telefono"
+            app:layout_constraintTop_toBottomOf="@+id/celular"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
             android:textStyle="bold" />
@@ -100,7 +108,7 @@
             android:textColor="@color/naranja"
             app:layout_constraintLeft_toRightOf="@+id/val"
             app:layout_constraintStart_toStartOf="@+id/val"
-            app:layout_constraintTop_toBottomOf="@+id/telefono"
+            app:layout_constraintTop_toBottomOf="@+id/celular"
             tools:text="Clínica Central" />
 
 
@@ -131,6 +139,16 @@
             tools:text="Clínica Central" />
 
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="#00"
+            android:textColor="@color/bg_login"
+            android:id="@+id/prestamo_id"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textStyle="italic" />
 
         <TextView
             android:layout_width="wrap_content"

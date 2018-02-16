@@ -45,17 +45,31 @@
 
 
         <TextView
-            android:id="@+id/nombre_cliente"
+            android:id="@+id/idPrestamoH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/negro87"
+            android:textColor="@color/btn_login"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
-            tools:text="Nombre Cliente" />
+            tools:text="#567" />
 
+        <TextView
+            android:id="@+id/nombre_cliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:maxLines="5"
+            android:paddingBottom="10dp"
+            android:paddingRight="16dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/GRIS"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/idPrestamoH"
+            tools:text="Clínica Central" />
 
         <TextView
             android:id="@+id/fechaCobro"

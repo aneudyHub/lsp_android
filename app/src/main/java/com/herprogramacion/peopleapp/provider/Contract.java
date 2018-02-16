@@ -2,6 +2,7 @@ package com.herprogramacion.peopleapp.provider;
 
 import android.net.Uri;
 
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -77,6 +78,7 @@ public class Contract {
         String NOMBRE_COBRADOR = "nombre_cobrador";
         String NOMBRE_CLIENTE = "nombre_cliente";
         String MONTO="monto";
+        String TOTALMORA = "total_mora";
         String PRESTAMO="prestamos_id";
         String FECHA_CONSULTA = "fecha_consulta";
         String CADENA_STRING = "cadena_string";
@@ -190,9 +192,13 @@ public class Contract {
         }
 
         public static int generarIdCuotasPaga(){
-            int numero;
-            numero = (int) (Math.random() *6) + 1;
-            return numero;}
+
+            int min = 700000;
+            int max = 2000000;
+
+            Random r = new Random();
+            int i1 = r.nextInt(max - min + 1) + min;
+            return i1;}
 
         public static String obtenerIdCuotasPaga(Uri uri){return uri.getLastPathSegment();}
 

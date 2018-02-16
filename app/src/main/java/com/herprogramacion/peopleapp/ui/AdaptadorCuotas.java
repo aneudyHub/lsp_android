@@ -217,13 +217,13 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
         holder.cuota.setText(cantida_cuota);
         holder.nombre_cliente.setText(c.getCLIENTE());
         holder.cedula_cliente.setText(c.getCEDULA());
-        if (c.getTELEFONO().equals("NULL")){
+        if (c.getTELEFONO().equals("NULL")||c.getTELEFONO().equals("null")){
             holder.telefono.setText("");
 
         }else {
             holder.telefono.setText(c.getTELEFONO());
         }
-        if (c.getCELULAR().equals("NULL")){
+        if (c.getCELULAR().equals("NULL")||c.getCELULAR().equals("null")){
             holder.celular.setText("");
 
         }else {

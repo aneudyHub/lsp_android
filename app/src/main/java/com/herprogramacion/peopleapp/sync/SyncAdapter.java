@@ -220,7 +220,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             Log.d(TAG, "Sin cambios locales");
             //syncLocal();
-            Resolve.enviarBroadcast(getContext(),true, "Sincronización completa");
+            Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
         }
 
         syncLocal();
@@ -232,7 +232,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         procRemoto.desmarcarContactos(cr);
         //Resolve.sincronizarData(getContext());
         syncLocal();
-        Resolve.enviarBroadcast(getContext(),true, "Sincronización completa");
+        Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
     }
 
     private void tratarErrores(VolleyError error) {
@@ -272,6 +272,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     respuesta = new RespuestaApi(response.statusCode
                             , "No hay coincidencias del token");
 
+                    logoutUser(getContext());
                     break;
                 case 500:
                     json = new String(response.data);

@@ -425,6 +425,15 @@ public class Provider extends ContentProvider {
                         selectionArgs);
 
                 resolver.notifyChange(uri, null, false);
+
+
+               /* filasAfectadas = db.update(Contract.CUOTA_PAGADA, values,
+                        Contract.CuotaPaga.ID + "=" + "\'" + idCuotaPagada + "\'"
+                                + (!TextUtils.isEmpty(selection) ?
+                                " AND (" + selection + ')' : ""),
+                        selectionArgs);
+
+                resolver.notifyChange(uri, null, false);*/
                 break;
 
             default:

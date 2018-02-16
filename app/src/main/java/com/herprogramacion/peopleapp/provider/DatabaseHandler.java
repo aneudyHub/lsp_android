@@ -99,6 +99,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 CuotaPaga.NOMBRE_COBRADOR +" TEXT,"+
                 CuotaPaga.NOMBRE_CLIENTE +" TEXT,"+
                 CuotaPaga.MONTO+" DECIMAL(12,2),"+
+                CuotaPaga.TOTALMORA+" DECIMAL(12,2),"+
                 CuotaPaga.PRESTAMO+" INTEGER,"+
                 CuotaPaga.FECHA_CONSULTA +" TEXT,"+
                 CuotaPaga.UPDATE_AT+ " DATE DEFAULT CURRENT_TIMESTAMP,"+

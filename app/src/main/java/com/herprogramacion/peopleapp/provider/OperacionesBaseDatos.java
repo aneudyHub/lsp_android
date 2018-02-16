@@ -12,6 +12,7 @@ import com.herprogramacion.peopleapp.ui.Pagos.CuotasAdapter;
 import com.herprogramacion.peopleapp.utilidades.UPreferencias;
 import com.herprogramacion.peopleapp.utilidades.UTiempo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,8 @@ public class OperacionesBaseDatos {
                "(SUM( " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL + " ) + " +
                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + " ) + " +
                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) AS capital ",
+
+                Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MONTO_PAGADO,
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES,
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA,
                 };
@@ -92,6 +95,7 @@ public class OperacionesBaseDatos {
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_CLIENTE,
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.CADENA_STRING,
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO,
+                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.TOTALMORA,
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_COBRADOR,
                 //"(SUM( " + Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO + " )) AS monto ",
         };
@@ -224,7 +228,8 @@ public class OperacionesBaseDatos {
             cuotaPaga.setNombreCliente(c.getString(2));
             cuotaPaga.setCadenaString(c.getString(3));
             cuotaPaga.setMonto(c.getDouble(4));
-            cuotaPaga.setNombreCobrador(c.getString(5));;
+            cuotaPaga.setTotalMora(c.getDouble(5));
+            cuotaPaga.setNombreCobrador(c.getString(6));;
             list.add(cuotaPaga);
 
         }
@@ -232,9 +237,9 @@ public class OperacionesBaseDatos {
 
     }
 
-    public List<CuotaPaga> getReimprimirFactura(String nombre){
+    public ArrayList<CuotaPaga> getReimprimirFactura(String nombre){
 
-        List<CuotaPaga> list = new ArrayList<>();
+        ArrayList<CuotaPaga> list = new ArrayList<>();
         Cursor c = ReimprimirFactura(nombre);
         while (c.moveToNext()) {
             CuotaPaga cuotaPaga = new CuotaPaga();
@@ -251,6 +256,49 @@ public class OperacionesBaseDatos {
         return  list;
 
     }
+
+
+
+    // [OPERACIONES_CLIENTE]
+    public Cursor obtenerCuotasPagas() {
+        SQLiteDatabase db = baseDatos.getReadableDatabase();
+
+        String sql = String.format("SELECT * FROM %s", Contract.CUOTA_PAGADA);
+
+        return db.rawQuery(sql, null);
+    }
+
+    public Cursor pagosPendiente() {
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        String intertado = "1";
+        String sql = String.format("SELECT * FROM %s", Contract.CUOTA_PAGADA+
+                                    " WHERE insertado ="+intertado);
+        return db.rawQuery(sql, null);
+        //return resultado > 0;
+    }
+
+    public boolean isCuotasPagasExists() {
+        Cursor cursor = null;
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        String insertado = "1";
+        boolean result = false;
+        try {
+            String[] args = { "" + insertado };
+            StringBuffer sbQuery = new StringBuffer("SELECT * from ").append(
+                    Contract.CUOTA_PAGADA).append(" where insertado =?");
+            cursor = db.rawQuery(sbQuery.toString(), args);
+            if (cursor != null && cursor.moveToFirst()) {
+                result = true;
+            }else {
+                result = false;
+            }
+        } catch (Exception e) {
+            Log.e("Requestdbhelper", e.toString());
+        }
+        return result;
+    }
+
+
 
 
 

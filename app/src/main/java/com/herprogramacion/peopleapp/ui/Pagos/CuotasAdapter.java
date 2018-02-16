@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.herprogramacion.peopleapp.R;
 import com.herprogramacion.peopleapp.provider.Contract;
 import com.herprogramacion.peopleapp.ui.AdaptadorCuotas;
+import com.herprogramacion.peopleapp.ui.Login.LoginActivity;
 import com.herprogramacion.peopleapp.utilidades.Resolve;
 import com.herprogramacion.peopleapp.utilidades.UConsultas;
 import com.herprogramacion.peopleapp.utilidades.UPreferencias;
@@ -66,23 +67,26 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
         Log.e("VALOR-INTERES",String.valueOf(interes));
         Log.e("VALOR-MORA",String.valueOf(mora));
         Log.e("VALOR-ABONADO",String.valueOf(abonado));
+        double cuta_monto = (cap + interes);
         double total = (cap + interes + mora) - (abonado);
+
 
         Log.e("VALOR-TOTAL",String.valueOf(total));
 
         String numeroCuota = String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.CUOTA));
         totalCuotas += Integer.parseInt(numeroCuota) ;
 
-        holder.mMonto.setText("RD$ "+precision.format(total));
-        holder.moraMonto.setText("RD$ "+precision.format(mora - abonoM));
+        holder.cuota_monto.setText(precision.format(cap + interes));
+        holder.moraMonto.setText(precision.format(mora - abonoM));
+        holder.total_monto.setText("RD$ "+precision.format(total));
         holder.mLayout.setBackgroundColor(mCtx.getResources().getColor(R.color.cardview_light_background));
         holder.mIcon.setVisibility(View.GONE);
         holder.mRestante.setVisibility(View.GONE);
 
         if(mora>0){
-            holder.mMonto.setTextColor(mCtx.getResources().getColor(R.color.mora));
+            holder.total_monto.setTextColor(mCtx.getResources().getColor(R.color.mora));
         }else{
-            holder.mMonto.setTextColor(mCtx.getResources().getColor(R.color.negro87));
+            holder.total_monto.setTextColor(mCtx.getResources().getColor(R.color.negro87));
         }
 
         if(modificaCuota!=null){
@@ -134,15 +138,16 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
     public static class CuotaViewHolder extends RecyclerView.ViewHolder{
         public CardView mLayout;
         public TextView mFecha;
-        public TextView mMonto,moraMonto,mNumero,mRestante;
+        public TextView cuota_monto,moraMonto,total_monto,mNumero,mRestante;
         public ImageView mIcon;
 
         public CuotaViewHolder(View itemView) {
             super(itemView);
             mLayout=(CardView)itemView.findViewById(R.id.Layout);
             mFecha=(TextView)itemView.findViewById(R.id.Cuota_Fecha);
-            mMonto=(TextView)itemView.findViewById(R.id.Cuota_Monto);
+            cuota_monto=(TextView)itemView.findViewById(R.id.Cuot_Monto);
             moraMonto=(TextView)itemView.findViewById(R.id.Mora_Monto);
+            total_monto=(TextView)itemView.findViewById(R.id.Total_Monto);
             mNumero=(TextView)itemView.findViewById(R.id.Cuota_Numero);
             mIcon =(ImageView)itemView.findViewById(R.id.Cuota_Modificacion);
             mRestante=(TextView)itemView.findViewById(R.id.Restante);
@@ -182,7 +187,7 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
             for (mItems.moveToFirst(); !mItems.isAfterLast(); mItems.moveToNext()) {
                 cantidadCuota = mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA));
             }
-            double mora =0;
+            double tMora =0;
             double restanM=0;
             double restaMotoP=0;
             StringBuilder sb= new StringBuilder() ;
@@ -215,13 +220,16 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                     if (montoAPagar >= restanM){
                         modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"2",String.valueOf((montoAPagar + abonoM)),
                                 String.valueOf((mp+montoAPagar)),String.valueOf((montoAPagar))});
+
                         montoAPagar -= restanM;
+                        tMora +=restanM;
                         sb.append("Pago Mora a la fecha."+";"+restanM+";");
                     }else {
                         modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"3",String.valueOf(montoAPagar+abonoM),
                                 String.valueOf((mp+montoAPagar)),String.valueOf((montoAPagar))});
-                        sb.append("Abono Mora-C(s)N."+mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA))+";"+Math.abs(montoAPagar)+";");
+                        sb.append("Abono Mora a la fecha."+";"+Math.abs(montoAPagar)+";");
                         Log.e("Valor Monto A",String.valueOf(montoAPagar));
+                        tMora +=montoAPagar;
                         montoAPagar = 0;
                     }
                 }
@@ -247,7 +255,10 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                 notifyDataSetChanged();
             }
             datos = sb.toString();
-            totalMora = mora - abonoM;
+            totalMora = tMora;
+
+            Log.e("TOTAL-MORA",String.valueOf(datos));
+            Log.e("TOTAL-MORA",String.valueOf(totalMora));
         }
     }
 }

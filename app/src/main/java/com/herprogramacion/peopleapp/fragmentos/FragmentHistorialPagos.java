@@ -3,9 +3,11 @@ package com.herprogramacion.peopleapp.fragmentos;
 import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +21,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +45,8 @@ import com.herprogramacion.peopleapp.sync.ServicioSincronizacion;
 import com.herprogramacion.peopleapp.sync.SyncAdapter;
 import com.herprogramacion.peopleapp.ui.AdaptadorHisotiralPagos;
 import com.herprogramacion.peopleapp.ui.AdaptadorPrestamos;
+import com.herprogramacion.peopleapp.ui.Login.LoginActivity;
+import com.herprogramacion.peopleapp.ui.Pagos.Pagos;
 import com.herprogramacion.peopleapp.ui.Prestamo.DetallePrestamo;
 import com.herprogramacion.peopleapp.utilidades.Resolve;
 import com.herprogramacion.peopleapp.utilidades.UPreferencias;
@@ -58,7 +63,7 @@ import java.util.Locale;
  * Created by Suarez on 13/01/2018.
  */
 
-public class FragmentHistorialPagos extends android.support.v4.app.Fragment implements View.OnClickListener {
+public class FragmentHistorialPagos extends android.support.v4.app.Fragment implements View.OnClickListener,SearchView.OnQueryTextListener {
 
     public static final String TAG = "Prestamos";
     // Referencias UI
@@ -120,14 +125,14 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
                     Log.e("Hola soy ","AC");
                     //getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 }
-               // getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                // getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
             }
 
         };
 
 
-                //getData(neewCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        // getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         swipeRefreshLayout =(SwipeRefreshLayout)view.findViewById(R.id.refresh_layout);
         newCalendar = Calendar.getInstance();
@@ -165,8 +170,8 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
         fechaBuscar.setOnClickListener(this);
 
-       //fechaConsulta = (Button) view.findViewById(R.id.consultar);
-       // fechaConsulta.setOnClickListener(this);
+        //fechaConsulta = (Button) view.findViewById(R.id.consultar);
+        // fechaConsulta.setOnClickListener(this);
         reciclador = (RecyclerView) view.findViewById(R.id.reciclador);
         layoutManager = new LinearLayoutManager(getContext());
         reciclador.setLayoutManager(layoutManager);
@@ -179,7 +184,40 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
     public void onClick(View view) {
         if(view == fechaBuscar) {
-            toDatePickerDialog.show();
+
+            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerCuotasPagas());
+            if (operacionesBaseDatos.isCuotasPagasExists()){
+                android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+                // set title
+                alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SINCRONIZACION</font>"));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(Html.fromHtml("Sincronizacion pediente.<br/><br/>" +
+                                "<font color='#FF0000'> Porfavor SINCRONICE y vuelva a intentar</font>") )
+                        .setCancelable(false)
+                        .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, close
+                                // current activity
+                                Resolve.sincronizarData(getActivity());
+                                dialog.cancel();
+                            }
+                        });
+
+                // create alert dialog
+                android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
+            }else {
+                toDatePickerDialog.show();
+            }
+
+            // [QUERIES]
+            /*Log.d("PAGOS","PAGOS");
+            Log.d("PAGOS",String.valueOf(operacionesBaseDatos.isCuotasPagasExists()));
+            DatabaseUtils.dumpCursor(operacionesBaseDatos.pagosPendiente());*/
 
 
         } /*if(view == fechaConsulta){
@@ -194,7 +232,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
 
     private void setDateTimeField() {
-       newCalendar = Calendar.getInstance();
+        newCalendar = Calendar.getInstance();
         toDatePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -209,12 +247,14 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
     }
 
+
     private void getData(int year, int monthOfYear, int dayOfMonth){
         newCalendar.set(year,monthOfYear,dayOfMonth);
         Log.e("E DADO CLICK","N");
         fechaBuscar.setText(dateFormatter.format(newCalendar.getTime()));
         String fecha = fechaBuscar.getText().toString();
         Log.e("VALOR-FECH",fecha);
+
 
         historialPagos.synCuotaPagaLocal(fecha);
 
@@ -227,7 +267,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
         }
         mTotalFacutado.setText(String.valueOf(totalFacturado));
 
-        adaptador = new AdaptadorHisotiralPagos(listaCuotaPendiente,getContext());
+        adaptador = new AdaptadorHisotiralPagos((ArrayList<CuotaPaga>) listaCuotaPendiente,getContext());
         reciclador.setAdapter(adaptador);
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -237,10 +277,10 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.main, menu);
-        //MenuItem search = menu.findItem(R.id.search);
-       // SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
-        //search(searchView);
+        inflater.inflate(R.menu.menu_historial_pagos, menu);
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        search(searchView);
 
     }
 
@@ -267,9 +307,38 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
 
 
+
+    private void search(SearchView searchView) {
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                adaptador.getFilter().filter(newText);
+                return true;
+            }
+        });
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         //LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receptorSync);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

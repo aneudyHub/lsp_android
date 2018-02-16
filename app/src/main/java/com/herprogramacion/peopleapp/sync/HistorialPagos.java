@@ -75,6 +75,7 @@ public class HistorialPagos {
                     public void onResponse(JSONObject response) {
                         // Procesar GET
                         tratarGetCuotasPagos(response);
+                        Resolve.enviarBroadcast(context,false, "Listo");
                     }
                 },
                 new Response.ErrorListener() {
@@ -106,10 +107,10 @@ public class HistorialPagos {
             manejadorCuotasPagas.procesar(respuesta.getJSONArray("historial"));
             manejadorCuotasPagas.procesarOperaciones_Cuota_Paga(ops,cr);
 
-
+           // Resolve.enviarBroadcast(context,false, "Buscando...");
             // ¿ Hay operaciones por realizar ?
             if (ops.size() > 0) {
-                Resolve.enviarBroadcast(context,false, "Buscando...");
+
                 Log.d(TAG, "# Cambios en \'contacto\': " + ops.size() + " ops.");
                 // Aplicar batch de operaciones
                 cr.applyBatch(Contract.AUTORIDAD, ops);
@@ -124,11 +125,12 @@ public class HistorialPagos {
 
             // Sincronización remota
 
-            Resolve.enviarBroadcast(context,false, "Listo");
+
 
         } catch (RemoteException | OperationApplicationException | JSONException e) {
             e.printStackTrace();
         }
+
     }
 
 

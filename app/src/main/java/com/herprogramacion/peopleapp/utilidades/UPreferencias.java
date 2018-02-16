@@ -15,6 +15,7 @@ public class UPreferencias {
     private static final String PREFERENCIA_CLAVE_PRESTAMOS = "preferencia.idPrestamos";
 
     private static final String PREFERENCIA_USER_NAME = "preferencia.nombreUsuario";
+    private static final String PREFERENCIA_USER_TELEFONO = "preferencia.telefonoUsuario";
 
 
     private static SharedPreferences getDefaultSharedPreferences(Context contexto) {
@@ -45,6 +46,8 @@ public class UPreferencias {
         sp.edit().putString(PREFERENCIA_USER_NAME, nombreUsuario).apply();
     }
 
+
+
     public static String obtenerNombreUsuario(Context context){
         return getDefaultSharedPreferences(context).getString(PREFERENCIA_USER_NAME,null);
     }
@@ -57,5 +60,13 @@ public class UPreferencias {
 
     public static String obtenerIdPrestamos(Context context){
         return getDefaultSharedPreferences(context).getString(PREFERENCIA_CLAVE_PRESTAMOS,null);
+    }
+
+    public static void guardarTelefonoCobrador(Context contexto, String telefonoUsuario) {
+        SharedPreferences sp = getDefaultSharedPreferences(contexto);
+        sp.edit().putString(PREFERENCIA_USER_TELEFONO, telefonoUsuario).apply();
+    }
+    public static String obtenerTelefonoCobrador(Context context){
+        return getDefaultSharedPreferences(context).getString(PREFERENCIA_USER_TELEFONO,null);
     }
 }

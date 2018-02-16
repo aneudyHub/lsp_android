@@ -59,11 +59,13 @@ public class DetallePrestamo extends AppCompatActivity {
     private  TextView balance;
     private  TextView fecha;
     private  TextView cuotas;
+    private  TextView pagas;
+    private  TextView pendiente;
     private  TextView nombre;
     private  TextView documento;
     private  TextView iPrestamo;
     private  Button adelantarPago;
-
+    public OperacionesBaseDatos operacionesBaseDatos;
     private Double montoTotal;
 
 
@@ -98,6 +100,8 @@ public class DetallePrestamo extends AppCompatActivity {
         balance = (TextView) findViewById(R.id.balance);
         fecha = (TextView) findViewById(R.id.fecha);
         cuotas = (TextView) findViewById(R.id.cuotas);
+        pagas = (TextView) findViewById(R.id.pagada);
+        pendiente = (TextView) findViewById(R.id.pendiente);
         nombre = (TextView) findViewById(R.id.nombre_cliente);
         documento = (TextView) findViewById(R.id.documento);
         iPrestamo = (TextView) findViewById(R.id.idprestamo);
@@ -134,7 +138,6 @@ public class DetallePrestamo extends AppCompatActivity {
 
                 Intent intent = new Intent(DetallePrestamo.this, Pagos.class);
                 Uri uri;
-                monto = 0.00;
 
                 uri = Contract.PrestamoDetalle.crearUriPrestamoDetalle(idPrestamos);
                 Log.e("URI-PRE",uri.toString());
@@ -145,6 +148,10 @@ public class DetallePrestamo extends AppCompatActivity {
                     intent.putExtra(Contract.Cobrador.TOTAL,monto);
                     intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
                     intent.putExtra(Contract.Cobrador.CLIENTE,nombre.getText());
+
+
+
+
                 }
                 startActivityForResult(intent,REQ_DET);
             }
@@ -171,15 +178,26 @@ public class DetallePrestamo extends AppCompatActivity {
         //
         // Consultamos el centro por el identificador
         //
+        operacionesBaseDatos = OperacionesBaseDatos
+                .obtenerInstancia(this);
+        int totalPendiente = operacionesBaseDatos.getCuotaPendiete(UPreferencias.obtenerIdPrestamos(this),"0").size();
+        int totalPagada = operacionesBaseDatos.getCuotaPendiete(UPreferencias.obtenerIdPrestamos(this),"1").size();
+
+
         cursor = datos.ObtenerDatosPrestamoPorId(id);
 
+        Log.e("TAOTAL-PENDIENTE",String.valueOf(totalPendiente));
 
         capital.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)));
         interes.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.INTERES)));
         mora.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.MORA)));
         balance.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
+        monto = (Double.parseDouble(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)))) ;
+
         fecha.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.FECHA_INICIO)));
         cuotas.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CUOTAS)));
+        pagas.setText(String.valueOf(totalPagada));
+        pendiente.setText(String.valueOf(totalPendiente));
         nombre.setText(cursor.getString(cursor.getColumnIndex(Contract.Cliente.NOMBRE)));
         documento.setText(cursor.getString(cursor.getColumnIndex(Contract.Cliente.DOCUMENTO)));
         iPrestamo.setText("# "+idPrestamos);

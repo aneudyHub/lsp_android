@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.herprogramacion.peopleapp.R;
 import com.herprogramacion.peopleapp.provider.Contract;
 import com.herprogramacion.peopleapp.ui.AdaptadorCuotas;
+import com.herprogramacion.peopleapp.ui.Login.LoginActivity;
 import com.herprogramacion.peopleapp.utilidades.Resolve;
 import com.herprogramacion.peopleapp.utilidades.UPreferencias;
 import com.herprogramacion.peopleapp.utilidades.UTiempo;
@@ -202,6 +203,7 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
         Log.e("ID-PRESTAMO",""+  idPrestamos);
         Log.e("FFECHA CONSULTA",""+UTiempo.obtenerFecha());
         Log.e("CADENA STRING", CuotasAdapter.datos);
+        Log.e("TOTAL-MORA-P",String.valueOf(CuotasAdapter.totalMora));
 
 
         valores.put(Contract.CuotaPaga.ID,Contract.CuotaPaga.generarIdCuotasPaga());
@@ -210,6 +212,7 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
         valores.put(Contract.CuotaPaga.NOMBRE_COBRADOR,UPreferencias.obtenerNombreUsuario(this));
         valores.put(Contract.CuotaPaga.NOMBRE_CLIENTE,nombreCliente);
         valores.put(Contract.CuotaPaga.MONTO,mMonto.getText().toString());
+        valores.put(Contract.CuotaPaga.TOTALMORA,CuotasAdapter.totalMora);
         valores.put(Contract.CuotaPaga.PRESTAMO,idPrestamos);
         valores.put(Contract.CuotaPaga.FECHA_CONSULTA,UTiempo.obtenerFecha());
         valores.put(Contract.CuotaPaga.UPDATE_AT,UTiempo.obtenerTiempo());
@@ -219,19 +222,9 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
 
 
         new Pagos.PagarCuotas(getContentResolver(),valores).execute(Contract.CuotaPaga.URI_CONTENIDO);
-
-
-
-
-
     }
 
-
-
-
     class PagarCuotas extends AsyncTask<Uri,Void,Void>{
-
-
         private final ContentResolver resolver;
         private final ContentValues valores;
 
@@ -314,7 +307,11 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
             super.onPostExecute(aVoid);
             Resolve.sincronizarData(Pagos.this);
             setResult(RESULT_OK);
-            ZebraPrint zebraprint = new ZebraPrint(Pagos.this,"imprimir",UTiempo.obtenerFechaHora(),idPrestamos,nombreCliente,CuotasAdapter.datos,montoDigitado,UPreferencias.obtenerNombreUsuario(Pagos.this));
+            Log.e("TOTAL-E-MORA",String.valueOf(CuotasAdapter.totalMora));
+            ZebraPrint zebraprint = new ZebraPrint(Pagos.this,"imprimir",UTiempo.obtenerFechaHora(),idPrestamos,nombreCliente,
+                                                    CuotasAdapter.datos,montoDigitado,CuotasAdapter.totalMora,
+                                                    UPreferencias.obtenerNombreUsuario(Pagos.this),
+                                                    UPreferencias.obtenerTelefonoCobrador(Pagos.this));
             zebraprint.probarlo();
 
             finish();

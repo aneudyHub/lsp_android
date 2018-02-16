@@ -53,8 +53,10 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
         // Campos respectivos de un item
         public TextView fecha;
         public TextView nombre_cliente;
+        public TextView id_prestamo;
         public TextView cuota;
         public TextView telefono;
+        public TextView celular;
         public TextView total;
         public TextView valor;
         public View statusIndicator;
@@ -64,9 +66,11 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
             super(v);
             fecha = (TextView) v.findViewById(R.id.fecha);
             nombre_cliente = (TextView) v.findViewById(R.id.nombre_cliente);
+            id_prestamo = (TextView) v.findViewById(R.id.prestamo_id);
             valor = (TextView) v.findViewById(R.id.valor);
             total = (TextView) v.findViewById(R.id.total);
             telefono = (TextView) v.findViewById(R.id.telefono);
+            celular = (TextView) v.findViewById(R.id.celular);
             cuota = (TextView) v.findViewById(R.id.cuota);
             statusIndicator = itemView.findViewById(R.id.appointment_status);
             mLayout= (CardView) itemView.findViewById(R.id.Layout);
@@ -161,8 +165,19 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
         //indicator_appointment_status
         Log.e("VALOR CUOTA",cantida_cuota);
         holder.nombre_cliente.setText(c.getCLIENTE());
+        holder.id_prestamo.setText("#"+c.getPRESTAMO());
         holder.fecha.setText(c.getFECHA());
-        holder.telefono.setText(c.getTELEFONO());
+        if (c.getTELEFONO().equals("NULL") || c.getTELEFONO().equals("null")){
+            holder.telefono.setText("");
+        }else {
+            holder.telefono.setText(c.getTELEFONO());
+        }
+
+        if (c.getCELULAR().equals("NULL") || c.getCELULAR().equals("null")){
+            holder.celular.setText("");
+        }else {
+            holder.celular.setText(c.getCELULAR());
+        }
         holder.valor.setText("RD$ "+c.getVALOR());
         holder.total.setText("RD$ "+c.getTOTAL());
         holder.mLayout.setOnClickListener(new View.OnClickListener() {

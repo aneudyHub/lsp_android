@@ -25,7 +25,7 @@ public class FragmentPrestamoPediente extends Fragment {
     public AdaptadorCuotasPendientes adaptadorCuotasPendientes;
     public List<CuotaPendiente> listaCuotaPendiente;
     public OperacionesBaseDatos operacionesBaseDatos;
-
+    public static int totalPendiente;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +37,8 @@ public class FragmentPrestamoPediente extends Fragment {
         operacionesBaseDatos = OperacionesBaseDatos
                 .obtenerInstancia(getContext());
        listaCuotaPendiente = operacionesBaseDatos.getCuotaPendiete(UPreferencias.obtenerIdPrestamos(getContext()),"0");
+
+       totalPendiente = listaCuotaPendiente.size();
 
         prepararLista(view);
 
