@@ -1,6 +1,6 @@
 <resources>
     <!-- Nombre App -->
-    <string name="app_name">People App</string>
+    <string name="app_name">LSP</string>
 
     <!-- Titulos actividades -->
     <string name="titulo_actividad_actividad_contactos">Contactos</string>

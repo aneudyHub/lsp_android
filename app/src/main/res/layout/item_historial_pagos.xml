@@ -4,105 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
 
     <!-- Indicador de estado -->
-    <View
-        android:id="@+id/appointment_status"
-        android:layout_width="11dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="false"
-        android:background="#E0E0E0" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:paddingRight="16dp"
-        android:paddingTop="8dp">
-
-        <TextView
-            android:id="@+id/cuota"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6sp"
-            android:textColor="@color/mr"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
         <View
-            android:id="@+id/vertical_separator"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="6dp"
-            app:layout_constraintLeft_toRightOf="@+id/cuota"
-            app:layout_constraintStart_toEndOf="@+id/cuota"
+            android:id="@+id/appointment_status"
+            android:layout_width="11dp"
+            android:layout_height="0dp"
+            android:layout_alignParentStart="false"
+            android:background="#E0E0E0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/nombre_cliente"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:ellipsize="end"
-            android:maxLines="1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/negro87"
-            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
-            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_separator1"
+            app:layout_constraintHorizontal_bias="0.037"
+            app:layout_constraintStart_toEndOf="@+id/appointment_status"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Nombre Cliente" />
 
 
         <TextView
             android:id="@+id/fechaCobro"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
             android:maxLines="5"
-            android:paddingBottom="10dp"
-            android:paddingRight="16dp"
-            android:paddingTop="2dp"
-            android:textColor="@color/GRIS"
-            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
-            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            android:textColor="@color/input_register_hint"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/vertical_separator1"
+            app:layout_constraintHorizontal_bias="0.031"
+            app:layout_constraintStart_toEndOf="@+id/appointment_status"
             app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
-            tools:text="Clínica Central" />
+            tools:text="2018-02-16" />
 
 
         <TextView
             android:id="@+id/montoCobrado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
             android:text="RD$ 200000.000"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/negro87"
+            android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
-            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
-            app:layout_constraintTop_toBottomOf="@+id/fechaCobro" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/appointment_status" />
 
 
         <View
             android:id="@+id/vertical_separator1"
-            android:layout_width="5dp"
-            android:layout_height="100dp"
-            android:layout_marginRight="60dp"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="60dp"
             android:background="@color/negro87"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/reimprimir"
-            android:layout_width="39dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="16dp"
-            android:background="@drawable/impresora"
-            app:layout_constraintStart_toStartOf="@+id/vertical_separator1"
-            app:layout_constraintTop_toBottomOf="@+id/fechaCobro" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_local_print"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/vertical_separator1"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </android.support.constraint.ConstraintLayout>
