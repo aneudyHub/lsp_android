@@ -20,10 +20,10 @@
     <string name="accion_descartar">Descartar</string>
     <string name="search">Buscar</string>
     <!-- Cuenta Sync Adapter -->
-    <string name="tipo_cuenta">com.herprogramacion.peopleapp.cuenta</string>
+    <string name="tipo_cuenta">com.system.lsp.cuenta</string>
 
     <!-- Autoridad del provider -->
-    <string name="autoridad_provider">com.herprogramacion.peopleapp</string>
+    <string name="autoridad_provider">com.system.lsp</string>
 
 
     <string name="hint_email">Nombre de Usuario</string>

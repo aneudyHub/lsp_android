@@ -28,6 +28,7 @@ import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Login.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.ZebraPrint;
+import com.system.lsp.utilidades.ZebraprintOld;
 
 
 public class MainActivity extends AppCompatActivity

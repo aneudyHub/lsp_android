@@ -13,6 +13,7 @@ import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPendiente;
 import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorCuotasPagadas;
+import com.system.lsp.ui.AdaptadorCuotasPendientes;
 import com.system.lsp.utilidades.UPreferencias;
 
 import java.util.List;

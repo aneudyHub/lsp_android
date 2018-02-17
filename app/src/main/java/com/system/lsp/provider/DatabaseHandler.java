@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.system.lsp.provider.Contract.Cliente;
 import com.system.lsp.provider.Contract.Prestamo;
 import com.system.lsp.provider.Contract.PrestamoDetalle;
@@ -99,6 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 CuotaPaga.NOMBRE_COBRADOR +" TEXT,"+
                 CuotaPaga.NOMBRE_CLIENTE +" TEXT,"+
                 CuotaPaga.MONTO+" DECIMAL(12,2),"+
+                CuotaPaga.TOTALMORA+" DECIMAL(12,2),"+
                 CuotaPaga.PRESTAMO+" INTEGER,"+
                 CuotaPaga.FECHA_CONSULTA +" TEXT,"+
                 CuotaPaga.UPDATE_AT+ " DATE DEFAULT CURRENT_TIMESTAMP,"+
@@ -137,6 +139,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             db.execSQL("DROP TABLE IF EXISTS " + Contract.COBRADOR);
         } catch (SQLiteException e) {
             // Manejo de excepciones
+            FirebaseCrash.report(e);
         }
         onCreate(db);
     }

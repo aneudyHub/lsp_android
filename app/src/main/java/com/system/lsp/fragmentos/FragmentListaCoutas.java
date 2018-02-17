@@ -17,9 +17,11 @@ import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,7 +29,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
@@ -35,6 +41,7 @@ import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Main.MainActivity;
 import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
+import com.system.lsp.utilidades.URL;
 
 import java.util.ArrayList;
 
@@ -45,14 +52,14 @@ import java.util.ArrayList;
 public class FragmentListaCoutas extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdaptadorCuotas.OnItemClickListener,SearchView.OnQueryTextListener{
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    private int REQ_DET=100;
     // Referencias UI
     private RecyclerView reciclador;
     private LinearLayoutManager layoutManager;
     private AdaptadorCuotas adaptador;
-    private int REQ_DET=100;
-
-    SwipeRefreshLayout swipeRefreshLayout;
-    ConstraintLayout mInfoNoData;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ConstraintLayout mInfoNoData;
+    private BroadcastReceiver receptorSync;
 
 
     @Override
@@ -61,10 +68,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
+
     }
-
-    private BroadcastReceiver receptorSync;
-
 
     @Nullable
     @Override
@@ -251,8 +256,39 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     }
 
     @Override
+    public void showFoto(String documento) {
+        final AlertDialog pDialog;
+
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Foto");
+        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_foto_layout,null);
+        builder.setView(view);
+        ImageView foto = (ImageView) view.findViewById(R.id.DialogFoto_Foto);
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(getResources().getDrawable(R.drawable.ic_image))
+                .error(getResources().getDrawable(R.drawable.ic_broken_image));
+
+        String Url = URL.FOTO+documento+".jpg";
+        Glide.with(this).load(Url).apply(options).into(foto);
+
+
+        pDialog = builder.create();
+        pDialog.show();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receptorSync);
     }
+
+
+
+
+
+
+
 }

@@ -214,6 +214,8 @@ public class LoginActivity extends Activity {
                         String username = jObj.getString("username");
                         String token = jObj.getString("token");
                         String email = jObj.getString("email");
+                        String telefono = jObj.getString("celular");
+                        UPreferencias.guardarTelefonoCobrador(LoginActivity.this,telefono);
 
 
 

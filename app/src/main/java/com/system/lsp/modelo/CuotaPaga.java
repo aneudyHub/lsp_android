@@ -21,6 +21,7 @@ public class CuotaPaga {
     private String Fecha;
     private int PrestamoId;
     private double Monto;
+    private double TotalMora;
     private String Updated_at;
     private int Modificado;
 
@@ -28,7 +29,7 @@ public class CuotaPaga {
     public CuotaPaga() {
     }
 
-    public CuotaPaga(int id, int cobradorId, String nombreCobrador, String nombreCliente, String cadenaString, String fechaConsulta, String fecha, int prestamoId, double monto,String updated_at, int modificado) {
+    public CuotaPaga(int id, int cobradorId, String nombreCobrador, String nombreCliente, String cadenaString, String fechaConsulta, String fecha, int prestamoId, double monto,Double totalMora,String updated_at, int modificado) {
         Id = id;
         CobradorId = cobradorId;
         this.nombreCobrador = nombreCobrador;
@@ -38,6 +39,7 @@ public class CuotaPaga {
         Fecha = fecha;
         PrestamoId = prestamoId;
         Monto = monto;
+        TotalMora = totalMora;
         Updated_at = updated_at;
         Modificado = modificado;
     }
@@ -62,6 +64,12 @@ public class CuotaPaga {
 
     public void setMonto(double monto) {
         Monto = monto;
+    }
+
+    public double getTotalMora() {return TotalMora;}
+
+    public void setTotalMora(double totalMora) {
+        TotalMora = totalMora;
     }
 
     public int getId() {return Id;}

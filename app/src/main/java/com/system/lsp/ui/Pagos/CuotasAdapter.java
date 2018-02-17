@@ -2,6 +2,7 @@ package com.system.lsp.ui.Pagos;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,7 +14,11 @@ import android.widget.TextView;
 
 import com.system.lsp.R;
 import com.system.lsp.provider.Contract;
+import com.system.lsp.ui.AdaptadorCuotas;
+import com.system.lsp.ui.Login.LoginActivity;
+import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UConsultas;
+import com.system.lsp.utilidades.UPreferencias;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -63,23 +68,27 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
         Log.e("VALOR-INTERES",String.valueOf(interes));
         Log.e("VALOR-MORA",String.valueOf(mora));
         Log.e("VALOR-ABONADO",String.valueOf(abonado));
+        double cuta_monto = (cap + interes);
         double total = (cap + interes + mora) - (abonado);
+
 
         Log.e("VALOR-TOTAL",String.valueOf(total));
 
         String numeroCuota = String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.CUOTA));
         totalCuotas += Integer.parseInt(numeroCuota) ;
 
-        holder.mMonto.setText("RD$ "+precision.format(total));
-        holder.moraMonto.setText("RD$ "+precision.format(mora - abonoM));
+        holder.cuota_monto.setText(precision.format(cap + interes));
+        holder.moraMonto.setText(precision.format(mora));
+        holder.total_monto.setText("RD$ "+precision.format(total));
         holder.mLayout.setBackgroundColor(mCtx.getResources().getColor(R.color.cardview_light_background));
         holder.mIcon.setVisibility(View.GONE);
         holder.mRestante.setVisibility(View.GONE);
+        holder.mAbonado.setText(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.MONTO_PAGADO)));
 
         if(mora>0){
-            holder.mMonto.setTextColor(mCtx.getResources().getColor(R.color.mora));
+            holder.total_monto.setTextColor(mCtx.getResources().getColor(R.color.mora));
         }else{
-            holder.mMonto.setTextColor(mCtx.getResources().getColor(R.color.negro87));
+            holder.total_monto.setTextColor(mCtx.getResources().getColor(R.color.negro87));
         }
 
         if(modificaCuota!=null){
@@ -103,7 +112,8 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                         holder.mRestante.setVisibility(View.VISIBLE);
                         montoRestante = Double.parseDouble(value[3]);
                         Log.e("RESTAANTE",String.valueOf(montoRestante));
-                        double restante = Math.abs(montoRestante) - total;
+                        Log.e("MONTO TOTAL", String.valueOf(total));
+                        double restante = Math.abs(total) - Math.abs(montoRestante);
                         holder.mRestante.setText("Resta RD$ "+String.valueOf(precision.format(restante)));
                     }
                 }
@@ -130,19 +140,21 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
 
     public static class CuotaViewHolder extends RecyclerView.ViewHolder{
         public CardView mLayout;
-        public TextView mFecha;
-        public TextView mMonto,moraMonto,mNumero,mRestante;
+        public TextView mFecha,mAbonado;
+        public TextView cuota_monto,moraMonto,total_monto,mNumero,mRestante;
         public ImageView mIcon;
 
         public CuotaViewHolder(View itemView) {
             super(itemView);
             mLayout=(CardView)itemView.findViewById(R.id.Layout);
             mFecha=(TextView)itemView.findViewById(R.id.Cuota_Fecha);
-            mMonto=(TextView)itemView.findViewById(R.id.Cuota_Monto);
+            cuota_monto=(TextView)itemView.findViewById(R.id.Cuot_Monto);
             moraMonto=(TextView)itemView.findViewById(R.id.Mora_Monto);
+            total_monto=(TextView)itemView.findViewById(R.id.Total_Monto);
             mNumero=(TextView)itemView.findViewById(R.id.Cuota_Numero);
             mIcon =(ImageView)itemView.findViewById(R.id.Cuota_Modificacion);
             mRestante=(TextView)itemView.findViewById(R.id.Restante);
+            mAbonado=(TextView)itemView.findViewById(R.id.Abonado);
         }
     }
 
@@ -179,7 +191,7 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
             for (mItems.moveToFirst(); !mItems.isAfterLast(); mItems.moveToNext()) {
                 cantidadCuota = mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA));
             }
-            double mora =0;
+            double tMora =0;
             double restanM=0;
             double restaMotoP=0;
             StringBuilder sb= new StringBuilder() ;
@@ -212,13 +224,16 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                     if (montoAPagar >= restanM){
                         modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"2",String.valueOf((montoAPagar + abonoM)),
                                 String.valueOf((mp+montoAPagar)),String.valueOf((montoAPagar))});
+
                         montoAPagar -= restanM;
-                        sb.append("Pago Mora a la fecha."+";"+restanM+";");
+                        tMora +=restanM;
+                        sb.append("Pago Mora Generada a la fecha."+";"+restanM+";");
                     }else {
                         modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"3",String.valueOf(montoAPagar+abonoM),
                                 String.valueOf((mp+montoAPagar)),String.valueOf((montoAPagar))});
-                        sb.append("Abono Mora-C(s)N."+mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA))+";"+Math.abs(montoAPagar)+";");
+                        sb.append("Abono Mora Generada a la fecha."+";"+Math.abs(montoAPagar)+";");
                         Log.e("Valor Monto A",String.valueOf(montoAPagar));
+                        tMora +=montoAPagar;
                         montoAPagar = 0;
                     }
                 }
@@ -244,7 +259,12 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                 notifyDataSetChanged();
             }
             datos = sb.toString();
-            totalMora = mora - abonoM;
+            totalMora = tMora;
+
+            notifyDataSetChanged();
+
+            Log.e("TOTAL-MORA",String.valueOf(datos));
+            Log.e("TOTAL-MORA",String.valueOf(totalMora));
         }
     }
 }

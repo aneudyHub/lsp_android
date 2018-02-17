@@ -90,15 +90,14 @@
                 android:id="@+id/idprestamo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center"
                 android:maxLines="1"
-                android:text="Documento"
-                android:textColor="@color/negro87"
+                android:text="#000"
+                android:textSize="18dp"
+                android:textColor="@color/bg_login"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0.045"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/documento" />
+                tools:layout_editor_absoluteY="1dp" />
 
 
             <TextView
@@ -223,9 +222,8 @@
                 android:id="@+id/cuo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="52dp"
-                android:layout_marginTop="60dp"
-                android:text="Cuotas:"
+                android:layout_marginRight="30dp"
+                android:text="Cot:"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/negro87"
                 app:layout_constraintRight_toRightOf="parent"
@@ -235,8 +233,7 @@
                 android:id="@+id/cuotas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="60dp"
+                android:layout_marginStart="15dp"
                 android:text="0"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#000"
@@ -245,17 +242,68 @@
                 app:layout_constraintStart_toStartOf="@+id/cuo"
                 app:layout_constraintTop_toBottomOf="@+id/documento" />
 
+
+            <TextView
+                android:id="@+id/pag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:text="Pag:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/negro87"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cuotas" />
+
+            <TextView
+                android:id="@+id/pagada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/completedStatus"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/pen"
+                app:layout_constraintTop_toBottomOf="@+id/cuotas" />
+
+
+            <TextView
+                android:id="@+id/pen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:text="Pen:"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/negro87"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pagada" />
+
+            <TextView
+                android:id="@+id/pendiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="0"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/colorPrimaryDark"
+                android:textStyle="bold"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/pag"
+                app:layout_constraintTop_toBottomOf="@+id/pagada" />
+
+
             <Button
                 android:id="@+id/adelantarPago"
                 android:layout_width="98dp"
                 android:layout_height="29dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="32dp"
                 android:background="@color/completedStatus"
                 android:text="REALIZAR PAGO"
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/documento"
-                app:layout_constraintTop_toBottomOf="@+id/cuotas" />
+                app:layout_constraintTop_toBottomOf="@+id/pendiente" />
 
 
         </android.support.constraint.ConstraintLayout>

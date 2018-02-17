@@ -1,6 +1,7 @@
 package com.system.lsp.fragmentos;
 
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;

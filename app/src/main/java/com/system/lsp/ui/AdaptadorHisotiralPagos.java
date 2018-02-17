@@ -8,34 +8,50 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
+import com.system.lsp.modelo.DatosCliente;
+import com.system.lsp.modelo.PrestamoDetalle;
+import com.system.lsp.ui.Pagos.CuotasAdapter;
+import com.system.lsp.ui.Pagos.Pagos;
+import com.system.lsp.utilidades.UPreferencias;
+import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.utilidades.ZebraPrint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Suarez on 20/01/2018.
  */
 
-public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder>  {
+public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder> implements Filterable {
 
     private List<CuotaPaga> mArrayList;
+    private ArrayList<CuotaPaga> mFilteredList;
+    private ArrayList<CuotaPaga> mArrayListOriginal;
     private Context context;
 
-    public AdaptadorHisotiralPagos(List<CuotaPaga> mArrayList,Context context) {
+    public AdaptadorHisotiralPagos(ArrayList<CuotaPaga> mArrayList,Context context) {
         this.mArrayList=mArrayList;
         this.context = context;
+        this.mFilteredList=mArrayList;
+        this.mArrayListOriginal=mArrayList;
 
     }
+
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Campos respectivos de un item
         public TextView nombreCliente;
         public TextView fecha;
         public TextView monto;
+        public TextView ipPrestamo;
         public View statusIndicator;
         public CardView mLayout;
         public Button mReimprimir;
@@ -45,6 +61,7 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
             nombreCliente = (TextView) v.findViewById(R.id.nombre_cliente);
             fecha = (TextView) v.findViewById(R.id.fechaCobro);
             monto = (TextView) v.findViewById(R.id.montoCobrado);
+            ipPrestamo= (TextView) v.findViewById(R.id.idPrestamoH);
             statusIndicator = v.findViewById(R.id.appointment_status);
             mLayout= (CardView) v.findViewById(R.id.Layout);
             mReimprimir =(Button)v.findViewById(R.id.reimprimir);
@@ -73,8 +90,11 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
         final String idPrestamos = String.valueOf(c.getPrestamoId());
         final String nombreCliente = String.valueOf(c.getNombreCliente());
         final String datos = String.valueOf(c.getCadenaString());
+        final double totalMora = c.getTotalMora();
         final double monto = c.getMonto();
         final String nombreCobrador = String.valueOf(c.getNombreCobrador());
+        final String telefonoCobrador = UPreferencias.obtenerTelefonoCobrador(context);
+
 
 
 
@@ -83,8 +103,9 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
             public void onClick(View view) {
                 Log.e("Soy el nombre",nombreCliente);
                 Log.e("STRING:",datos);
+                Log.e("VALOR-TOTAL-MORA",String.valueOf(totalMora));
                 ZebraPrint zebraprint = new ZebraPrint(view.getContext(),"imprimir", fecha,
-                        idPrestamos,nombreCliente, datos,monto, nombreCobrador);
+                        idPrestamos,nombreCliente, datos,monto,totalMora, nombreCobrador,telefonoCobrador);
                 zebraprint.probarlo();
             }
         });
@@ -99,6 +120,7 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
 
 
         //indicator_appointment_status
+        holder.ipPrestamo.setText("#"+idPrestamos);
         holder.nombreCliente.setText(nombreCliente);
         holder.fecha.setText(fecha);
         holder.monto.setText("RD$ "+monto);
@@ -114,7 +136,47 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
     }
 
 
+    @Override
+    public Filter getFilter() {
 
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+                Log.e("filter 1","estoy aca");
+
+                if (charString.isEmpty()) {
+                    Log.e("filter 2","estoy aca");
+                    mFilteredList = mArrayListOriginal;
+                } else {
+                    Log.e("filter 3","estoy aca");
+                    ArrayList<CuotaPaga> filteredList = new ArrayList<>();
+
+                    for (CuotaPaga androidVersion : mArrayList) {
+
+                        if (androidVersion.getNombreCliente().toLowerCase().contains(charString)||
+                                String.valueOf(androidVersion.getPrestamoId()).toLowerCase().contains(charSequence) ) {
+                            Log.e("filter 4","estoy aca");
+                            filteredList.add(androidVersion);
+                        }
+                    }
+
+                    mFilteredList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mFilteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mArrayList = (ArrayList<CuotaPaga>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 
 
 

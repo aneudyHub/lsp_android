@@ -142,6 +142,7 @@ public class ProcesadorLocal {
             cuotaPaga.setNombreCobrador(row.getString("cobrador"));
             cuotaPaga.setNombreCliente(row.getString("cliente"));
             cuotaPaga.setMonto(row.getDouble("monto"));
+            cuotaPaga.setTotalMora(row.getDouble("total_mora"));
             cuotaPaga.setPrestamoId(row.getInt("prestamos"));
             cuotaPaga.setFechaConsulta(row.getString("fecha_consulta"));
             cuotaPaga.setUpdated_at(row.getString("updated_at"));
@@ -605,6 +606,7 @@ public class ProcesadorLocal {
                 .withValue(Contract.CuotaPaga.NOMBRE_COBRADOR,cuotaPaga.getNombreCobrador())
                 .withValue(Contract.CuotaPaga.NOMBRE_CLIENTE,cuotaPaga.getNombreCliente())
                 .withValue(Contract.CuotaPaga.MONTO,cuotaPaga.getMonto())
+                .withValue(Contract.CuotaPaga.TOTALMORA,cuotaPaga.getTotalMora())
                 .withValue(Contract.CuotaPaga.PRESTAMO,cuotaPaga.getPrestamoId())
                 .withValue(Contract.CuotaPaga.FECHA_CONSULTA,cuotaPaga.getFechaConsulta())
                 .withValue(Contract.CuotaPaga.UPDATE_AT,cuotaPaga.getUpdated_at())

@@ -32,15 +32,27 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:textColor="@color/negro87"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/vertical_separator1"
-            app:layout_constraintHorizontal_bias="0.037"
+            app:layout_constraintHorizontal_bias="0.187"
             app:layout_constraintStart_toEndOf="@+id/appointment_status"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Nombre Cliente" />
+
+        <TextView
+            android:id="@+id/idPrestamoH"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/btn_login"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="#567" />
 
 
         <TextView
@@ -49,13 +61,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
             android:maxLines="5"
             android:textColor="@color/input_register_hint"
             android:textSize="14sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toStartOf="@+id/vertical_separator1"
-            app:layout_constraintHorizontal_bias="0.031"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/appointment_status"
             app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
             tools:text="2018-02-16" />
@@ -67,13 +78,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:text="RD$ 200000.000"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/negro87"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/appointment_status" />
+            app:layout_constraintStart_toEndOf="@+id/appointment_status"
+            app:layout_constraintTop_toBottomOf="@+id/fechaCobro" />
 
 
         <View

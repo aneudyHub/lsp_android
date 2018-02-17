@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
 
@@ -76,14 +76,16 @@
 
         <TextView
             android:id="@+id/direccion"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="6dp"
             android:maxLines="5"
             android:paddingBottom="10dp"
             android:paddingRight="16dp"
             android:paddingTop="2dp"
             android:textColor="@color/GRIS"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
             app:layout_constraintTop_toBottomOf="@+id/cedula_cliente"
@@ -104,38 +106,36 @@
             tools:text="Clínica Central" />
 
 
-
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="01/01/2017"
             android:id="@+id/fecha"
-            app:layout_constraintTop_toBottomOf="@+id/direccion"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textStyle="italic" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="01/01/2017"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="0000"
+            android:textStyle="italic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/direccion" />
+
+        <TextView
             android:id="@+id/idPrestamo"
-            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textStyle="italic" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="0000"
-            android:textColor="@color/naranja"
-            android:id="@+id/celular"
-            app:layout_constraintTop_toBottomOf="@+id/fecha"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="italic"
             app:layout_constraintRight_toRightOf="parent"
-            android:textStyle="italic" />
+            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente" />
 
+        <TextView
+            android:id="@+id/celular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0000"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/naranja"
+            android:textStyle="italic"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fecha" />
 
 
         <TextView
@@ -150,6 +150,15 @@
             app:layout_constraintTop_toBottomOf="@+id/fecha"
             tools:text="0000000000" />
 
+        <ImageView
+            android:id="@+id/foto"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/total"
+            app:srcCompat="@drawable/ic_image" />
 
 
     </android.support.constraint.ConstraintLayout>

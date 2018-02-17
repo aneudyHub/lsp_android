@@ -14,6 +14,10 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.system.lsp.utilidades.UTiempo;
+
+import java.security.acl.LastOwnerException;
+
 /**
  * Created by aneudy on 7/7/2017.
  */
@@ -128,12 +132,13 @@ public class Provider extends ContentProvider {
                         "cli.direccion as "+Contract.Cobrador.DIRECCION+","+
                         "cli.celular as "+Contract.Cobrador.CELULAR+","+
                         "cli.telefono as "+Contract.Cobrador.TELEFONO+","+
-                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)- sum(pd.monto_pagado)) as "+Contract.Cobrador.TOTAL+" "+
+                        "((sum(pd.capital)+sum(pd.interes)+sum(pd.mora))- sum(pd.monto_pagado)) as "+Contract.Cobrador.TOTAL+" "+
                         "from prestamos p " +
                         "join prestamos_detalle pd on p.id=pd.prestamos_id " +
                         "join clientes cli on p.clientes_id=cli.id " +
-                        "where pd.pagado=0 and pd.fecha <= date('now') " +
-                        "group by p.id",null);
+                        "where pd.pagado=0 and date(pd.fecha) <= '"+ UTiempo.obtenerFecha()+"'"+
+                        "group by p.id "+
+                        "order by pd.fecha DESC",null);
                 break;
             case LISTA_PRESTAMO:
                // Log.e("Estoy en Lista","Prestamo");
@@ -147,7 +152,7 @@ public class Provider extends ContentProvider {
                         "cli.celular as "+Contract.Cobrador.CELULAR+","+
                         "cli.telefono as "+Contract.Cobrador.TELEFONO+","+
                         "p.capital_prestamo as "+Contract.Prestamo.CAPITAL+","+
-                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)) as "+Contract.Cobrador.TOTAL+" "+
+                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)-sum(pd.monto_pagado)) as "+Contract.Cobrador.TOTAL+" "+
                         "from prestamos p " +
                         "join prestamos_detalle pd on p.id=pd.prestamos_id " +
                         "join clientes cli on p.clientes_id=cli.id " +
@@ -423,6 +428,15 @@ public class Provider extends ContentProvider {
                         selectionArgs);
 
                 resolver.notifyChange(uri, null, false);
+
+
+               /* filasAfectadas = db.update(Contract.CUOTA_PAGADA, values,
+                        Contract.CuotaPaga.ID + "=" + "\'" + idCuotaPagada + "\'"
+                                + (!TextUtils.isEmpty(selection) ?
+                                " AND (" + selection + ')' : ""),
+                        selectionArgs);
+
+                resolver.notifyChange(uri, null, false);*/
                 break;
 
             default:

@@ -6,11 +6,14 @@ import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.v4.content.LocalBroadcastManager;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -216,7 +220,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         } else {
             Log.d(TAG, "Sin cambios locales");
             //syncLocal();
-            Resolve.enviarBroadcast(getContext(),true, "Sincronización completa");
+            Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
         }
 
         syncLocal();
@@ -228,7 +232,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         procRemoto.desmarcarContactos(cr);
         //Resolve.sincronizarData(getContext());
         syncLocal();
-        Resolve.enviarBroadcast(getContext(),true, "Sincronización completa");
+        Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
     }
 
     private void tratarErrores(VolleyError error) {
@@ -268,6 +272,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     respuesta = new RespuestaApi(response.statusCode
                             , "No hay coincidencias del token");
 
+                    logoutUser(getContext());
                     break;
                 case 500:
                     json = new String(response.data);

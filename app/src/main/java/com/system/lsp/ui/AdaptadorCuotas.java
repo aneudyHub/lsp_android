@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
@@ -56,6 +58,7 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
      */
     public interface OnItemClickListener {
         public void onClick(String idContacto,double montoPendiente,String nombre);
+        void showFoto(String documento);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,6 +74,7 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
         public TextView idPrestamo;
         public View statusIndicator;
         public CardView mLayout;
+        public ImageView mFoto;
 
         public ViewHolder(View v) {
             super(v);
@@ -86,6 +90,7 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
             statusIndicator = itemView.findViewById(R.id.indicator_appointment_status);
             mLayout= (CardView) itemView.findViewById(R.id.Layout);
             cantiCuota = cuota.getText().toString();
+            mFoto = (ImageView) itemView.findViewById(R.id.foto);
 
 
 
@@ -216,13 +221,13 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
         holder.cuota.setText(cantida_cuota);
         holder.nombre_cliente.setText(c.getCLIENTE());
         holder.cedula_cliente.setText(c.getCEDULA());
-        if (c.getTELEFONO().equals("NULL")){
+        if (c.getTELEFONO().equals("NULL")||c.getTELEFONO().equals("null")){
             holder.telefono.setText("");
 
         }else {
             holder.telefono.setText(c.getTELEFONO());
         }
-        if (c.getCELULAR().equals("NULL")){
+        if (c.getCELULAR().equals("NULL")||c.getCELULAR().equals("null")){
             holder.celular.setText("");
 
         }else {
@@ -247,6 +252,14 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
         holder.correo.setText(mFilteredList.get(position).getCorreo());
        // holder.status.setText(status);
         holder.fecha.setText(mFilteredList.get(position).getVersion());*/
+
+
+       holder.mFoto.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               escucha.showFoto(c.getCEDULA());
+           }
+       });
 
 
 
