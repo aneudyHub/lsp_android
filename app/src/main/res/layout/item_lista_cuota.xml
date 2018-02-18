@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/Layout"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
     app:cardUseCompatPadding="true">
 
@@ -99,11 +99,12 @@
             android:layout_marginStart="3dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="8000"
             android:textColor="@color/naranja"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
             app:layout_constraintTop_toBottomOf="@+id/direccion"
-            tools:text="Clínica Central" />
+             />
 
 
         <TextView
@@ -142,12 +143,16 @@
             android:id="@+id/telefono"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/naranja"
+            app:layout_constraintBottom_toTopOf="@+id/foto"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
-            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
-            app:layout_constraintTop_toBottomOf="@+id/fecha"
+            app:layout_constraintStart_toEndOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/total"
             tools:text="0000000000" />
 
         <ImageView
@@ -155,9 +160,9 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/total"
+            app:layout_constraintStart_toEndOf="@+id/cuota"
             app:srcCompat="@drawable/ic_image" />
 
 

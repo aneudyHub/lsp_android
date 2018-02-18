@@ -273,7 +273,7 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
                         ContentProviderOperation k =
                                 ContentProviderOperation.newUpdate(uri1)
                                         .withValue(Contract.PrestamoDetalle.PAGADO,value[0])
-                                        .withValue(Contract.PrestamoDetalle.MONTO_PAGADO,value[1])
+                                        .withValue(Contract.PrestamoDetalle.MONTO_PAGADO,value[2])
 
                                         .build();
                         ops.add(k);

@@ -268,8 +268,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(getResources().getDrawable(R.drawable.ic_image))
-                .error(getResources().getDrawable(R.drawable.ic_broken_image));
+                .placeholder(getResources().getDrawable(R.drawable.index))
+                .error(getResources().getDrawable(R.drawable.index));
 
         String Url = URL.FOTO+documento+".jpg";
         Glide.with(this).load(Url).apply(options).into(foto);
