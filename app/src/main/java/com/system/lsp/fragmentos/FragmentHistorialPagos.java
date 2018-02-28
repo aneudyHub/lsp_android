@@ -35,9 +35,12 @@ import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorHisotiralPagos;
+import com.system.lsp.ui.Pagos.CuotasAdapter;
+import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
+import com.system.lsp.utilidades.ZebraPrint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,7 +59,8 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     // Referencias UI
     private RecyclerView reciclador;
     private LinearLayoutManager layoutManager;
-    public List<CuotaPaga> listaCuotaPendiente;
+    public List<CuotaPaga> listaCuotasCobradas;
+    public List<CuotaPaga> listaCobrosRealizados;
     public OperacionesBaseDatos operacionesBaseDatos;
     private AdaptadorHisotiralPagos adaptador;
     private int REQ_DET=100;
@@ -175,7 +179,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     public void onClick(View view) {
         if(view == fechaBuscar) {
 
-            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerCuotasPagas());
+            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
             if (operacionesBaseDatos.isCuotasPagasExists()){
                 android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
                 // set title
@@ -238,38 +242,112 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     }
 
 
+
     private void getData(int year, int monthOfYear, int dayOfMonth){
         newCalendar.set(year,monthOfYear,dayOfMonth);
         Log.e("E DADO CLICK","N");
         fechaBuscar.setText(dateFormatter.format(newCalendar.getTime()));
         String fecha = fechaBuscar.getText().toString();
         Log.e("VALOR-FECH",fecha);
-
-
-        historialPagos.synCuotaPagaLocal(fecha);
-
         operacionesBaseDatos = OperacionesBaseDatos
                 .obtenerInstancia(getContext());
-        listaCuotaPendiente = operacionesBaseDatos.getCutaPagas(UPreferencias.obtenerIdUsuario(getContext()),fecha);
+
+        if (operacionesBaseDatos.isCuotasPagasExists()){
+            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            // set title
+            alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SINCRONIZACION</font>"));
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(Html.fromHtml("Sincronizacion pediente.<br/><br/>" +
+                            "<font color='#FF0000'> Porfavor SINCRONICE y vuelva a intentar</font>") )
+                    .setCancelable(false)
+                    .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Resolve.sincronizarData(getActivity());
+                            dialog.cancel();
+                        }
+                    });
+
+            // create alert dialog
+            android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+        }else {
+            historialPagos.synCuotaPagaLocal(fecha);
+        }
+
+        listaCuotasCobradas = operacionesBaseDatos.getCutaPagas(UPreferencias.obtenerIdUsuario(getContext()),fecha);
         double totalFacturado=0;
-        for(CuotaPaga cu :listaCuotaPendiente){
+        for(CuotaPaga cu :listaCuotasCobradas){
             totalFacturado+=cu.getMonto();
         }
         mTotalFacutado.setText(String.valueOf(totalFacturado));
 
-        adaptador = new AdaptadorHisotiralPagos((ArrayList<CuotaPaga>) listaCuotaPendiente,getContext());
+        adaptador = new AdaptadorHisotiralPagos((ArrayList<CuotaPaga>) listaCuotasCobradas,getContext());
         reciclador.setAdapter(adaptador);
         mCant.setText(String.valueOf(adaptador.getItemCount()));
         swipeRefreshLayout.setRefreshing(false);
     }
 
 
+    private void imprimirCuadre(){
+        operacionesBaseDatos = OperacionesBaseDatos
+                .obtenerInstancia(getContext());
+        listaCobrosRealizados = operacionesBaseDatos.getImprimirCuadre(UPreferencias.obtenerIdUsuario(getContext()));
+
+        String nombreCobrador="";
+        String fechaCobro = "";
+        double totalCobrado = 0;
+        StringBuilder sb= new StringBuilder() ;
+
+        for (CuotaPaga cuotaPaga :listaCobrosRealizados){
+            nombreCobrador = cuotaPaga.getNombreCobrador();
+            fechaCobro = cuotaPaga.getFechaConsulta();
+            sb.append(cuotaPaga.getPrestamoId()+";"+cuotaPaga.getMonto()+";");
+            totalCobrado +=cuotaPaga.getMonto();
+        }
+
+        Log.e("CUADRE",""+nombreCobrador+" "+sb.toString() +" Total:"+totalCobrado);
+
+            ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
+                                                    totalCobrado);
+            zebraprint.probarlo();
+
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.imprimirCuadre) {
+            /*ZebraprintOld zebraprint = new ZebraprintOld(this,null,"prueba");
+            zebraprint.probarlo();*/
+
+            imprimirCuadre();
+
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_historial_pagos, menu);
         MenuItem search = menu.findItem(R.id.search);
+        MenuItem imprmirCuadre = menu.findItem(R.id.imprimirCuadre);
+
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         search(searchView);
 

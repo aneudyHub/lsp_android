@@ -117,7 +117,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Cobrador.NOMBRE+" TEXT,"+
                 Cobrador.ZONA+" TEXT,"+
                 Cobrador.TOKEN+" TEXT,"+
-                Cobrador.EMAIL+" TEXT);";
+                Cobrador.EMAIL+" TEXT,"+
+                Cobrador.SYNC_TIME+" TIMESTAMP);";
 
         db.execSQL(CobradorT);
 

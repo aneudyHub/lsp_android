@@ -143,6 +143,7 @@ public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+
         Log.e("Este es el valor","Estoy aca");
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_lista_cuota, parent, false);

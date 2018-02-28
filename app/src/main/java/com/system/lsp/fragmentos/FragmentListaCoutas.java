@@ -2,11 +2,13 @@ package com.system.lsp.fragmentos;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
@@ -22,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,19 +34,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
+import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Main.MainActivity;
 import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
+import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
+import com.system.lsp.utilidades.UTiempo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by aneudy on 22/6/2017.
@@ -61,6 +73,12 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private ConstraintLayout mInfoNoData;
     private BroadcastReceiver receptorSync;
 
+    private Cursor cursor;
+    public OperacionesBaseDatos operacionesBaseDatos;
+
+    private static Timer timer;
+    private TimerTask timerTask;
+    final Handler handler = new Handler();
 
     @Override
     public void onResume() {
@@ -68,6 +86,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
+        Log.e("ESTOY EN RESUME","");
+        //startTime(getContext());
 
     }
 
@@ -76,6 +96,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_lista_couta, container, false);
         setHasOptionsMenu(true);
+
+
         prepararLista(view);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
         Log.e("broadcast","llego");
@@ -189,6 +211,49 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
             mInfoNoData.setVisibility(View.VISIBLE);
             reciclador.setVisibility(View.GONE);
         }
+
+        operacionesBaseDatos = OperacionesBaseDatos
+                .obtenerInstancia(getContext());
+        String fechaSync="";
+        cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+        if (cursor.moveToFirst()) {
+            fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
+        }
+        if (fechaSync==null){
+            fechaSync="2000-01-01";
+        }
+        String fechaExtraida = fechaSync.substring(0,10);
+
+        if (fechaExtraida.equals(UTiempo.obtenerFecha())){
+
+        }else {
+            Log.e("VALOR FECHA",fechaExtraida);
+            Log.e("VALOR FECHA-ACTUAL",UTiempo.obtenerFecha());
+            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            // set title
+            alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SALUDO!!!</font>"));
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(Html.fromHtml("SI ESTA LELLENDO ESTE MENSAJE:<br/><br/>" +
+                            "<font color='#FF0000'> NECEISTA SINCRONIZAR PARA EMPEZAR A TRABAJAR.</font>") )
+                    .setCancelable(false)
+                    .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            Resolve.sincronizarData(getActivity());
+                            dialog.cancel();
+                        }
+                    });
+
+            // create alert dialog
+            android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+            // show it
+            alertDialog.show();
+        }
+
     }
 
     @Override
@@ -286,9 +351,49 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     }
 
 
+    public void startTime(Context context){
+        //set a new Timer
+        timer = new Timer();
+
+        //initialize the TimerTask's job
+       //initializeTimerTask(context);
+
+        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
+        timer.schedule(timerTask, 5000, 30000); //
+    }
 
 
+      /*  public void initializeTimerTask(final Context context) {
 
+            timerTask = new TimerTask() {
+                public void run() {
+                    //use a handler to run a toast that shows the current timestamp
+                    handler.post(new Runnable() {
+                        public void run() {
+                            //get the current timeStamp
 
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
+                            final String strDate = simpleDateFormat.format(calendar.getTime());
+
+                            //show the toast
+                             int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(getContext(), strDate, duration);
+                            toast.show();
+                            Resolve.sincronizarData(context);
+                        }
+                    });
+                }
+            };
+        }
+
+    public static void stoptimertask() {
+        //stop the timer, if it's not already null
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }*/
 
 }

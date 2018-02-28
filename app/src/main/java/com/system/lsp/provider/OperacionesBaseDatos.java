@@ -1,9 +1,11 @@
 package com.system.lsp.provider;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.system.lsp.modelo.CuotaPaga;
@@ -40,9 +42,6 @@ public class OperacionesBaseDatos {
             "ON clientes.id = prestamos.clientes_id " +
             "INNER JOIN prestamos_detalle " +
             "ON prestamos_detalle.prestamos_id = prestamos.id";
-
-
-
 
     private static final String CABECERA_CUOTAS_PAGAS = "cuota_paga ";
 
@@ -82,7 +81,6 @@ public class OperacionesBaseDatos {
                "(SUM( " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL + " ) + " +
                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + " ) + " +
                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) - SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+") as "+Contract.PrestamoDetalle.CAPITAL,
-
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MONTO_PAGADO,
                 "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES+") AS "+Contract.PrestamoDetalle.INTERES,
                 "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA+") AS "+Contract.PrestamoDetalle.MORA,
@@ -98,10 +96,7 @@ public class OperacionesBaseDatos {
 
     }
 
-
-
     public Cursor ObtenerCuotasPagasPorCobrador(String id,String fecha){
-        Log.e("valorFecha","entre");
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.COBRADOR_ID) +
                 " AND "+ String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.FECHA_CONSULTA);;
@@ -118,7 +113,6 @@ public class OperacionesBaseDatos {
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO,
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.TOTALMORA,
                 Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_COBRADOR,
-                //"(SUM( " + Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO + " )) AS monto ",
         };
 
         c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
@@ -132,24 +126,22 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Cursor ReimprimirFactura(String nombre){
+    public Cursor cuadreCobrador(String cobradorId){
         Log.e("valorFecha","entre");
         SQLiteDatabase db = baseDatos.getWritableDatabase();
-        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.NOMBRE_CLIENTE);
-        String[] selectionArgs = {nombre};
+        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.COBRADOR_ID);
+        String[] selectionArgs = {cobradorId};
         Cursor c;
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(CABECERA_CUOTAS_PAGAS);
         String[] proyeccion = {
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.FECHA,
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.PRESTAMO,
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_CLIENTE,
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.CADENA_STRING,
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO,
-                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_COBRADOR,
 
-                //"(SUM( " + Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO + " )) AS monto ",
+                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.NOMBRE_COBRADOR,
+                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.FECHA_CONSULTA,
+                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.PRESTAMO,
+                Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.MONTO,
+
         };
 
         c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
@@ -161,24 +153,6 @@ public class OperacionesBaseDatos {
         return c;
 
     }
-
-      /*Log.e("ID-COBRADOR",""+ UPreferencias.obtenerIdUsuario(this));
-        Log.e("NOMBRE-COBRADOR",""+ UPreferencias.obtenerNombreUsuario(this));
-        Log.e("NOMBRE CLIENTE",nombreCliente);
-        Log.e("CADENA STRING", CuotasAdapter.datos);
-        Log.e("FECHA",""+  UTiempo.obtenerTiempo());
-        Log.e("FFECHA CONSULTA",""+UTiempo.obtenerFecha());
-        Log.e("ID-PRESTAMO",""+  idPrestamos);
-        Log.e("MONTO",""+  mMonto.getText().toString());*/
-
-
-
-    /*int cuota = data.getColumnIndex(Contract.PrestamoDetalle.CUOTA);
-    int capital = data.getColumnIndex(Contract.PrestamoDetalle.CAPITAL);
-    int interes = data.getColumnIndex(Contract.PrestamoDetalle.INTERES);
-    int mora = data.getColumnIndex(Contract.PrestamoDetalle.MORA);
-    int fecha = data.getColumnIndex(Contract.PrestamoDetalle.FECHA);
-    int pagado = data.getColumnIndex(Contract.PrestamoDetalle.PAGADO);*/
 
     public Cursor ObtenerCuotasPendientesOPagadas(String id,String pagado){
         SQLiteDatabase db = baseDatos.getWritableDatabase();
@@ -210,6 +184,31 @@ public class OperacionesBaseDatos {
         }*/
         return c;
 
+    }
+
+
+
+    public boolean actualizarSyncTime(String idCobrador,String fecha) {
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+
+        ContentValues valores = new ContentValues();
+        valores.put(Contract.Cobrador.SYNC_TIME, fecha);
+
+        String whereClause = String.format("%s=?", Contract.Cobrador.COBRADOR_ID);
+        String[] whereArgs = {idCobrador};
+
+        int resultado = db.update(Contract.COBRADOR, valores, whereClause, whereArgs);
+
+        return resultado > 0;
+    }
+
+    // [OPERACIONES_FORMA_PAGO]
+    public Cursor obtenerSyncTime(String idCobrador) {
+        SQLiteDatabase db = baseDatos.getReadableDatabase();
+
+        String sql = String.format("SELECT sync_time FROM %s ", Contract.COBRADOR +" WHERE id = "+idCobrador);
+
+        return db.rawQuery(sql, null);
     }
 
 
@@ -258,18 +257,16 @@ public class OperacionesBaseDatos {
 
     }
 
-    public ArrayList<CuotaPaga> getReimprimirFactura(String nombre){
+    public ArrayList<CuotaPaga> getImprimirCuadre(String cobradorId){
 
         ArrayList<CuotaPaga> list = new ArrayList<>();
-        Cursor c = ReimprimirFactura(nombre);
+        Cursor c = cuadreCobrador(cobradorId);
         while (c.moveToNext()) {
             CuotaPaga cuotaPaga = new CuotaPaga();
-            cuotaPaga.setFecha(c.getString(0));
-            cuotaPaga.setPrestamoId(c.getInt(1));
-            cuotaPaga.setNombreCliente(c.getString(2));
-            cuotaPaga.setCadenaString(c.getString(3));
-            cuotaPaga.setMonto(c.getDouble(4));
-            cuotaPaga.setNombreCobrador(c.getString(5));
+            cuotaPaga.setNombreCobrador(c.getString(0));
+            cuotaPaga.setFechaConsulta(c.getString(1));
+            cuotaPaga.setPrestamoId(c.getInt(2));
+            cuotaPaga.setMonto(c.getDouble(3));
 
             list.add(cuotaPaga);
 

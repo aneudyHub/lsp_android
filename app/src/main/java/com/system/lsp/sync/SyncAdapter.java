@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
@@ -27,8 +28,10 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.DatabaseHandler;
+import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.provider.ProcesadorLocal;
 import com.system.lsp.provider.ProcesadorRemoto;
 import com.system.lsp.provider.SessionManager;
@@ -36,9 +39,11 @@ import com.system.lsp.ui.Login.LoginActivity;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
+import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.web.RESTService;
 import com.system.lsp.web.RespuestaApi;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,7 +56,8 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private static final String TAG = SyncAdapter.class.getSimpleName();
-
+    private Cursor cursor;
+    public OperacionesBaseDatos operacionesBaseDatos;
     // Extras para intent local
     public static final String EXTRA_RESULTADO = "extra.resultado";
     private static final String EXTRA_MENSAJE = "extra.mensaje";
@@ -111,9 +117,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private void syncLocal() {
         // Construcción de cabeceras
         Log.e("sync local","sincronizando--------------");
+        operacionesBaseDatos = OperacionesBaseDatos
+                .obtenerInstancia(getContext());
         HashMap<String, String> cabeceras = new HashMap<>();
         cabeceras.put("Authorization", UPreferencias.obtenerClaveApi(getContext()));
-        cabeceras.put("sync_time", "0");
+        String fechaSync="";
+         cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+        if (cursor.moveToFirst()) {
+            fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
+        }
+        if (fechaSync==null){
+            fechaSync ="0";
+        }
+        cabeceras.put("sync_time",fechaSync);
         Log.e("ESTADO 107","1");
 
         boolean t = Resolve.isInternetAvailable();
@@ -125,6 +141,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         public void onResponse(JSONObject response) {
                             // Procesar GET
                             tratarGet(response);
+                            JSONObject jObj =  response;
+                            try {
+                                String status = jObj.getString("estado");
+                                Log.e("STATUS->>LO",String.valueOf(status));
+                                if (status.equals("200")){
+                                    Log.e("STATUS->>LO",String.valueOf(status));
+                                    operacionesBaseDatos.actualizarSyncTime(UPreferencias.obtenerIdUsuario(getContext()),UTiempo.obtenerFechaHora());
+                                    Resolve.enviarBroadcast(getContext(),true, "Sicronizacion Completa!!!");
+                                }
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     },
                     new Response.ErrorListener() {
@@ -169,6 +198,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             } else {
                 Log.d(TAG, "Sin cambios remotos");
+                Resolve.enviarBroadcast(getContext(),true, "Sicronizacion Completa!!!");
             }
 
             // Sincronización remota
@@ -184,14 +214,21 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         procRemoto = new ProcesadorRemoto();
         Log.e("sync remoto","sincronizando--------------");
         // Construir payload con todas las operaciones remotas pendientes
+        //NetworkResponse response = error.networkResponse;
         Log.e("ESTADO 107","2");
         String datos = procRemoto.crearPayload(cr);
 
         if (datos != null) {
             Log.d(TAG, "Payload de contactos:" + datos);
-
+            operacionesBaseDatos = OperacionesBaseDatos
+                    .obtenerInstancia(getContext());
             HashMap<String, String> cabeceras = new HashMap<>();
             cabeceras.put("Authorization", UPreferencias.obtenerClaveApi(getContext()));
+            String fechaSync="";
+            cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+            if (cursor.moveToFirst()) {
+                fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
+            }
             cabeceras.put("sync_time", "0");
 
             boolean t = Resolve.isInternetAvailable();
@@ -202,7 +239,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             @Override
                             public void onResponse(JSONObject response) {
 
+
                                     tratarPost();
+                                JSONObject jObj =  response;
+                                try {
+                                    int status = jObj.getInt("status");
+                                    Log.e("STATUS->>RE",String.valueOf(status));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                         },
                         new Response.ErrorListener() {
@@ -219,9 +265,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             Log.d(TAG, "Sin cambios locales");
-            //syncLocal();
             Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
+            //syncLocal();
+
         }
+
+
 
         syncLocal();
     }
@@ -232,7 +281,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         procRemoto.desmarcarContactos(cr);
         //Resolve.sincronizarData(getContext());
         syncLocal();
-        Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
+        Resolve.enviarBroadcast(getContext(),true, "Sicronizando espereeeeeeee!!!");
     }
 
     private void tratarErrores(VolleyError error) {
@@ -273,6 +322,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             , "No hay coincidencias del token");
 
                     logoutUser(getContext());
+                   // FragmentListaCoutas.stoptimertask();
                     break;
                 case 500:
                     json = new String(response.data);

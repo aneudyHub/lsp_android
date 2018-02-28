@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Looper;
+import android.os.ParcelUuid;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -58,6 +59,16 @@ public class ZebraPrint {
 
     private String imp_dat = "";
     private Recibo receipt;
+
+    public ZebraPrint(Context context, String TAG,String nombreCobrador,String fechaCobro,
+                      String detalleCobro, Double totalPagado){
+        this._context = context;
+        this.imp_dat=TAG;
+        this.nombreCobrador = nombreCobrador;
+        this.fechaPago = fechaCobro;
+        this.detalleFactura = detalleCobro;
+        this.totalPagado = totalPagado;
+    }
 
     public ZebraPrint(Context context, String TAG,String fechaPago, String numPrestamo, String nombreCliente,
                       String detalleFactura, Double totalPagado,Double totalMora, String nombreCobrador,String telefono) {
@@ -418,6 +429,11 @@ public class ZebraPrint {
                     break;
 
                 }
+                case "imprimirCuadre":{
+                    printerConnection.write(imprmirCuadre());
+                    break;
+
+                }
             }
 
             setStatus("Sending Data", Color.BLUE);
@@ -728,6 +744,68 @@ public class ZebraPrint {
                     Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
+                    " " + Final_Linea;
+
+
+
+            configLabel = cpclConfigLabel.getBytes();
+        }
+        return configLabel;
+
+    }
+
+
+
+    private byte[] imprmirCuadre() {
+
+        PrinterLanguage printerLanguage = printer.getPrinterControlLanguage();
+
+        byte[] configLabel = null;
+        if (printerLanguage == PrinterLanguage.ZPL) {
+            configLabel = "^XA^FO17,16^GB379,371,8^FS^FT65,255^A0N,135,134^FDTEST^FS^XZ".getBytes();
+        } else if (printerLanguage == PrinterLanguage.CPCL) {
+            String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
+                    "! U1 CONTRAST 3" + Final_Linea +
+                    "! U1 CENTER" + Final_Linea + //No funciona D:!!
+                    Resolve.alinea_centro("INVERSIONES JOSE CASTILLO SANTOS", caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Av. Antonio Guzman Fernandez.", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Plaza Dereck Mall #202", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Tel: 809-244-3787", caracteres_X_linea) + Final_Linea +
+
+                    Resolve.dos_columna("", caracteres_X_linea, "") + Final_Linea +
+                    //"RNC: 104-01619-1" + Final_Linea +
+                    Resolve.alinea_centro("*CUADRE COBRADOR:*", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
+                    //"#FATURA: " + "10" + Final_Linea + //TRN, detalles = Resultado, parametros[0] = TRN
+                    //"Referencia: " + detalles.get(0).get(parametros[0]) + Final_Linea +
+                    "Fecha: " + fechaPago + Final_Linea + //Fecha
+                   // "#PRESTAMO: "  + numPrestamo + Final_Linea +
+                   // nombreCliente + Final_Linea +
+                    //"BALANCE ANTERIOR: " + "8000" + Final_Linea +
+                    //"DIRECCION: " + "C/JUAN DE DIOS VENTURA SIMO #1, SECTOR SALVADOR THEN, CIUDAD SAN FRANCISCO DE MACOIRS || FRENTE AL COMAADO EL AGUILA" + Final_Linea +
+                    linea_entera + Final_Linea +
+                    Resolve.dos_columna("Prestamo", caracteres_X_linea, "Monto Cobrado") + Final_Linea +
+                    linea_entera + Final_Linea;
+
+            //detalles.get(0).get(parametros[1]).toString() CARGO NOVIEMBRE 2014; 650.00; CARGO DICIEMBRE 2014; 650.00;
+                /* cuota 1; 46;
+                Devuelve la misma sentencia con los detalles anexados en dado caso de fallar devuelve el mismo string sin los anexos
+                 */
+            //cpclConfigLabel = imprime_detalles(cpclConfigLabel,SeparaLineas("Saldo Cuota(s) No. 10/46;650.00;Saldo Cuota(s) No. 11/46;650.00;", ";"), caracteres_X_linea, Final_Linea);//ConceptoPago
+            //Log.e("DETALLE",detalleFactura);
+            cpclConfigLabel = imprime_detalles(cpclConfigLabel,SeparaLineas(detalleFactura, ";"), caracteres_X_linea, Final_Linea);//ConceptoPago
+            Log.e("TOTAL-MORA",String.valueOf(totalMora));
+            //Double f = Double.valueOf(cliente.balance) -  Double.valueOf(param_post.get(0).getValue());
+            cpclConfigLabel += linea_entera + Final_Linea +
+                    //Resolve.dos_columna("TOTAL P-MORA", caracteres_X_linea, String.valueOf(totalMora)) + Final_Linea +
+                    Resolve.dos_columna("TOTAL COBRADO", caracteres_X_linea, String.valueOf(totalPagado)) + Final_Linea +
+                    //Resolve.dos_columna("TOTAL PENDIENTE", caracteres_X_linea,"6700") + Final_Linea +
+                   // Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
+                    //Resolve.alinea_centro(telefono, caracteres_X_linea) + Final_Linea +
+                   // Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
+                   // Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
+                   //  Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
                     " " + Final_Linea;
 
 

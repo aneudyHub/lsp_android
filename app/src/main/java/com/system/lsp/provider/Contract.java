@@ -94,6 +94,7 @@ public class Contract {
         String ZONA="zona";
         String TOKEN="token";
         String EMAIL="email";
+        String SYNC_TIME="sync_time";
     }
 
     interface ColumnasListaCuotasHoy{
@@ -193,8 +194,8 @@ public class Contract {
 
         public static int generarIdCuotasPaga(){
 
-            int min = 700000;
-            int max = 2000000;
+            int min = 600000000;
+            int max = 2000000000;
 
             Random r = new Random();
             int i1 = r.nextInt(max - min + 1) + min;

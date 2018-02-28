@@ -195,6 +195,9 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
         ContentValues valores = new ContentValues();
 
         //fecha-pago,ip-prestamo,nombre-cliente,detallpago,total-pagado,nombre-cobrador
+
+        int idAutoGenerado = Contract.CuotaPaga.generarIdCuotasPaga();
+        Log.e("ID-GENERADO",""+ idAutoGenerado);
         Log.e("FECHA",""+  UTiempo.obtenerTiempo());
         Log.e("ID-COBRADOR",""+ UPreferencias.obtenerIdUsuario(this));
         Log.e("NOMBRE-COBRADOR",""+ UPreferencias.obtenerNombreUsuario(this));
@@ -206,7 +209,7 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
         Log.e("TOTAL-MORA-P",String.valueOf(CuotasAdapter.totalMora));
 
 
-        valores.put(Contract.CuotaPaga.ID,Contract.CuotaPaga.generarIdCuotasPaga());
+        valores.put(Contract.CuotaPaga.ID,idAutoGenerado);
         valores.put(Contract.CuotaPaga.FECHA,UTiempo.obtenerTiempo());
         valores.put(Contract.CuotaPaga.COBRADOR_ID,UPreferencias.obtenerIdUsuario(this));
         valores.put(Contract.CuotaPaga.NOMBRE_COBRADOR,UPreferencias.obtenerNombreUsuario(this));
