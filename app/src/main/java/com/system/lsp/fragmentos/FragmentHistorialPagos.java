@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -69,6 +71,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     public static String valor;
     public static String fechaBusca;
     public TextView mCant;
+    private SharedPreferences sharedPref ;
 
     private Button fechaConsulta;
     private EditText fechaBuscar;
@@ -97,6 +100,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_historial_pagos, container, false);
         setHasOptionsMenu(true);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         historialPagos = new com.system.lsp.sync.HistorialPagos(getContext());
         prepararLista(view);

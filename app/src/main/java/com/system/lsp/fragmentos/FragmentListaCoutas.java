@@ -23,7 +23,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,9 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -50,10 +47,7 @@ import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
 import com.system.lsp.utilidades.UTiempo;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -72,6 +66,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private SwipeRefreshLayout swipeRefreshLayout;
     private ConstraintLayout mInfoNoData;
     private BroadcastReceiver receptorSync;
+    private Context globalContext = null;
 
     private Cursor cursor;
     public OperacionesBaseDatos operacionesBaseDatos;
@@ -96,7 +91,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_lista_couta, container, false);
         setHasOptionsMenu(true);
-
+        globalContext = this.getActivity();
 
         prepararLista(view);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
@@ -215,7 +210,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         operacionesBaseDatos = OperacionesBaseDatos
                 .obtenerInstancia(getContext());
         String fechaSync="";
-        cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+        cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(globalContext));
         if (cursor.moveToFirst()) {
             fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
         }
@@ -260,6 +255,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     public void onLoaderReset(Loader<Cursor> loader) {
 
     }
+
+
 
     void mostrarDetalles(Uri uri,double montoPendiente,String nombre) {
         Intent intent = new Intent(getActivity(), Pagos.class);
