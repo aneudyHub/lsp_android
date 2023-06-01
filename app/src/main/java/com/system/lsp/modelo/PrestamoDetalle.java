@@ -18,11 +18,13 @@ public class PrestamoDetalle {
     private double Interes;
     private double Mora;
     private String Fecha;
+    private String dias_atrasados;
     private String FechaPagado;
     private int Pagado;
     private int Activo;
     private double MontoPagado;
     private double Abono_mora;
+    private double mora_acumulada;
     private String Updated_at;
     private int Modificado;
 
@@ -38,7 +40,7 @@ public class PrestamoDetalle {
         Pagado = pagado;
     }
 
-    public PrestamoDetalle(int id, int prestamoId, int cuota, double capital, double interes, double mora, String fecha, String FechaPagado, int pagado, int activo, double montoPagado,double abono_mora,String updated_at, int modificado) {
+    public PrestamoDetalle(int id, int prestamoId, int cuota, double capital, double interes, double mora, String fecha,String dias_atrasados, String FechaPagado, int pagado, int activo, double montoPagado,double abono_mora,double mora_acumulada,String updated_at, int modificado) {
         Id = id;
         PrestamoId = prestamoId;
         Cuota = cuota;
@@ -46,10 +48,12 @@ public class PrestamoDetalle {
         Interes = interes;
         Mora = mora;
         Fecha = fecha;
+        this.dias_atrasados = dias_atrasados;
         Pagado = pagado;
         Activo = activo;
         MontoPagado = montoPagado;
         Abono_mora = abono_mora;
+        this.mora_acumulada = mora_acumulada;
         Updated_at = updated_at;
         Modificado = modificado;
         this.FechaPagado=FechaPagado;
@@ -120,6 +124,10 @@ public class PrestamoDetalle {
         Fecha = fecha;
     }
 
+    public String getDias_atrasados() {return dias_atrasados;}
+
+    public void setDias_atrasados(String dias_atrasados) {this.dias_atrasados = dias_atrasados;}
+
     public int getPagado() {
         return Pagado;
     }
@@ -148,6 +156,10 @@ public class PrestamoDetalle {
 
     public void setAbono_mora(double abono_mora) {Abono_mora = abono_mora;}
 
+    public double getMora_acumulada() {return mora_acumulada;}
+
+    public void setMora_acumulada(double mora_acumulada) {mora_acumulada = mora_acumulada;}
+
     public String getUpdated_at() {return Updated_at;}
 
     public void setUpdated_at(String version) {Updated_at = version;}
@@ -169,10 +181,12 @@ public class PrestamoDetalle {
                 Interes == prestamoDetalle.getInteres() &&
                 Mora == prestamoDetalle.getMora() &&
                 Fecha.equalsIgnoreCase(prestamoDetalle.getFecha()) &&
+                dias_atrasados.equalsIgnoreCase(prestamoDetalle.getDias_atrasados()) &&
                 Pagado == prestamoDetalle.getPagado() &&
                 Activo == prestamoDetalle.getActivo() &&
                 MontoPagado ==prestamoDetalle.getMontoPagado()&&
-                Abono_mora ==prestamoDetalle.getAbono_mora();
+                Abono_mora ==prestamoDetalle.getAbono_mora()&&
+                mora_acumulada ==prestamoDetalle.getMora_acumulada();
 
     }
 

@@ -10,7 +10,9 @@
 
     <color name="mora">#d32f2f</color>
 
-
+    <color name="orange">#FF9900</color>
+    <color name="green">#009900</color>
+    <color name="blue">#000099</color>
     <!-- Paleta #1 -->
     <color name="azul700">#1976D2</color>
     <color name="azul500">#2196F3</color>

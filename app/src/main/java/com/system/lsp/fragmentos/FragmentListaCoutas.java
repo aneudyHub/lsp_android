@@ -9,20 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,8 +19,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
@@ -116,7 +117,18 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         mInfoNoData.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                    Resolve.sincronizarData(getContext());
+
+                    swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 sincronizar(view);
@@ -128,7 +140,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                 //sincronizar(view);
 
             }
-        });
+        });*/
 
         return  view;
     }
@@ -176,6 +188,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         int telefono = data.getColumnIndex(Contract.Cobrador.TELEFONO);
         int celular = data.getColumnIndex(Contract.Cobrador.CELULAR);
         int total = data.getColumnIndex(Contract.Cobrador.TOTAL);
+        int totalCuota = data.getColumnIndex("Total_cuota");
         int prestamo = data.getColumnIndex(Contract.Cobrador.PRESTAMO);
 
 
@@ -185,7 +198,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
                 DatosCliente cli = new DatosCliente(data.getString(cuota),data.getString(cuota_id),
                         data.getString(cliente),data.getString(documento),data.getString(fecha),data.getString(direccion),
-                        data.getString(telefono),data.getString(celular),data.getString(total),
+                        data.getString(telefono),data.getString(celular),data.getString(total),data.getString(totalCuota),
                         data.getString(prestamo)
                 );
                 mArrayList.add(cli);
@@ -224,7 +237,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         }else {
             Log.e("VALOR FECHA",fechaExtraida);
             Log.e("VALOR FECHA-ACTUAL",UTiempo.obtenerFecha());
-            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             // set title
             alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SALUDO!!!</font>"));
 
@@ -243,7 +256,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                     });
 
             // create alert dialog
-            android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
             // show it
             alertDialog.show();
@@ -258,11 +271,12 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
 
 
-    void mostrarDetalles(Uri uri,double montoPendiente,String nombre) {
+    void mostrarDetalles(Uri uri,double montoPendiente,double totalCuota,String nombre) {
         Intent intent = new Intent(getActivity(), Pagos.class);
         if (null != uri) {
             intent.putExtra(Contract.PRESTAMOS, uri.toString());
             intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
+            intent.putExtra("TotalCuota",totalCuota);
             intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
             intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
         }
@@ -312,9 +326,9 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onClick(String idContacto,double montoPendiente,String nombre) {
+    public void onClick(String idContacto,double montoPendiente,double totalCuota,String nombre) {
         Log.e("idcontacto",idContacto);
-        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,nombre);
+        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,totalCuota,nombre);
     }
 
     @Override
@@ -329,7 +343,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         ImageView foto = (ImageView) view.findViewById(R.id.DialogFoto_Foto);
 
         RequestOptions options = new RequestOptions()
-                .centerCrop()
+                .fitCenter()
                 .placeholder(getResources().getDrawable(R.drawable.index))
                 .error(getResources().getDrawable(R.drawable.index));
 

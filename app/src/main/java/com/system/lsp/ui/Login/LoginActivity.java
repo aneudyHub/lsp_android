@@ -104,7 +104,7 @@ public class LoginActivity extends Activity {
                             "No hay conexion disponible",
                             Snackbar.LENGTH_LONG).show();*/
 
-                    android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
                     // set title
                     alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
 
@@ -122,7 +122,7 @@ public class LoginActivity extends Activity {
                             });
 
                     // create alert dialog
-                    android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
                     // show it
                     alertDialog.show();

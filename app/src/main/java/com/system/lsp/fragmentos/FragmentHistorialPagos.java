@@ -10,14 +10,6 @@ import android.content.SharedPreferences;
 import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.text.InputType;
 import android.util.Log;
@@ -32,13 +24,22 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorHisotiralPagos;
-import com.system.lsp.ui.Pagos.CuotasAdapter;
-import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
@@ -55,7 +56,7 @@ import java.util.Locale;
  * Created by Suarez on 13/01/2018.
  */
 
-public class FragmentHistorialPagos extends android.support.v4.app.Fragment implements View.OnClickListener,SearchView.OnQueryTextListener {
+public class FragmentHistorialPagos extends Fragment implements View.OnClickListener, SearchView.OnQueryTextListener {
 
     public static final String TAG = "Prestamos";
     // Referencias UI
@@ -185,7 +186,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
             DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
             if (operacionesBaseDatos.isCuotasPagasExists()){
-                android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                 // set title
                 alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SINCRONIZACION</font>"));
 
@@ -204,7 +205,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
                         });
 
                 // create alert dialog
-                android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                AlertDialog alertDialog = alertDialogBuilder.create();
 
                 // show it
                 alertDialog.show();
@@ -214,8 +215,8 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
             // [QUERIES]
             /*Log.d("PAGOS","PAGOS");
-            Log.d("PAGOS",String.valueOf(operacionesBaseDatos.isCuotasPagasExists()));
-            DatabaseUtils.dumpCursor(operacionesBaseDatos.pagosPendiente());*/
+            Log.d("PAGOS",String.valueOf(operacionesBaseDatos.isCuotasPagasExists()));*/
+            DatabaseUtils.dumpCursor(operacionesBaseDatos.pagosPendiente());
 
 
         } /*if(view == fechaConsulta){
@@ -257,7 +258,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
                 .obtenerInstancia(getContext());
 
         if (operacionesBaseDatos.isCuotasPagasExists()){
-            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             // set title
             alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SINCRONIZACION</font>"));
 
@@ -276,7 +277,7 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
                     });
 
             // create alert dialog
-            android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
             // show it
             alertDialog.show();

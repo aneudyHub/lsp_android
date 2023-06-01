@@ -3,29 +3,28 @@ package com.system.lsp.ui.Prestamo;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.system.lsp.R;
 import com.system.lsp.fragmentos.FragmentPrestamoPagado;
-
 import com.system.lsp.fragmentos.FragmentPrestamoPediente;
 import com.system.lsp.fragmentos.FragmentTodasLasCuotas;
 import com.system.lsp.provider.Contract;
@@ -36,12 +35,12 @@ import com.system.lsp.utilidades.UPreferencias;
 public class DetallePrestamo extends AppCompatActivity {
 
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private OperacionesBaseDatos datos;
@@ -52,6 +51,7 @@ public class DetallePrestamo extends AppCompatActivity {
 
     private String idPrestamos;
     private Double monto;
+    private Double totalCuota;
 
     private  TextView capital;
     private  TextView interes;
@@ -146,6 +146,7 @@ public class DetallePrestamo extends AppCompatActivity {
                 if (null != uri) {
                     intent.putExtra(Contract.PRESTAMOS, uri.toString());
                     intent.putExtra(Contract.Cobrador.TOTAL,monto);
+                    intent.putExtra("TotalCuota",totalCuota);
                     intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
                     intent.putExtra(Contract.Cobrador.CLIENTE,nombre.getText());
 
@@ -191,9 +192,10 @@ public class DetallePrestamo extends AppCompatActivity {
         capital.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)));
         interes.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.INTERES)));
         mora.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.MORA)));
-        balance.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
-        double b =Double.parseDouble(cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
+        balance.setText("RD$ "+cursor.getString(cursor.getColumnIndex("ValorCapital")));
+        //double b =Double.parseDouble(cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
         monto = datos.obtenerTotalAPagar(idPrestamos);
+        totalCuota = datos.obtenerTotalCuota(idPrestamos);
 
         fecha.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.FECHA_INICIO)));
         cuotas.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CUOTAS)));
@@ -212,7 +214,7 @@ public class DetallePrestamo extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             // [QUERIES]
            Log.d("Clientes","Clientes");
-            DatabaseUtils.dumpCursor(datos.ObtenerDatosPrestamoPorId(idPrestamos));
+            //DatabaseUtils.dumpCursor(datos.ObtenerDatosPrestamoPorId(idPrestamos));
             consultar(idPrestamos);
 
             return null;

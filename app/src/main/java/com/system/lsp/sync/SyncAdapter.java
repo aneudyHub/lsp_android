@@ -6,15 +6,12 @@ import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,12 +20,10 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.DatabaseHandler;
 import com.system.lsp.provider.OperacionesBaseDatos;
@@ -43,7 +38,6 @@ import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.web.RESTService;
 import com.system.lsp.web.RespuestaApi;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +57,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String EXTRA_MENSAJE = "extra.mensaje";
 
     // Recurso sync (10.0.3.2 -> Genymotion; 10.0.2.2 -> AVD)
-    //public static final String URL_SYNC_BATCH = "http://10.0.3.2/api.peopleapp.com/v1/sync";
+    // public static final String URL_SYNC_BATCH = "http://10.0.3.2/api.peopleapp.com/v1/sync";
    // public static final String URL_SYNC_BATCH = "http://192.168.10.77/api.saludmock.com/v1/sync";
     // public static final String URL_SYNC_BATCH = "http://192.168.10.77:80/api.saludmock.com/v1/sync"
 
@@ -122,13 +116,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         HashMap<String, String> cabeceras = new HashMap<>();
         cabeceras.put("Authorization", UPreferencias.obtenerClaveApi(getContext()));
         String fechaSync="";
-         cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+       /*  cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
         if (cursor.moveToFirst()) {
             fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
         }
-        if (fechaSync==null){
+        if (fechaSync==null){*/
             fechaSync ="0";
-        }
+        //}
         cabeceras.put("sync_time",fechaSync);
         Log.e("ESTADO 107","1");
 
@@ -265,7 +259,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             Log.d(TAG, "Sin cambios locales");
-            Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
+            //Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
             //syncLocal();
 
         }

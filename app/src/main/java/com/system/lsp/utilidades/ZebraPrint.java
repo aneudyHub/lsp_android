@@ -272,10 +272,10 @@ public class ZebraPrint {
                         printerConnection = new BluetoothConnection(mmDevice.getAddress());
                         break;
                     } else if (device.getName().equals("RM1")) {
-                    mmDevice = device;
-                    printerConnection = new BluetoothConnection(mmDevice.getAddress());
-                    break;
-                }
+                        mmDevice = device;
+                        printerConnection = new BluetoothConnection(mmDevice.getAddress());
+                        break;
+                    }
                 }
             }
 
@@ -705,11 +705,11 @@ public class ZebraPrint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro("INVERSIONES JOSE CASTILLO SANTOS", caracteres_X_linea) + Final_Linea +
-                   // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Av. Antonio Guzman Fernandez.", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Plaza Dereck Mall #202", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Tel: 809-244-3787", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("PRESTAMOS LA SOLUCION HERNADEZ", caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("AL INSTANTE DONDE SU DINERO.", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Tel: 829-201-3448", caracteres_X_linea) + Final_Linea +
 
                     Resolve.dos_columna("", caracteres_X_linea, "") + Final_Linea +
                     //"RNC: 104-01619-1" + Final_Linea +
@@ -736,14 +736,14 @@ public class ZebraPrint {
             Log.e("TOTAL-MORA",String.valueOf(totalMora));
             //Double f = Double.valueOf(cliente.balance) -  Double.valueOf(param_post.get(0).getValue());
             cpclConfigLabel += linea_entera + Final_Linea +
-                    Resolve.dos_columna("TOTAL P-MORA", caracteres_X_linea, String.valueOf(totalMora)) + Final_Linea +
+                   // Resolve.dos_columna("TOTAL P-MORA", caracteres_X_linea, String.valueOf(totalMora)) + Final_Linea +
                     Resolve.dos_columna("TOTAL PAGADO", caracteres_X_linea, String.valueOf(totalPagado)) + Final_Linea +
                     //Resolve.dos_columna("TOTAL PENDIENTE", caracteres_X_linea,"6700") + Final_Linea +
                     Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro(telefono, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
                     " " + Final_Linea;
 
 
@@ -767,11 +767,11 @@ public class ZebraPrint {
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro("INVERSIONES JOSE CASTILLO SANTOS", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("PRESTAMOS LA SOLUCION HERNADEZ", caracteres_X_linea) + Final_Linea +
                     // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Av. Antonio Guzman Fernandez.", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Plaza Dereck Mall #202", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Tel: 809-244-3787", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("AL INSTANTE DONDE SU DINERO.", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Tel: 829-201-3448", caracteres_X_linea) + Final_Linea +
 
                     Resolve.dos_columna("", caracteres_X_linea, "") + Final_Linea +
                     //"RNC: 104-01619-1" + Final_Linea +
@@ -780,8 +780,8 @@ public class ZebraPrint {
                     //"#FATURA: " + "10" + Final_Linea + //TRN, detalles = Resultado, parametros[0] = TRN
                     //"Referencia: " + detalles.get(0).get(parametros[0]) + Final_Linea +
                     "Fecha: " + fechaPago + Final_Linea + //Fecha
-                   // "#PRESTAMO: "  + numPrestamo + Final_Linea +
-                   // nombreCliente + Final_Linea +
+                    // "#PRESTAMO: "  + numPrestamo + Final_Linea +
+                    // nombreCliente + Final_Linea +
                     //"BALANCE ANTERIOR: " + "8000" + Final_Linea +
                     //"DIRECCION: " + "C/JUAN DE DIOS VENTURA SIMO #1, SECTOR SALVADOR THEN, CIUDAD SAN FRANCISCO DE MACOIRS || FRENTE AL COMAADO EL AGUILA" + Final_Linea +
                     linea_entera + Final_Linea +
@@ -801,11 +801,11 @@ public class ZebraPrint {
                     //Resolve.dos_columna("TOTAL P-MORA", caracteres_X_linea, String.valueOf(totalMora)) + Final_Linea +
                     Resolve.dos_columna("TOTAL COBRADO", caracteres_X_linea, String.valueOf(totalPagado)) + Final_Linea +
                     //Resolve.dos_columna("TOTAL PENDIENTE", caracteres_X_linea,"6700") + Final_Linea +
-                   // Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro(nombreCobrador, caracteres_X_linea) + Final_Linea +
                     //Resolve.alinea_centro(telefono, caracteres_X_linea) + Final_Linea +
-                   // Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
-                   // Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
-                   //  Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
+                    //  Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
                     " " + Final_Linea;
 
 
@@ -854,7 +854,7 @@ public class ZebraPrint {
                     Resolve.dos_columna("TOTAL PAGADO", caracteres_X_linea, detalles.get(0).get(parametros[6]).toString()) + Final_Linea +
                     Resolve.dos_columna("TOTAL PENDIENTE", caracteres_X_linea,"8050" + Final_Linea +
                     Resolve.alinea_centro(detalles.get(0).get(parametros[4]), caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("*** ABONO A FACTURA NO EVITA CORTE ***", caracteres_X_linea) + Final_Linea +
                     " " + Final_Linea;

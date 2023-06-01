@@ -3,6 +3,7 @@ package com.system.lsp.sync;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.DatabaseHandler;
 import com.system.lsp.provider.ProcesadorLocal;
 import com.system.lsp.provider.ProcesadorRemoto;
+import com.system.lsp.provider.SessionManager;
+import com.system.lsp.ui.Login.LoginActivity;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
@@ -172,7 +175,7 @@ public class HistorialPagos {
                     if(json != null) //displayMessage(json);
                         respuesta = new RespuestaApi(response.statusCode
                                 , "No hay coincidencias del token");
-
+                    logoutUser(context);
                     break;
                 case 500:
                     json = new String(response.data);
@@ -252,6 +255,18 @@ public class HistorialPagos {
         }
 
         return trimmedString;
+    }
+
+
+    private void logoutUser(Context context) {
+        db = new DatabaseHandler(context);
+        SessionManager session = new SessionManager(context);
+        session.setLogin(false);
+        db.deleteCobrador();
+        // Launching the login activity
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 
 

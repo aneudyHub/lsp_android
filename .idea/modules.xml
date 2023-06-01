@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ZSDK_ANDROID_API/ZSDK_ANDROID_API.iml" filepath="$PROJECT_DIR$/ZSDK_ANDROID_API/ZSDK_ANDROID_API.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/lsp_android.iml" filepath="$PROJECT_DIR$/lsp_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lsp_android_credifersa.iml" filepath="$PROJECT_DIR$/.idea/modules/lsp_android_credifersa.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ZSDK_ANDROID_API/lsp_android_credifersa.ZSDK_ANDROID_API.iml" filepath="$PROJECT_DIR$/.idea/modules/ZSDK_ANDROID_API/lsp_android_credifersa.ZSDK_ANDROID_API.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/lsp_android_credifersa.app.unitTest.iml" />
     </modules>
   </component>
 </project>

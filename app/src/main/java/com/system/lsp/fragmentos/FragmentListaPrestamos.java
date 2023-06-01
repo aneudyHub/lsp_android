@@ -7,17 +7,6 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +15,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
@@ -39,7 +41,7 @@ import java.util.ArrayList;
  * Created by Suarez on 13/01/2018.
  */
 
-public class FragmentListaPrestamos extends android.support.v4.app.Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdaptadorPrestamos.OnItemClickListener,SearchView.OnQueryTextListener{
+public class FragmentListaPrestamos extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdaptadorPrestamos.OnItemClickListener,SearchView.OnQueryTextListener{
 
     public static final String TAG = "Prestamos";
     // Referencias UI
@@ -149,6 +151,7 @@ public class FragmentListaPrestamos extends android.support.v4.app.Fragment impl
         int celular = data.getColumnIndex(Contract.Prestamo.CELULAR);
         int capital = data.getColumnIndex(Contract.Prestamo.CAPITAL);
         int total = data.getColumnIndex(Contract.Prestamo.TOTAL);
+        int totalCuota = data.getColumnIndex("Total_cuota");
         int prestamo = data.getColumnIndex(Contract.Prestamo.PRESTAMO);
 
 
@@ -161,7 +164,7 @@ public class FragmentListaPrestamos extends android.support.v4.app.Fragment impl
                 cli = new DatosCliente(data.getString(cuota),data.getString(cuota_id),
                         data.getString(cliente),data.getString(cedula),data.getString(fecha),data.getString(direccion),
                         data.getString(telefono),data.getString(celular),data.getString(capital),
-                        data.getString(total), data.getString(prestamo)
+                        data.getString(total), data.getString(totalCuota),data.getString(prestamo)
                 );
                 mArrayList.add(cli);
                // Log.e("Este es el ARRAY",cli.getDIRECCION());
