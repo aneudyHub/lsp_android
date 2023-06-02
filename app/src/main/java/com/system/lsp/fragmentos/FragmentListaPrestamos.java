@@ -142,13 +142,14 @@ public class FragmentListaPrestamos extends android.support.v4.app.Fragment impl
         int cuota = data.getColumnIndex(Contract.Prestamo.CUOTA);
         int cuota_id = data.getColumnIndex(Contract.Prestamo.CUOTA_ID);
         int cliente = data.getColumnIndex(Contract.Prestamo.CLIENTE);
-        int cedula = data.getColumnIndex(Contract.Prestamo.CLIENTE);
+        int cedula = data.getColumnIndex(Contract.Cliente.DOCUMENTO);
         int fecha = data.getColumnIndex(Contract.Prestamo.FECHA);
         int direccion = data.getColumnIndex(Contract.Prestamo.DIRECCION);
         int telefono = data.getColumnIndex(Contract.Prestamo.TELEFONO);
         int celular = data.getColumnIndex(Contract.Prestamo.CELULAR);
         int capital = data.getColumnIndex(Contract.Prestamo.CAPITAL);
         int total = data.getColumnIndex(Contract.Prestamo.TOTAL);
+        int totalCuota = data.getColumnIndex("Total_cuota");
         int prestamo = data.getColumnIndex(Contract.Prestamo.PRESTAMO);
 
 
@@ -161,7 +162,7 @@ public class FragmentListaPrestamos extends android.support.v4.app.Fragment impl
                 cli = new DatosCliente(data.getString(cuota),data.getString(cuota_id),
                         data.getString(cliente),data.getString(cedula),data.getString(fecha),data.getString(direccion),
                         data.getString(telefono),data.getString(celular),data.getString(capital),
-                        data.getString(total), data.getString(prestamo)
+                        data.getString(total), data.getString(totalCuota),data.getString(prestamo)
                 );
                 mArrayList.add(cli);
                // Log.e("Este es el ARRAY",cli.getDIRECCION());

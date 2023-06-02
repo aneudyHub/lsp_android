@@ -1,6 +1,9 @@
 package com.system.lsp.fragmentos;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Presentation;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -35,10 +38,12 @@ import android.widget.TextView;
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.modelo.DatosCliente;
+import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorHisotiralPagos;
 import com.system.lsp.ui.Pagos.CuotasAdapter;
 import com.system.lsp.ui.Pagos.Pagos;
+import com.system.lsp.utilidades.Progress;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
@@ -55,7 +60,7 @@ import java.util.Locale;
  * Created by Suarez on 13/01/2018.
  */
 
-public class FragmentHistorialPagos extends android.support.v4.app.Fragment implements View.OnClickListener,SearchView.OnQueryTextListener {
+public class FragmentHistorialPagos extends android.support.v4.app.Fragment implements Progress,View.OnClickListener,SearchView.OnQueryTextListener {
 
     public static final String TAG = "Prestamos";
     // Referencias UI
@@ -82,12 +87,17 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     SwipeRefreshLayout swipeRefreshLayout;
     Calendar newCalendar;
 
+    private ProgressDialog server_prog;
+    public ProgressDialog mPrinterProgress;
+    public ProgressDialog progress;
+
 
     @Override
     public void onResume() {
         super.onResume();
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
+
 
 
     }
@@ -103,6 +113,12 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
         dateFormatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         historialPagos = new com.system.lsp.sync.HistorialPagos(getContext());
+
+        mPrinterProgress = new ProgressDialog(getContext());
+        mPrinterProgress.setTitle("Printing...");
+        mPrinterProgress.setCancelable(false);
+        mPrinterProgress.setIndeterminate(true);
+
         prepararLista(view);
         setDateTimeField();
 
@@ -119,6 +135,12 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
                         mensaje, Snackbar.LENGTH_LONG).show();
                 if (mensaje == "Listo"){
                     Log.e("Hola soy ","AC");
+                    if(progress !=null){
+                        Log.e("Hola soy ","ACcc");
+                        if(progress.isShowing())
+                            Log.e("Hola soy ","ACcccc");
+                            progress.dismiss();
+                    }
                     //getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 }
                 // getData(newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -214,8 +236,9 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
             // [QUERIES]
             /*Log.d("PAGOS","PAGOS");
-            Log.d("PAGOS",String.valueOf(operacionesBaseDatos.isCuotasPagasExists()));
-            DatabaseUtils.dumpCursor(operacionesBaseDatos.pagosPendiente());*/
+            Log.d("PAGOS",String.valueOf(operacionesBaseDatos.isCuotasPagasExists()));*/
+           // DatabaseUtils.dumpCursor(operacionesBaseDatos.pagosPendiente());
+
 
 
         } /*if(view == fechaConsulta){
@@ -317,9 +340,13 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
 
         Log.e("CUADRE",""+nombreCobrador+" "+sb.toString() +" Total:"+totalCobrado);
 
+
+
             ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
-                                                    totalCobrado);
+                                                    totalCobrado,this);
             zebraprint.probarlo();
+
+
 
 
 
@@ -413,5 +440,88 @@ public class FragmentHistorialPagos extends android.support.v4.app.Fragment impl
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+
+
+    public void showAlert(String mensaje){
+        if(server_prog!=null)
+            server_prog.dismiss();
+
+
+        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage(mensaje);
+
+        alertDialogBuilder.setPositiveButton("salir", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                finish();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();*/
+
+         /*Snackbar.make(findViewById(R.id.coordinador),
+                            "No hay conexion disponible",
+                            Snackbar.LENGTH_LONG).show();*/
+
+        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+        // set title
+        alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FFF'>INFORMACION</font>"));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(mensaje)
+                .setCancelable(false)
+                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        dialog.cancel();
+                        //finish();
+                    }
+                });
+
+        // create alert dialog
+        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+
+    }
+
+    @Override
+    public void showProgressPrint(Boolean b) {
+        Log.e("HOLA","EL PROBLEMA 1.0");
+        if(b){
+            Log.e("HOLA","EL PROBLEMA 1.1");
+            mPrinterProgress.show();
+        }else{
+            Log.e("HOLA","EL PROBLEMA 1.2");
+            mPrinterProgress.dismiss();
+        }
+    }
+
+    @Override
+    public void error(String msj) {
+        Log.e("valor",mPrinterProgress.toString());
+        if(mPrinterProgress!=null){
+            mPrinterProgress.dismiss();
+        }
+        Log.e("error printer",msj);
+        showAlert(msj);
+
+    }
+
+    @Override
+    public void finishPrint(String msj) {
+        getActivity().setResult(Activity.RESULT_OK);
+        showAlert(msj);
+        if(mPrinterProgress!=null){
+            mPrinterProgress.dismiss();
+        }
+
     }
 }

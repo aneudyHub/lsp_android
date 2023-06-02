@@ -2,13 +2,22 @@ package com.system.lsp.ui.Login;
 /**
  * Created by Suarez on 13/06/2017.
  */
+
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -43,15 +52,17 @@ import com.system.lsp.web.RespuestaApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LoginActivity extends Activity {
-    private static final String TAG = LoginActivity.class.getSimpleName();
+public class Autentication extends Activity {
+    private static final String TAG = Autentication.class.getSimpleName();
     private Button btnLogin;
     private Button btnLinkToRegister;
-    private EditText inputEmail;
-    private EditText inputPassword;
+    private EditText inputCodigo;
+    private EditText inputCodigo1;
     private ProgressDialog pDialog;
     private SessionManager session;
     private TextView nombreUsuario;
+    TelephonyManager mngr;
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
 
     private static final int ESTADO_PETICION_FALLIDA = 107;
     private static final int ESTADO_TIEMPO_ESPERA = 108;
@@ -60,50 +71,57 @@ public class LoginActivity extends Activity {
 
     private Gson gson = new Gson();
 
-    public void setView(){
+    public void setView() {
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
+        inputCodigo = (EditText) findViewById(R.id.codigo);
+        inputCodigo1 = (EditText) findViewById(R.id.codigo1);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                if(UWeb.hayConexion(LoginActivity.this)) {
-                    String email = inputEmail.getText().toString().trim();
-                    String password = inputPassword.getText().toString().trim();
+                if (UWeb.hayConexion(Autentication.this)) {
+                        String cod1 = inputCodigo1.getText().toString().trim();
+                        String cod0 = inputCodigo.getText().toString().trim();
 
                     // Check for empty data in the form
-                    if (!email.isEmpty() && !password.isEmpty()) {
+                    if (!cod1.isEmpty()&&!cod0.isEmpty()) {
                         // login user
                         try {
-                            Log.e("Valores", "" + email + " " + password);
-                            checkLogin(email, password);
+                            String codigo = cod1+"-"+cod0;
+                            Log.e("Valores", "" + codigo);
+                            Log.e("VALOR IMEI", getIMEIDeviceId(Autentication.this));//getIMEIDeviceId
+
+
+
+
+
+                            checkLogin(getIMEIDeviceId(Autentication.this), codigo);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     } else {
                         // Prompt user to enter credentials
                         Toast.makeText(getApplicationContext(),
-                                "Favor digites sus credenciales!", Toast.LENGTH_LONG)
+                                "Favor digite el codigo Completo!", Toast.LENGTH_LONG)
                                 .show();
                     }
-                }else {
+                } else {
 
                      /*Snackbar.make(findViewById(R.id.coordinador),
                             "No hay conexion disponible",
                             Snackbar.LENGTH_LONG).show();*/
 
-                    android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
+                    android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(Autentication.this);
                     // set title
                     alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
 
                     // set dialog message
                     alertDialogBuilder
                             .setMessage(Html.fromHtml("NO TIENE INTERNET.<br/><br/>" +
-                                    "<font color='#FF0000'> Porfavor apague el MODO AVION o conectese a traves de WIFI o 3G</font>") )
+                                    "<font color='#FF0000'> Porfavor apague el MODO AVION o conectese a traves de WIFI o 3G</font>"))
                             .setCancelable(false)
-                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
                                     // if this button is clicked, close
                                     // current activity
                                     dialog.cancel();
@@ -129,116 +147,82 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_antentication);
 
-        setView();
+
         // Session manager
-        session = new SessionManager(getApplicationContext());
-        Log.e("estoy en este lado","pendejo");
+        //session = new SessionManager(getApplicationContext());
+        Log.e("estoy en este lado1","pendejo1");
         // Check if user is already logged in or not
-        if (session.isLoggedIn()) {
+        if (UPreferencias.obtenerUrlAPP(Autentication.this) != null) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(Autentication.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
+
+        setView();
     }
 
     /**
      * function to verify login details in mysql db
      * */
-    private void checkLogin(final String email, final String password) throws JSONException {
+    private void checkLogin(final String imei, final String codigo) throws JSONException {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        Log.e("PASO 1","PASO 1");
+        Log.e("PASO 1", "PASO 10");
 
         final JSONObject jsonBody = new JSONObject();
-        jsonBody.put("id", email);
-        jsonBody.put("password", password);
+        jsonBody.put("imei", imei);
+        jsonBody.put("code", codigo);
 
-        pDialog.setMessage("Logging in ...");
+        pDialog.setMessage("Verificando ...");
         showDialog();
 
-        String url = UPreferencias.obtenerUrlAPP(LoginActivity.this);
-        Log.e("PASO 2","PASO 2");
-        Log.e("PASO 2",url + URL.LOGIN);
+        Log.e("PASO 2", "PASO 20");
+        Log.e("PASO 2", URL.SAUTORISAR + URL.AUTORIZACION);
 
         StringRequest strReq = new StringRequest(Method.POST,
-                url + URL.LOGIN, new Response.Listener<String>() {
+                URL.SAUTORISAR + URL.AUTORIZACION, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.e(TAG, "Login Response: " + response.toString());
                 hideDialog();
 
-                Log.e("PASO 3","PASO 3");
+                Log.e("PASO 3", "PASO 3");
 
                 try {
                     JSONObject jObj = new JSONObject(response.replaceAll("[^\\x00-\\x7F]", ""));
-                    int status = jObj.getInt("status");
-                    Log.e("PASO 4","PASO 4");
+                   // int status = jObj.getInt("status");
+                    Log.e("PASO 4", "PASO 4");
                     // Check for error node in json
-                    if (status == 200) {
+                   /* if (status == 200) {*/
                         // user successfully logged in
                         // Create login session
-                        session.setLogin(true);
+                       // session.setLogin(true);
 
-                        Log.e("PASO 5","PASO 5");
+                        Log.e("PASO 5", "PASO 5");
 
                         // Now store the user in SQLite
                         //String uid = jObj.getString("id");
 
                         // JSONObject user = jObj.getJSONObject("user");
-                        String id = jObj.getString("id");
-                        UPreferencias.guardarIdUsuario(LoginActivity.this,id);
-                        String name = jObj.getString("firstname")+ " " + jObj.getString("lastname");
-                        UPreferencias.guardarNombreUsuario(LoginActivity.this,name);
-                        String nombreCompania = jObj.getString("compania_nombre");
-                        String direccionCompania = jObj.getString("compania_direccion");
-                        String telefonoCompania = jObj.getString("compania_telefono");
-                        String rncCompania = jObj.getString("compania_rnc");
-                        String notaCompania = jObj.getString("compania_nota");
-                        String lemaCompania = jObj.getString("compania_lema");
-                        String username = jObj.getString("username");
-                        String token = jObj.getString("token");
-                        String email = jObj.getString("email");
-                        String telefono = jObj.getString("celular");
-
-
-
-
-                        UPreferencias.guardarTelefonoCobrador(LoginActivity.this,telefono);
-
-                        // Inserting row in users table
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(Contract.Cobrador.COBRADOR_ID,id);
-                        contentValues.put(Contract.Cobrador.NOMBRE,name);
-                        contentValues.put(Contract.Cobrador.USERNAME,username);
-                        contentValues.put(Contract.Cobrador.TOKEN,token);
-                        contentValues.put(Contract.Cobrador.EMAIL,email);
-                        contentValues.put(Contract.Cobrador.NOMBRECOMPANIA,nombreCompania);
-                        contentValues.put(Contract.Cobrador.DIRECCIONCOMPANIA,direccionCompania);
-                        contentValues.put(Contract.Cobrador.TELEFONOCOMPANIA,telefonoCompania);
-                        contentValues.put(Contract.Cobrador.RNCCOMPANIA,rncCompania);
-                        contentValues.put(Contract.Cobrador.NOTACOMPANIA,notaCompania);
-                        contentValues.put(Contract.Cobrador.LEMACOMPANIA,lemaCompania);
-
-
-                        getContentResolver().insert(Contract.Cobrador.URI_CONTENIDO,contentValues);
-
+                        String urlAPP = jObj.getString("connection");
+                        UPreferencias.guardaUrlAPP(Autentication.this,urlAPP);
 
                         // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                MainActivity.class);
+                        Intent intent = new Intent(Autentication.this,
+                                LoginActivity.class);
                         startActivity(intent);
                         finish();
-                    } else {
+                   /* } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("message");
                         Toast.makeText(getApplicationContext(),
                                 errorMsg, Toast.LENGTH_LONG).show();
-                    }
+                    }*/
                 } catch (JSONException e) {
                     // JSON error
                     e.printStackTrace();
@@ -255,27 +239,29 @@ public class LoginActivity extends Activity {
                 //tratarErrores(error);
 
                 NetworkResponse response = error.networkResponse;
-                if(response != null && response.data != null){
-                    switch(response.statusCode){
+                if (response != null && response.data != null) {
+                    switch (response.statusCode) {
                         case 400:
                             json = new String(response.data);
-                            json = trimMessage(json, "message");
-                            if(json != null) displayMessage(json);
+                            json = trimMessage(json, "mensaje");
+                            if (json != null) displayMessage(json);
                             break;
                         case 401:
+
                             json = new String(response.data);
-                            json = trimMessage(json, "message");
-                            if(json != null) displayMessage(json);
+                            Log.e("Estoy aca",json);
+                            json = trimMessage(json, "mensaje");
+                            if (json != null) displayMessage(json);
                             break;
                         case 500:
                             json = new String(response.data);
-                            json = trimMessage(json, "message");
-                            if(json != null) displayMessage(json);
+                            json = trimMessage(json, "mensaje");
+                            if (json != null) displayMessage(json);
                             break;
                         case 405:
                             json = new String(response.data);
-                            json = trimMessage(json, "message");
-                            if(json != null) displayMessage(json);
+                            json = trimMessage(json, "mensaje");
+                            if (json != null) displayMessage(json);
                             break;
                     }
                     //Additional cases
@@ -302,13 +288,13 @@ public class LoginActivity extends Activity {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    public String trimMessage(String json, String key){
+    public String trimMessage(String json, String key) {
         String trimmedString = null;
 
-        try{
+        try {
             JSONObject obj = new JSONObject(json);
             trimmedString = obj.getString(key);
-        } catch(JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -368,7 +354,7 @@ public class LoginActivity extends Activity {
         Log.d(TAG, "Error Respuesta:" + (respuesta != null ? respuesta.toString() : "()")
                 + "\nDetalles:" + error.getMessage());
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Autentication.this);
         alertDialogBuilder.setMessage(respuesta.getMensaje());
 
         alertDialogBuilder.setPositiveButton("salir", new DialogInterface.OnClickListener() {
@@ -383,9 +369,83 @@ public class LoginActivity extends Activity {
         alertDialog.show();
 
 
+    }
+
+
+    public String obtenerImei() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            //Menores a Android 6.0
+            String imei = getIMEI();
+            return imei;
+        } else {
+            // Mayores a Android 6.0
+            String imei = "";
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
+                        MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+                //imei = getIMEI();
+            } else {
+                imei = getIMEI();
+            }
+
+            return imei;
+
+        }
+    }
+
+    @SuppressLint("HardwareIds")
+    private String getIMEI() {
+        String imei;
+        TelephonyManager tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+             imei="";
+        }
+        assert tm != null;
+        imei = tm.getDeviceId(); // Obtiene el imei  or  "352319065579474";
+        Log.e("ESTE ES EL IME",imei);
+        return imei;
 
     }
 
+    public static String getIMEIDeviceId(Context context) {
+
+        String deviceId;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+        {
+            deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        } else {
+            final TelephonyManager mTelephony = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                    return "";
+                }
+            }
+            assert mTelephony != null;
+            if (mTelephony.getDeviceId() != null)
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                {
+                    deviceId = mTelephony.getImei();
+                }else {
+                    deviceId = mTelephony.getDeviceId();
+                }
+            } else {
+                deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+            }
+        }
+        Log.d("deviceId", deviceId);
+        return deviceId;
+    }
 
 
     //Somewhere that has access to a context

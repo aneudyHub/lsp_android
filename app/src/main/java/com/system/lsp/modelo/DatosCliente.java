@@ -16,11 +16,12 @@ public class DatosCliente {
     private String CELULAR;
     private String VALOR;
     private String TOTAL;
+    private String Total_cuota;
     private String MONTO_PAGADO;
     private String PRESTAMO;
 
 
-    public DatosCliente(String CUOTA, String CUOTA_ID, String CLIENTE,String CEDULA, String FECHA, String DIRECCION, String TELEFONO, String CELULAR, String VALOR,String TOTAL, String PRESTAMO) {
+    public DatosCliente(String CUOTA, String CUOTA_ID, String CLIENTE,String CEDULA, String FECHA, String DIRECCION, String TELEFONO, String CELULAR, String VALOR,String TOTAL,String total_cuota, String PRESTAMO) {
         this.CUOTA = CUOTA;
         this.CUOTA_ID = CUOTA_ID;
         this.CLIENTE = CLIENTE;
@@ -31,10 +32,11 @@ public class DatosCliente {
         this.CELULAR = CELULAR;
         this.VALOR = VALOR;
         this.TOTAL = TOTAL;
+        this.Total_cuota = total_cuota;
         this.PRESTAMO = PRESTAMO;
     }
 
-    public DatosCliente(String CUOTA, String CUOTA_ID, String CLIENTE,String CEDULA, String FECHA, String DIRECCION, String TELEFONO, String CELULAR, String TOTAL, String PRESTAMO) {
+    public DatosCliente(String CUOTA, String CUOTA_ID, String CLIENTE,String CEDULA, String FECHA, String DIRECCION, String TELEFONO, String CELULAR, String TOTAL,String total_cuota, String PRESTAMO) {
         this.CUOTA = CUOTA;
         this.CUOTA_ID = CUOTA_ID;
         this.CLIENTE = CLIENTE;
@@ -44,6 +46,7 @@ public class DatosCliente {
         this.TELEFONO = TELEFONO;
         this.CELULAR = CELULAR;
         this.TOTAL = TOTAL;
+        this.Total_cuota = total_cuota;
         this.PRESTAMO = PRESTAMO;
     }
 
@@ -122,6 +125,11 @@ public class DatosCliente {
     public void setTOTAL(String TOTAL) {
         this.TOTAL = TOTAL;
     }
+
+    public String getTotal_cuota() {return Total_cuota;}
+
+    public void setTotal_cuota(String total_cuota) {Total_cuota = total_cuota;}
+
 
     public String getPRESTAMO() {
         return PRESTAMO;

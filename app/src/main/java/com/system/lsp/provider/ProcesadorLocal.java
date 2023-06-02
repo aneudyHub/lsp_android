@@ -100,11 +100,13 @@ public class ProcesadorLocal {
             prestamosDetalle.setInteres(Float.parseFloat(row.getString("interes")));
             prestamosDetalle.setMora(Float.parseFloat(row.getString("mora")));
             prestamosDetalle.setFecha(row.getString("fecha"));
+            prestamosDetalle.setDias_atrasados(row.getString("dias"));
             prestamosDetalle.setFechaPagado(row.getString("fecha_pagado"));
             prestamosDetalle.setPagado(row.getInt("pagado"));
             prestamosDetalle.setActivo(row.getInt("activo"));
             prestamosDetalle.setMontoPagado(row.getDouble("monto_pagado"));
             prestamosDetalle.setAbono_mora(row.getDouble("abono_mora"));
+            prestamosDetalle.setMora_acumulada(row.getDouble("mora_acumulada"));
             prestamosDetalle.setUpdated_at(row.getString("updated_at"));
             prestamosDetalle.aplicarSanidad();
             PrestamosDetalleRemotos.put(prestamosDetalle.getId(),prestamosDetalle);
@@ -526,7 +528,7 @@ public class ProcesadorLocal {
                 .withValue(Contract.Prestamo.CLIENTE_ID,prestamo.getClientes_Id())
                 .withValue(Contract.Prestamo.CAPITAL,prestamo.getCapital())
                 .withValue(Contract.Prestamo.INTERES,prestamo.getPorcientoInteres())
-                .withValue(Contract.Prestamo.MORA,prestamo.getPorcientoMora())
+                .withValue(Contract.Prestamo.PORCIENTO_MORA,prestamo.getPorcientoMora())
                 .withValue(Contract.Prestamo.PLAZO,prestamo.getPlazo())
                 .withValue(Contract.Prestamo.CUOTAS,prestamo.getCuotas())
                 .withValue(Contract.Prestamo.FECHA_INICIO,prestamo.getFechaInicio())
@@ -543,7 +545,7 @@ public class ProcesadorLocal {
                 .withValue(Contract.Prestamo.CLIENTE_ID,prestamo.getClientes_Id())
                 .withValue(Contract.Prestamo.CAPITAL,prestamo.getCapital())
                 .withValue(Contract.Prestamo.INTERES,prestamo.getPorcientoInteres())
-                .withValue(Contract.Prestamo.MORA,prestamo.getPorcientoMora())
+                .withValue(Contract.Prestamo.PORCIENTO_MORA,prestamo.getPorcientoMora())
                 .withValue(Contract.Prestamo.PLAZO,prestamo.getPlazo())
                 .withValue(Contract.Prestamo.CUOTAS,prestamo.getCuotas())
                 .withValue(Contract.Prestamo.FECHA_INICIO,prestamo.getFechaInicio())
@@ -564,10 +566,12 @@ public class ProcesadorLocal {
                 .withValue(Contract.PrestamoDetalle.INTERES,prestamoDetalle.getInteres())
                 .withValue(Contract.PrestamoDetalle.MORA,prestamoDetalle.getMora())
                 .withValue(Contract.PrestamoDetalle.FECHA,prestamoDetalle.getFecha())
+                .withValue(Contract.PrestamoDetalle.DIAS_ATRASADOS,prestamoDetalle.getDias_atrasados())
                 .withValue(Contract.PrestamoDetalle.PAGADO,prestamoDetalle.getPagado())
                 .withValue(Contract.PrestamoDetalle.ACTIVO,prestamoDetalle.getActivo())
                 .withValue(Contract.PrestamoDetalle.MONTO_PAGADO,prestamoDetalle.getMontoPagado())
                 .withValue(Contract.PrestamoDetalle.ABONO_MORA,prestamoDetalle.getAbono_mora())
+                .withValue(Contract.PrestamoDetalle.MORA_ACUMULADA,prestamoDetalle.getMora_acumulada())
                 .withValue(Contract.PrestamoDetalle.UPDATE_AT,prestamoDetalle.getUpdated_at())
                 .withValue(Contract.PrestamoDetalle.INSERTADO,0)
                 .build();
@@ -585,10 +589,12 @@ public class ProcesadorLocal {
                 .withValue(Contract.PrestamoDetalle.INTERES,prestamoDetalle.getInteres())
                 .withValue(Contract.PrestamoDetalle.MORA,prestamoDetalle.getMora())
                 .withValue(Contract.PrestamoDetalle.FECHA,prestamoDetalle.getFecha())
+                .withValue(Contract.PrestamoDetalle.DIAS_ATRASADOS,prestamoDetalle.getDias_atrasados())
                 .withValue(Contract.PrestamoDetalle.PAGADO,prestamoDetalle.getPagado())
                 .withValue(Contract.PrestamoDetalle.ACTIVO,prestamoDetalle.getActivo())
                 .withValue(Contract.PrestamoDetalle.MONTO_PAGADO,prestamoDetalle.getMontoPagado())
                 .withValue(Contract.PrestamoDetalle.ABONO_MORA,prestamoDetalle.getAbono_mora())
+                .withValue(Contract.PrestamoDetalle.MORA_ACUMULADA,prestamoDetalle.getMora_acumulada())
                 .withValue(Contract.PrestamoDetalle.UPDATE_AT,prestamoDetalle.getUpdated_at())
                 .withValue(Contract.PrestamoDetalle.MODIFICADO,prestamoDetalle.getModificado())
                 .build();
@@ -678,7 +684,7 @@ public class ProcesadorLocal {
                 c.getInt(c.getColumnIndex(Contract.Prestamo.CLIENTE_ID)),
                 c.getDouble(c.getColumnIndex(Contract.Prestamo.CAPITAL)),
                 Float.parseFloat(c.getString(c.getColumnIndex(Contract.Prestamo.INTERES))),
-                Float.parseFloat(c.getString(c.getColumnIndex(Contract.Prestamo.MORA))),
+                Float.parseFloat(c.getString(c.getColumnIndex(Contract.Prestamo.PORCIENTO_MORA))),
                 c.getString(c.getColumnIndex(Contract.Prestamo.PLAZO)),
                 c.getInt(c.getColumnIndex(Contract.Prestamo.CUOTAS)),
                 c.getString(c.getColumnIndex(Contract.Prestamo.FECHA_INICIO)),
@@ -702,11 +708,13 @@ public class ProcesadorLocal {
                 c.getDouble(c.getColumnIndex(Contract.PrestamoDetalle.INTERES)),
                 c.getDouble(c.getColumnIndex(Contract.PrestamoDetalle.MORA)),
                 c.getString(c.getColumnIndex(Contract.PrestamoDetalle.FECHA)),
+                c.getString(c.getColumnIndex(Contract.PrestamoDetalle.DIAS_ATRASADOS)),
                 c.getString(c.getColumnIndex(Contract.PrestamoDetalle.FECHA_PAGADO)),
                 c.getInt(c.getColumnIndex(Contract.PrestamoDetalle.PAGADO)),
                 c.getInt(c.getColumnIndex(Contract.PrestamoDetalle.ACTIVO)),
                 c.getDouble(c.getColumnIndex(Contract.PrestamoDetalle.MONTO_PAGADO)),
                 c.getDouble(c.getColumnIndex(Contract.PrestamoDetalle.ABONO_MORA)),
+                c.getDouble(c.getColumnIndex(Contract.PrestamoDetalle.MORA_ACUMULADA)),
                 c.getString(c.getColumnIndex(Contract.PrestamoDetalle.UPDATE_AT)),
                 c.getInt(c.getColumnIndex(Contract.PrestamoDetalle.MODIFICADO))
 

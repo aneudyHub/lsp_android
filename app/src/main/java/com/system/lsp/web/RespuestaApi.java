@@ -12,8 +12,13 @@ public class RespuestaApi {
     public RespuestaApi(int code, String body) {
         this.estado = code;
         this.mensaje = body;
-        Log.e("ESTA EL EL ESTADO",""+this.estado);
-        Log.e("Este es el msj",this.mensaje.toString());
+        if (this.mensaje== null) {
+            Log.e("ESTA EL EL ESTADO","VALOR NULL");
+        } else {
+            Log.e("ESTA EL EL ESTADO",""+this.estado);
+            Log.e("Este es el msj",this.mensaje.toString());
+        }
+
     }
 
     public RespuestaApi() {

@@ -45,7 +45,7 @@ public class Contract {
         String CLIENTE_ID ="clientes_id";
         String CAPITAL ="capital_prestamo";
         String INTERES ="interes";
-        String MORA="mora";
+        String PORCIENTO_MORA="porciento_mora";
         String PLAZO ="plazo";
         String CUOTAS="cantidad_cuotas";
         String FECHA_INICIO="fecha_inicio";
@@ -63,15 +63,18 @@ public class Contract {
         String INTERES="interes";
         String MORA ="mora";
         String FECHA ="fecha";
+        String DIAS_ATRASADOS ="dias_atrasados";
         String PAGADO ="pagado";
         String ACTIVO ="activo";
         String MONTO_PAGADO="monto_pagado";
         String FECHA_PAGADO="fecha_pagado";
         String ABONO_MORA = "abono_mora";
+        String MORA_ACUMULADA = "mora_acumulada";
         String UPDATE_AT="updated_at";
     }
 
     interface ColumnasCuotasPagas {
+        String ID_CUOTA ="id_cuota";
         String ID = "id";
         String FECHA="fecha";
         String COBRADOR_ID = "usuarios_id";
@@ -87,6 +90,7 @@ public class Contract {
 
 
 
+
     interface ColumnasCobrador{
         String COBRADOR_ID="id";
         String USERNAME="username";
@@ -94,6 +98,12 @@ public class Contract {
         String ZONA="zona";
         String TOKEN="token";
         String EMAIL="email";
+        String NOMBRECOMPANIA="compania_nombre";
+        String DIRECCIONCOMPANIA="compania_direccion";
+        String TELEFONOCOMPANIA="compania_telefono";
+        String RNCCOMPANIA="compania_rnc";
+        String NOTACOMPANIA="compania_nota";
+        String LEMACOMPANIA="compania_lema";
         String SYNC_TIME="sync_time";
     }
 

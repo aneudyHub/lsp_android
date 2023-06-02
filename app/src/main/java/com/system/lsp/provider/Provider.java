@@ -121,7 +121,7 @@ public class Provider extends ContentProvider {
                 c=bd.query(Contract.PRESTAMOS,projection,selection,selectionArgs,null,null,sortOrder);
                 break;
             case LISTA_CUOTAS:
-               // Log.e("Estoy en Lista","Cuotas");
+                Log.e("Estoy en Lista","Cuotas");
                 c=bd.rawQuery("select " +
                         "p.id as "+Contract.Cobrador.PRESTAMO+"," +
                         "count(pd.n_cuota) as "+Contract.Cobrador.CUOTA+","+
@@ -132,7 +132,9 @@ public class Provider extends ContentProvider {
                         "cli.direccion as "+Contract.Cobrador.DIRECCION+","+
                         "cli.celular as "+Contract.Cobrador.CELULAR+","+
                         "cli.telefono as "+Contract.Cobrador.TELEFONO+","+
-                        "((sum(pd.capital)+sum(pd.interes)+sum(pd.mora))- sum(pd.monto_pagado)) as "+Contract.Cobrador.TOTAL+" "+
+                        "pd.mora_acumulada as "+Contract.PrestamoDetalle.MORA_ACUMULADA+","+
+                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)-(sum(pd.monto_pagado)+sum(pd.abono_mora))) as "+Contract.Cobrador.TOTAL+","+
+                        "((sum(pd.capital)+sum(pd.interes))- sum(pd.monto_pagado)) as "+"Total_cuota"+" "+
                         "from prestamos p " +
                         "join prestamos_detalle pd on p.id=pd.prestamos_id " +
                         "join clientes cli on p.clientes_id=cli.id " +
@@ -147,12 +149,14 @@ public class Provider extends ContentProvider {
                         "count(pd.n_cuota) as "+Contract.Cobrador.CUOTA+","+
                         "pd.id as "+Contract.Cobrador.CUOTA_ID+","+
                         "cli.nombre as "+Contract.Cobrador.CLIENTE+","+
+                        "cli.documento as "+Contract.Cliente.DOCUMENTO+","+
                         "pd.fecha as "+Contract.Cobrador.FECHA+","+
                         "cli.direccion as "+Contract.Cobrador.DIRECCION+","+
                         "cli.celular as "+Contract.Cobrador.CELULAR+","+
                         "cli.telefono as "+Contract.Cobrador.TELEFONO+","+
                         "p.capital_prestamo as "+Contract.Prestamo.CAPITAL+","+
-                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)-sum(pd.monto_pagado)) as "+Contract.Cobrador.TOTAL+" "+
+                        "(sum(pd.capital)+sum(pd.interes)+sum(pd.mora)-(sum(pd.monto_pagado)+sum(pd.abono_mora))) as "+Contract.Cobrador.TOTAL+","+
+                        "(sum(pd.capital)+sum(pd.interes)-sum(pd.monto_pagado)) as "+"Total_cuota"+" "+
                         "from prestamos p " +
                         "join prestamos_detalle pd on p.id=pd.prestamos_id " +
                         "join clientes cli on p.clientes_id=cli.id " +
@@ -263,7 +267,7 @@ public class Provider extends ContentProvider {
 
             case CUOTA_PAGADA:
                 Log.e("ENTRE AL PROVIDER","HOLA");
-                insertOrUpdateById(bd,uri,Contract.CUOTA_PAGADA,values);
+                insertOrCuotaPagas(bd,uri,Contract.CUOTA_PAGADA,values);
                 resolver.notifyChange(uri,null);
                 return Contract.CuotaPaga.crearUriCuotaPaga(values.getAsString(Contract.CuotaPaga.ID));
              /* long _id =  bd.insertOrThrow(Contract.CUOTA_PAGADA,null,values);
@@ -298,6 +302,17 @@ public class Provider extends ContentProvider {
         }
 
     }
+
+    private void insertOrCuotaPagas(SQLiteDatabase db, Uri uri, String table,
+                                    ContentValues values) throws SQLException {
+
+            db.insertOrThrow(table, null, values);
+
+
+    }
+
+
+
 
 
 

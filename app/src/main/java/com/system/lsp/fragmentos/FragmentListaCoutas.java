@@ -1,5 +1,6 @@
 package com.system.lsp.fragmentos;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,6 +49,7 @@ import com.system.lsp.utilidades.URL;
 import com.system.lsp.utilidades.UTiempo;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -67,6 +69,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private ConstraintLayout mInfoNoData;
     private BroadcastReceiver receptorSync;
     private Context globalContext = null;
+    public ProgressDialog progress;
 
     private Cursor cursor;
     public OperacionesBaseDatos operacionesBaseDatos;
@@ -74,13 +77,14 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private static Timer timer;
     private TimerTask timerTask;
     final Handler handler = new Handler();
+    private ProgressDialog dialog;
 
     @Override
     public void onResume() {
         super.onResume();
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
+        LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext())).registerReceiver(receptorSync, filtroSync);
         Log.e("ESTOY EN RESUME","");
         //startTime(getContext());
 
@@ -95,7 +99,10 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
         prepararLista(view);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
+
         Log.e("broadcast","llego");
+
+
         // Crear receptor de mensajes de sincronización
         receptorSync = new BroadcastReceiver() {
 
@@ -108,6 +115,12 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                 Snackbar.make(view.findViewById(R.id.coordinador),
                         mensaje, Snackbar.LENGTH_LONG).show();
 
+                if(progress !=null){
+                    if(progress.isShowing())
+                        progress.dismiss();
+                }
+
+
             }
         };
 
@@ -116,7 +129,19 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         mInfoNoData.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showProgress("CARGANDO DATOS");
+                    Resolve.sincronizarData(getContext());
+
+                    swipeRefreshLayout.setRefreshing(true);
+            }
+        });
+        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 sincronizar(view);
@@ -128,7 +153,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                 //sincronizar(view);
 
             }
-        });
+        });*/
 
         return  view;
     }
@@ -148,7 +173,15 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         reciclador = (RecyclerView) view.findViewById(R.id.reciclador);
         layoutManager = new LinearLayoutManager(getContext());
         reciclador.setLayoutManager(layoutManager);
-        //reciclador.setAdapter(adaptador);
+        reciclador.setHasFixedSize(true);
+        reciclador.setAdapter(adaptador);
+
+
+
+
+
+
+
     }
 
 
@@ -176,6 +209,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         int telefono = data.getColumnIndex(Contract.Cobrador.TELEFONO);
         int celular = data.getColumnIndex(Contract.Cobrador.CELULAR);
         int total = data.getColumnIndex(Contract.Cobrador.TOTAL);
+        int totalCuota = data.getColumnIndex("Total_cuota");
         int prestamo = data.getColumnIndex(Contract.Cobrador.PRESTAMO);
 
 
@@ -185,7 +219,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
                 DatosCliente cli = new DatosCliente(data.getString(cuota),data.getString(cuota_id),
                         data.getString(cliente),data.getString(documento),data.getString(fecha),data.getString(direccion),
-                        data.getString(telefono),data.getString(celular),data.getString(total),
+                        data.getString(telefono),data.getString(celular),data.getString(total),data.getString(totalCuota),
                         data.getString(prestamo)
                 );
                 mArrayList.add(cli);
@@ -237,6 +271,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                         public void onClick(DialogInterface dialog,int id) {
                             // if this button is clicked, close
                             // current activity
+                            showProgress("CARGANDO DATOS");
                             Resolve.sincronizarData(getActivity());
                             dialog.cancel();
                         }
@@ -258,11 +293,12 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
 
 
-    void mostrarDetalles(Uri uri,double montoPendiente,String nombre) {
+    void mostrarDetalles(Uri uri,double montoPendiente,double totalCuota,String nombre) {
         Intent intent = new Intent(getActivity(), Pagos.class);
         if (null != uri) {
             intent.putExtra(Contract.PRESTAMOS, uri.toString());
             intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
+            intent.putExtra("TotalCuota",totalCuota);
             intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
             intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
         }
@@ -312,9 +348,9 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     }
 
     @Override
-    public void onClick(String idContacto,double montoPendiente,String nombre) {
+    public void onClick(String idContacto,double montoPendiente,double totalCuota,String nombre) {
         Log.e("idcontacto",idContacto);
-        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,nombre);
+        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,totalCuota,nombre);
     }
 
     @Override
@@ -329,7 +365,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         ImageView foto = (ImageView) view.findViewById(R.id.DialogFoto_Foto);
 
         RequestOptions options = new RequestOptions()
-                .centerCrop()
+                .fitCenter()
                 .placeholder(getResources().getDrawable(R.drawable.index))
                 .error(getResources().getDrawable(R.drawable.index));
 
@@ -346,6 +382,14 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         super.onDestroy();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receptorSync);
     }
+
+    public void showProgress(String title){
+        progress = new ProgressDialog(getContext());
+        progress.setTitle(title);
+        progress.setCancelable(false);
+        progress.show();
+    }
+
 
 
     public void startTime(Context context){
@@ -392,5 +436,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
             timer = null;
         }
     }*/
+
+
+
 
 }

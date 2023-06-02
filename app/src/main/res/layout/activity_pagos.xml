@@ -71,7 +71,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/PanelAPagar"
+        android:id="@+id/PanelAMora"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul700"
@@ -80,6 +80,81 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Tlayout">
 
+
+
+    <TextView
+        android:id="@+id/tMora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="left"
+        android:text="Total en Mora"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/total_mora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="right"
+        android:text="RD$ 5000.00"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/PanelACuota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul700"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PanelAMora">
+        <TextView
+            android:id="@+id/tCuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="Total en Cuota"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/info_prestamo"
+            android:layout_width="112dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+        <TextView
+            android:id="@+id/total_cuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="RD$ 5000.00"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/PanelAPagar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/azul700"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PanelACuota">
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"

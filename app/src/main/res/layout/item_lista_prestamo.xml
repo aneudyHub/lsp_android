@@ -59,7 +59,37 @@
             tools:text="Clínica Central" />
 
 
+        <TextView
+            android:id="@+id/documento_cliente"
+            style="@style/Base.TextAppearance.AppCompat.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:textColor="@color/negro87"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
+            tools:text="0000000000" />
 
+
+        <TextView
+            android:id="@+id/direccion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="6dp"
+            android:maxLines="5"
+            android:paddingBottom="10dp"
+            android:paddingRight="16dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/GRIS"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
+            app:layout_constraintStart_toStartOf="@+id/vertical_separator"
+            app:layout_constraintTop_toBottomOf="@+id/documento_cliente"
+            tools:text="Clínica Central" />
 
 
         <TextView
@@ -74,7 +104,7 @@
             android:textColor="@color/GRIS"
             app:layout_constraintLeft_toLeftOf="@+id/vertical_separator"
             app:layout_constraintStart_toStartOf="@+id/vertical_separator"
-            app:layout_constraintTop_toBottomOf="@+id/nombre_cliente"
+            app:layout_constraintTop_toBottomOf="@+id/direccion"
             tools:text="Clínica Central" />
 
 

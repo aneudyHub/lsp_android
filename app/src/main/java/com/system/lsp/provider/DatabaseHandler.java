@@ -56,7 +56,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 Prestamo.CLIENTE_ID+ " INTEGER,"+
                 Prestamo.CAPITAL+" DOUBLE,"+
                 Prestamo.INTERES+" FLOAT,"+
-                Prestamo.MORA+" FLOAT,"+
+                Prestamo.PORCIENTO_MORA+" INTEGER,"+
                 Prestamo.PLAZO+" TEXT,"+
                 Prestamo.CUOTAS+" INTEGER,"+
                 Prestamo.FECHA_INICIO+" TIMESTAMP,"+
@@ -80,11 +80,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 PrestamoDetalle.INTERES+" DOUBLE,"+
                 PrestamoDetalle.MORA+" DOUBLE,"+
                 PrestamoDetalle.FECHA+" DATE,"+
+                PrestamoDetalle.DIAS_ATRASADOS+" INTEGER,"+
                 PrestamoDetalle.FECHA_PAGADO+" DATE,"+
                 PrestamoDetalle.PAGADO+" INTEGER,"+
                 PrestamoDetalle.ACTIVO+" INTEGER,"+
                 PrestamoDetalle.MONTO_PAGADO+" DOUBLE,"+
                 PrestamoDetalle.ABONO_MORA+" DOUBLE,"+
+                PrestamoDetalle.MORA_ACUMULADA+" DOUBLE,"+
                 PrestamoDetalle.UPDATE_AT + " DATE DEFAULT CURRENT_TIMESTAMP,"+
                 Prestamo.INSERTADO+" INTEGER DEFAULT 1,"+
                 Prestamo.MODIFICADO+" INTEGER DEFAULT 0,"+
@@ -94,7 +96,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
         String PagosT = "CREATE TABLE "+Contract.CUOTA_PAGADA +" ("+
-                CuotaPaga.ID + " INTEGER PRIMARY KEY,"+
+                CuotaPaga.ID_CUOTA + " INTEGER PRIMARY KEY  AUTOINCREMENT,"+
+                CuotaPaga.ID + " INTEGER DEFAULT 0,"+
                 CuotaPaga.FECHA+" TIMESTAMP,"+
                 CuotaPaga.COBRADOR_ID +" INTEGER,"+
                 CuotaPaga.NOMBRE_COBRADOR +" TEXT,"+
@@ -111,14 +114,20 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Log.e("PagosT table",PagosT);
         db.execSQL(PagosT);
 
-        String CobradorT ="CREATE TABLE "+Contract.COBRADOR+"("+
-                Cobrador.COBRADOR_ID+" INTEGER PRIMARY KEY,"+
-                Cobrador.USERNAME+" TEXT,"+
-                Cobrador.NOMBRE+" TEXT,"+
-                Cobrador.ZONA+" TEXT,"+
-                Cobrador.TOKEN+" TEXT,"+
-                Cobrador.EMAIL+" TEXT,"+
-                Cobrador.SYNC_TIME+" TIMESTAMP);";
+        String CobradorT ="CREATE TABLE "+Contract.COBRADOR+" ("+
+                Cobrador.COBRADOR_ID + " INTEGER PRIMARY KEY,"+
+                Cobrador.USERNAME + " TEXT,"+
+                Cobrador.NOMBRE + " TEXT,"+
+                Cobrador.ZONA + " TEXT,"+
+                Cobrador.TOKEN + " TEXT,"+
+                Cobrador.EMAIL + " TEXT,"+
+                Cobrador.NOMBRECOMPANIA + " TEXT,"+
+                Cobrador.DIRECCIONCOMPANIA + " TEXT,"+
+                Cobrador.TELEFONOCOMPANIA + " TEXT,"+
+                Cobrador.RNCCOMPANIA + " TEXT,"+
+                Cobrador.NOTACOMPANIA + " TEXT,"+
+                Cobrador.LEMACOMPANIA + " TEXT,"+
+                Cobrador.SYNC_TIME + " TIMESTAMP);";
 
         db.execSQL(CobradorT);
 

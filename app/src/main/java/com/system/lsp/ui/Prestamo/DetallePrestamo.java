@@ -52,6 +52,7 @@ public class DetallePrestamo extends AppCompatActivity {
 
     private String idPrestamos;
     private Double monto;
+    private Double totalCuota;
 
     private  TextView capital;
     private  TextView interes;
@@ -146,6 +147,7 @@ public class DetallePrestamo extends AppCompatActivity {
                 if (null != uri) {
                     intent.putExtra(Contract.PRESTAMOS, uri.toString());
                     intent.putExtra(Contract.Cobrador.TOTAL,monto);
+                    intent.putExtra("TotalCuota",totalCuota);
                     intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
                     intent.putExtra(Contract.Cobrador.CLIENTE,nombre.getText());
 
@@ -191,9 +193,10 @@ public class DetallePrestamo extends AppCompatActivity {
         capital.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)));
         interes.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.INTERES)));
         mora.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.MORA)));
-        balance.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
-        double b =Double.parseDouble(cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
+        balance.setText("RD$ "+cursor.getString(cursor.getColumnIndex("ValorCapital")));
+        //double b =Double.parseDouble(cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL)));
         monto = datos.obtenerTotalAPagar(idPrestamos);
+        totalCuota = datos.obtenerTotalCuota(idPrestamos);
 
         fecha.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.FECHA_INICIO)));
         cuotas.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CUOTAS)));
@@ -212,7 +215,7 @@ public class DetallePrestamo extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             // [QUERIES]
            Log.d("Clientes","Clientes");
-            DatabaseUtils.dumpCursor(datos.ObtenerDatosPrestamoPorId(idPrestamos));
+            //DatabaseUtils.dumpCursor(datos.ObtenerDatosPrestamoPorId(idPrestamos));
             consultar(idPrestamos);
 
             return null;

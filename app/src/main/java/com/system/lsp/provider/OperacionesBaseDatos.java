@@ -43,6 +43,11 @@ public class OperacionesBaseDatos {
             "INNER JOIN prestamos_detalle " +
             "ON prestamos_detalle.prestamos_id = prestamos.id";
 
+    private static final String CABECERA_PRESTAMO_JOIN_DATALLEPRESTAMO = "prestamos " +
+            "INNER JOIN prestamos_detalle " +
+            "ON prestamos.id = prestamos_detalle.prestamos_id ";
+
+
     private static final String CABECERA_CUOTAS_PAGAS = "cuota_paga ";
 
     public Double obtenerTotalAPagar(String prestamo){
@@ -52,7 +57,7 @@ public class OperacionesBaseDatos {
         builder.setTables(Contract.PRESTAMOS_DETALLES);
         Cursor c;
         String[] proyeccion ={
-                "(SUM("+Contract.PrestamoDetalle.CAPITAL+") + SUM("+Contract.PrestamoDetalle.INTERES+") + SUM("+Contract.PrestamoDetalle.MORA+")) - SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+") as total"
+                "(SUM("+Contract.PrestamoDetalle.CAPITAL+") + SUM("+Contract.PrestamoDetalle.INTERES+") + SUM("+Contract.PrestamoDetalle.MORA+")) - (SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+")+SUM("+Contract.PrestamoDetalle.ABONO_MORA+")) as total"
         };
         c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{prestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
 
@@ -63,6 +68,68 @@ public class OperacionesBaseDatos {
         c.close();
         return t;
     }
+
+
+    public Double obtenerTotalCuota(String prestamo){
+        double t=0;
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Contract.PRESTAMOS_DETALLES);
+        Cursor c;
+        String[] proyeccion ={
+                "(SUM("+Contract.PrestamoDetalle.CAPITAL+") + SUM("+Contract.PrestamoDetalle.INTERES+")) - SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+") as totalCuota"
+        };
+        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{prestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
+
+        if(c!=null){
+            c.moveToFirst();
+            t = c.getDouble(c.getColumnIndex("totalCuota"));
+        }
+        c.close();
+        return t;
+    }
+
+
+    public Double obtenerTotalMora(String idPrestamo){
+        double t=0;
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(Contract.PRESTAMOS_DETALLES);
+        Cursor c;
+        String[] proyeccion ={
+                "SUM("+Contract.PrestamoDetalle.MORA+") - SUM("+Contract.PrestamoDetalle.ABONO_MORA+")  as totalMora"
+        };
+        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{idPrestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
+
+        if(c!=null){
+            c.moveToFirst();
+            t = c.getDouble(c.getColumnIndex("totalMora"));
+        }
+        c.close();
+        return t;
+    }
+
+
+
+    public boolean actualizarCuotas(String idPrestamoDetalle,double monto,String MC) {
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+
+        ContentValues valores = new ContentValues();
+        if(MC.equals("1")){
+            valores.put(Contract.PrestamoDetalle.ABONO_MORA,monto);
+        }else {
+            valores.put(Contract.PrestamoDetalle.MONTO_PAGADO,monto);
+
+        }
+
+        String whereClause = String.format("%s=?", Contract.PrestamoDetalle.ID);
+        String[] whereArgs = {idPrestamoDetalle};
+
+        int resultado = db.update(Contract.PRESTAMOS_DETALLES, valores, whereClause, whereArgs);
+
+        return resultado > 0;
+    }
+
 
     public Cursor ObtenerDatosPrestamoPorId(String id){
         SQLiteDatabase db = baseDatos.getWritableDatabase();
@@ -80,7 +147,7 @@ public class OperacionesBaseDatos {
                 Contract.PRESTAMOS + "." + Contract.Prestamo.FECHA_INICIO,
                "(SUM( " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL + " ) + " +
                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + " ) + " +
-                       "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) - SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+") as "+Contract.PrestamoDetalle.CAPITAL,
+                       "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) as ValorCapital",
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MONTO_PAGADO,
                 "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES+") AS "+Contract.PrestamoDetalle.INTERES,
                 "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA+") AS "+Contract.PrestamoDetalle.MORA,
@@ -95,6 +162,69 @@ public class OperacionesBaseDatos {
         return c;
 
     }
+
+    public Cursor ObtenerInfoPrestamoPorId(String id){
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        String selection;
+        selection = String.format("%s=?", Contract.PRESTAMOS + "." +Contract.Prestamo.ID);
+        String[] selectionArgs = {id};
+        Cursor c;
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(CABECERA_PRESTAMO_JOIN_DATALLEPRESTAMO);
+        String[] proyeccion = {
+                Contract.PRESTAMOS + "." + Contract.Prestamo.CAPITAL,
+                Contract.PRESTAMOS + "." + Contract.Prestamo.PORCIENTO_MORA,
+                Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL,
+                Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES,
+                Contract.PRESTAMOS + "." + Contract.Prestamo.PLAZO,
+                Contract.PRESTAMOS + "." + Contract.Prestamo.CUOTAS,
+                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PAGADO+") AS CuotaPagada",
+
+        };
+
+        c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
+
+        //Nos movemos al primer registro de la consulta
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
+    }
+
+
+    public Cursor ObtenerInfoPrestamoDiasAtrasadoAndMora(String id){
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+        String selection;
+        selection = String.format("%s=?", Contract.PRESTAMOS + "." +Contract.Prestamo.ID) +
+                " AND "+ Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.PAGADO + " = 0" +
+                " AND "+ Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.DIAS_ATRASADOS + " > 0 IS NOT NULL";
+        String[] selectionArgs = {id};
+        Cursor c;
+
+        SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
+        builder.setTables(CABECERA_PRESTAMO_JOIN_DATALLEPRESTAMO);
+        String[] proyeccion = {
+                "COUNT("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CUOTA+")  AS CuotasAtrasadas ",
+                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.DIAS_ATRASADOS+") AS DiasAtrasados ",
+                "(SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " ) - " +
+                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.ABONO_MORA + " ))  as ValorMora",
+                "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.ABONO_MORA + " )  as AbonoMora",
+        };
+
+        c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
+
+        //Nos movemos al primer registro de la consulta
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
+    }
+
+
+
 
     public Cursor ObtenerCuotasPagasPorCobrador(String id,String fecha){
         SQLiteDatabase db = baseDatos.getWritableDatabase();
@@ -211,6 +341,14 @@ public class OperacionesBaseDatos {
         return db.rawQuery(sql, null);
     }
 
+    // [OPERACIONES_FORMA_PAGO]
+    public Cursor obtenerDetallePrestamo(String idPrestamos) {
+        SQLiteDatabase db = baseDatos.getReadableDatabase();
+
+        String sql = String.format("SELECT * FROM %s ", Contract.PRESTAMOS_DETALLES +" WHERE prestamos_id = "+idPrestamos);
+
+        return db.rawQuery(sql, null);
+    }
 
     public List<CuotaPendiente> getCuotaPendiete(String ipPrestamos,String pagado){
 
@@ -289,9 +427,24 @@ public class OperacionesBaseDatos {
     public Cursor pagosPendiente() {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         String intertado = "1";
-        String sql = String.format("SELECT * FROM %s", Contract.CUOTA_PAGADA+
-                                    " WHERE insertado ="+intertado);
+       /* String sql = String.format("SELECT * FROM %s", Contract.CUOTA_PAGADA+
+                                    " WHERE insertado ="+intertado);*/
+        String sql = String.format("SELECT * FROM %s", Contract.CUOTA_PAGADA);
         return db.rawQuery(sql, null);
+        //return resultado > 0;
+    }
+
+    public Cursor datosCompania() {
+        SQLiteDatabase db = baseDatos.getWritableDatabase();
+
+        String sql = String.format("SELECT * FROM %s", Contract.COBRADOR);
+        Cursor c;
+            c = db.rawQuery(sql, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
         //return resultado > 0;
     }
 

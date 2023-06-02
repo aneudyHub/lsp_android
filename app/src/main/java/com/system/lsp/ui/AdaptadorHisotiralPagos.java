@@ -18,6 +18,7 @@ import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.modelo.PrestamoDetalle;
 import com.system.lsp.ui.Pagos.CuotasAdapter;
 import com.system.lsp.ui.Pagos.Pagos;
+import com.system.lsp.utilidades.Progress;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.utilidades.ZebraPrint;
@@ -29,7 +30,7 @@ import java.util.List;
  * Created by Suarez on 20/01/2018.
  */
 
-public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder> implements Filterable {
+public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder> implements Progress, Filterable {
 
     private List<CuotaPaga> mArrayList;
     private ArrayList<CuotaPaga> mFilteredList;
@@ -44,6 +45,20 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
 
     }
 
+    @Override
+    public void showProgressPrint(Boolean b) {
+
+    }
+
+    @Override
+    public void error(String msj) {
+
+    }
+
+    @Override
+    public void finishPrint(String msj) {
+
+    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

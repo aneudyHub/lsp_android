@@ -1,7 +1,10 @@
 package com.system.lsp.ui.Pagos;
 
+import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.net.Uri;
 import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 
 import com.system.lsp.R;
 import com.system.lsp.provider.Contract;
+import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Login.LoginActivity;
 import com.system.lsp.utilidades.Resolve;
@@ -21,6 +25,7 @@ import com.system.lsp.utilidades.UConsultas;
 import com.system.lsp.utilidades.UPreferencias;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,11 +36,14 @@ import java.util.Map;
 
 public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewHolder>{
 
-    private Cursor mItems;
+    public Cursor mItems;
+    private Cursor cursor;
+    private OperacionesBaseDatos datosBD;
     private HashMap<String,String[]> modificaCuota=null;
     private Context mCtx;
     public static String datos = "";
     public static double totalMora;
+    private String idPrestamo;
     double abonoM,abonado;
     double abonoMora,abonoCapital;
     private double montoRestante =0.00 ;
@@ -43,8 +51,12 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
     private int totalCuotas =0;
     DecimalFormat precision = new DecimalFormat("0.00");;
 
-    public CuotasAdapter(Context mCtx){
+    public CuotasAdapter(Context mCtx,String idPrestamo){
+
+        datosBD = OperacionesBaseDatos
+                .obtenerInstancia(mCtx);
         this.mCtx=mCtx;
+        this.idPrestamo=idPrestamo;
     }
 
 
@@ -58,27 +70,27 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
     public void onBindViewHolder(CuotaViewHolder holder, int position) {
         mItems.moveToPosition(position);
 
+
+
+
         holder.mFecha.setText(String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.FECHA)));
         holder.mNumero.setText("#"+String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.CUOTA)));
+        holder.diasAtrasados.setText(String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.DIAS_ATRASADOS)));
         double cap = Double.parseDouble(UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.CAPITAL));
         double interes = Double.parseDouble(UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.INTERES));
         double mora = Double.parseDouble(UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.MORA));
+        double mora_acumulada = Double.parseDouble(UConsultas.obtenerString(mItems,Contract.PrestamoDetalle.MORA_ACUMULADA));
         abonado = Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.MONTO_PAGADO)));
         abonoM = Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ABONO_MORA)));
-        Log.e("VALOR-CP",String.valueOf(cap));
-        Log.e("VALOR-INTERES",String.valueOf(interes));
-        Log.e("VALOR-MORA",String.valueOf(mora));
-        Log.e("VALOR-ABONADO",String.valueOf(abonado));
         double cuta_monto = (cap + interes);
-        double total = (cap + interes + mora) - (abonado);
-
-        Log.e("VALOR-TOTAL",String.valueOf(total));
+        double valorMora = mora - abonoM;
+        double total = (cap + interes + valorMora) - (abonado);
 
         String numeroCuota = String.format("%s", UConsultas.obtenerString(mItems, Contract.PrestamoDetalle.CUOTA));
         totalCuotas += Integer.parseInt(numeroCuota) ;
 
         holder.cuota_monto.setText(precision.format(cap + interes));
-        holder.moraMonto.setText(precision.format(mora));
+        holder.moraMonto.setText(precision.format(valorMora));
         holder.total_monto.setText("RD$ "+precision.format(total));
         holder.mLayout.setBackgroundColor(mCtx.getResources().getColor(R.color.cardview_light_background));
         holder.mIcon.setVisibility(View.GONE);
@@ -92,32 +104,23 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
         }
 
         if(modificaCuota!=null){
-            Log.e("MODIFICA","1");
 
             for(Map.Entry<String,String[]> h:modificaCuota.entrySet()){
-                Log.e("MODIFICA","2");
                 String key = h.getKey();
                 String[] value = h.getValue();
-                Log.e("VALOR-DE-VALUE",value[0]);
-                Log.e("VALOR-DE-VALUE-1",value[1]);
-                Log.e("VALOR-DE-VALUE-2",value[2]);
-                Log.e("VALOR-DE-VALUE-3",value[3]);
                 if(key.equalsIgnoreCase(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)))){
                     if(value[0].equalsIgnoreCase("1")){
-                        Log.e("MODIFICA","3");
-                        holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_check_box_black_24dp));
-                        holder.mIcon.setVisibility(View.VISIBLE);
+
+                        //holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_check_box_black_24dp));
+                        //holder.mIcon.setVisibility(View.VISIBLE);
                         holder.mRestante.setVisibility(View.GONE);
                     }else{
-                        Log.e("MODIFICA","4");
-                        holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
-                        holder.mIcon.setVisibility(View.VISIBLE);
+
+                        //holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                       // holder.mIcon.setVisibility(View.VISIBLE);
                         holder.mRestante.setVisibility(View.VISIBLE);
-                        montoRestante = Double.parseDouble(value[3]);
-                        Log.e("RESTAANTE",String.valueOf(montoRestante));
-                        Log.e("MONTO TOTAL", String.valueOf(total));
                         double restante = Math.abs(total) - Math.abs(montoRestante);
-                        holder.mRestante.setText("Resta RD$ "+String.valueOf(precision.format(restante)));
+
                     }
                 }
 
@@ -143,7 +146,7 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
 
     public static class CuotaViewHolder extends RecyclerView.ViewHolder{
         public CardView mLayout;
-        public TextView mFecha,mAbonado;
+        public TextView mFecha,mAbonado,diasAtrasados;
         public TextView cuota_monto,moraMonto,total_monto,mNumero,mRestante;
         public ImageView mIcon;
 
@@ -158,6 +161,7 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
             mIcon =(ImageView)itemView.findViewById(R.id.Cuota_Modificacion);
             mRestante=(TextView)itemView.findViewById(R.id.Restante);
             mAbonado=(TextView)itemView.findViewById(R.id.Abonado);
+            diasAtrasados = (TextView)itemView.findViewById(R.id.dias_atrasados);
         }
     }
 
@@ -165,12 +169,17 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
         double r =0;
         double mp=0;
         double restante=0;
+        double ValorMora=0;
 
         if(mItems!=null){
             while (mItems.moveToNext()){
+                ValorMora = Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.MORA))) -
+                        Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ABONO_MORA)));
+
                 r += (  Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CAPITAL))) +
                         Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.INTERES))) +
-                        Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.MORA))));
+                        ValorMora);
+
                 mp +=(Double.parseDouble(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.MONTO_PAGADO))));
             }
 
@@ -194,81 +203,95 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
             for (mItems.moveToFirst(); !mItems.isAfterLast(); mItems.moveToNext()) {
                 cantidadCuota = mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA));
             }
+            double valorTotalMora;
+
+
+            valorTotalMora = datosBD.obtenerTotalMora(idPrestamo);
+            double pagoMora;
+            double abonoMora;
             double tMora =0;
-            double restanM=0;
-            double restaMotoP=0;
+            double restanM;
             StringBuilder sb= new StringBuilder() ;
+
+            pagoMora =valorTotalMora;
+            abonoMora=montoAPagar;
+            if(valorTotalMora > 0) {
+
+                for (mItems.moveToFirst(); !mItems.isAfterLast(); mItems.moveToNext()) {
+                    double m = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.MORA));
+                    abonoM = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.ABONO_MORA));
+
+                    restanM = m - abonoM;
+
+
+                        if (montoAPagar >= valorTotalMora) {
+                            modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),
+                                    new String[]{"2", String.valueOf((restanM + abonoM))});
+
+                            montoAPagar -= restanM;
+                            tMora = valorTotalMora;
+
+                            valorTotalMora -=restanM ;
+                        } else if(montoAPagar >= restanM){
+                           modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),
+                                    new String[]{"2", String.valueOf(restanM + abonoM)});
+
+                            tMora += montoAPagar;
+                            valorTotalMora -= restanM;
+                            montoAPagar=0 ;
+
+                        }
+                    
+                    notifyDataSetChanged();
+                }
+
+                if(valorTotalMora>0){
+                    sb.append("Abono Mora Generada a la fecha." + ";" + Math.abs(abonoMora) + ";");
+                }else {
+                    sb.append("Pago Mora Generada a la fecha." + ";" + pagoMora + ";");
+                }
+            }
+
+
+
+
             for (mItems.moveToFirst(); !mItems.isAfterLast(); mItems.moveToNext()) {
                 double c = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.CAPITAL));
                 double i = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.INTERES));
-                double m = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.MORA));
                 double mp = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.MONTO_PAGADO));
-                abonoM = mItems.getDouble(mItems.getColumnIndex(Contract.PrestamoDetalle.ABONO_MORA));
 
-                Log.e("CUOTA",mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA)));
-                Log.e("VALOR-CP",String.valueOf(c));
-                Log.e("VALOR-INTERES",String.valueOf(i));
-                Log.e("VALOR-MORA",String.valueOf(m));
-                Log.e("VALOR-MPAGADO",String.valueOf(mp));
-                Log.e("VALOR-ABONADO",String.valueOf(abonoM));
                 Double montoRestante = montoAPagar;
 
-                restanM = m - abonoM;
-                if(montoAPagar==0){
-                    notifyDataSetChanged();
-                    break;
-                }
-                restaMotoP = abonoM - mp;
-                double cot = (c + i ) - Math.abs(restaMotoP);
-                Log.e("VALOR COT",String.valueOf(cot));
-                Log.e("Restante Moraaaa",String.valueOf(restanM));
-                Log.e("MONTO-A-PAGAR",String.valueOf(montoAPagar));
-                if(restanM > 0){
-                    if (montoAPagar >= restanM){
-                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"2",String.valueOf((montoAPagar + abonoM)),
-                                String.valueOf((mp+montoAPagar)),String.valueOf(montoRestante)});
-                        Log.e("MONTO-A-PAGAR-M",String.valueOf(montoRestante));
-                        montoAPagar -= restanM;
-                        tMora +=restanM;
-                        sb.append("Pago Mora Generada a la fecha."+";"+restanM+";");
-                    }else {
-                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"3",String.valueOf(montoAPagar+abonoM),
-                                String.valueOf((mp+montoAPagar)),String.valueOf(montoRestante)});
-                        sb.append("Abono Mora Generada a la fecha."+";"+Math.abs(montoAPagar)+";");
-                        Log.e("MONTO-A-PAGAR-AM",String.valueOf(montoRestante));
-                        tMora +=montoAPagar;
-                        montoAPagar = 0;
-                    }
-                }
-                if(montoAPagar==0){
+                double cot = (c + i) - Math.abs(mp);
+
+                if (montoAPagar == 0) {
                     notifyDataSetChanged();
                     continue;
-                }else {
-                    Log.e("MONTO-A-PAGAR-PC",String.valueOf(montoRestante));
-                    if (montoAPagar >= cot){
-                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"1",String.valueOf((c + i + restanM)),
-                                String.valueOf((mp+montoAPagar)),String.valueOf(montoRestante)});
-                        Log.e("MONTO-A-PAGAR-C",String.valueOf(montoRestante));
-                        montoAPagar -=cot;
-                        sb.append("Pago Cuota(s)N."+mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA))+"/"+ cantidadCuota +";"+Math.abs(cot)+";");
+                } else {
+                    if (montoAPagar >= cot) {
+                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),
+                                new String[]{"1", String.valueOf((c + i))});
+                        montoAPagar -= cot;
+                        sb.append("Pago Cuota(s)N." + mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA)) + "/" + cantidadCuota + ";" + Math.abs(cot) + ";");
 
-                    }else {
-                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),new String[]{"0",String.valueOf((montoAPagar)),
-                                String.valueOf((mp+montoAPagar)),String.valueOf(montoRestante)});
-                        Log.e("MONTO-A-PAGAR-AC",String.valueOf(montoRestante));
-                        sb.append("Abono Cuota(s)N."+mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA))+"/"+ cantidadCuota +";"+
-                                String.valueOf(precision.format(montoAPagar))+";");
-                        montoAPagar=0;
+                    } else {
+                        modificaCuota.put(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)),
+                                new String[]{"0", String.valueOf((montoAPagar))});
+                        sb.append("Abono Cuota(s)N." + mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.CUOTA)) + "/" + cantidadCuota + ";" +
+                                String.valueOf(precision.format(montoAPagar)) + ";");
+                        montoAPagar = 0;
                     }
                 }
                 notifyDataSetChanged();
             }
+
+
+
             datos = sb.toString();
             totalMora = tMora;
 
             notifyDataSetChanged();
-            Log.e("TOTAL-MORA",String.valueOf(datos));
-            Log.e("TOTAL-MORA",String.valueOf(totalMora));
+
         }
     }
 }

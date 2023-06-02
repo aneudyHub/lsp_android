@@ -63,7 +63,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String EXTRA_MENSAJE = "extra.mensaje";
 
     // Recurso sync (10.0.3.2 -> Genymotion; 10.0.2.2 -> AVD)
-    //public static final String URL_SYNC_BATCH = "http://10.0.3.2/api.peopleapp.com/v1/sync";
+    // public static final String URL_SYNC_BATCH = "http://10.0.3.2/api.peopleapp.com/v1/sync";
    // public static final String URL_SYNC_BATCH = "http://192.168.10.77/api.saludmock.com/v1/sync";
     // public static final String URL_SYNC_BATCH = "http://192.168.10.77:80/api.saludmock.com/v1/sync"
 
@@ -122,20 +122,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         HashMap<String, String> cabeceras = new HashMap<>();
         cabeceras.put("Authorization", UPreferencias.obtenerClaveApi(getContext()));
         String fechaSync="";
-         cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
+       /*  cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext()));
         if (cursor.moveToFirst()) {
             fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
         }
-        if (fechaSync==null){
+        if (fechaSync==null){*/
             fechaSync ="0";
-        }
+        //}
         cabeceras.put("sync_time",fechaSync);
         Log.e("ESTADO 107","1");
 
         boolean t = Resolve.isInternetAvailable();
         Log.e("verifica red==>",String.valueOf(t));
         //if(t){
-            new RESTService(getContext()).get(URL.SERVER+URL.SYNC,
+            new RESTService(getContext()).get(UPreferencias.obtenerUrlAPP(getContext())+URL.SYNC,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -234,7 +234,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             boolean t = Resolve.isInternetAvailable();
 
             //if(t){
-                new RESTService(getContext()).post(URL.SERVER+URL.SYNC, datos,
+                new RESTService(getContext()).post(UPreferencias.obtenerUrlAPP(getContext())+URL.SYNC, datos,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -265,7 +265,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         } else {
             Log.d(TAG, "Sin cambios locales");
-            Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
+            //Resolve.enviarBroadcast(getContext(),true, "Sicronizando espere!!!");
             //syncLocal();
 
         }
