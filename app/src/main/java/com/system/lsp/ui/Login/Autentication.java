@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.Html;
 import android.util.Log;
@@ -25,6 +23,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -40,9 +40,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.system.lsp.R;
-import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.SessionManager;
-import com.system.lsp.ui.Main.MainActivity;
 import com.system.lsp.utilidades.AppController;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
@@ -111,7 +109,7 @@ public class Autentication extends Activity {
                             "No hay conexion disponible",
                             Snackbar.LENGTH_LONG).show();*/
 
-                    android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(Autentication.this);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Autentication.this);
                     // set title
                     alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
 
@@ -129,7 +127,7 @@ public class Autentication extends Activity {
                             });
 
                     // create alert dialog
-                    android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
                     // show it
                     alertDialog.show();
