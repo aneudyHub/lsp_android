@@ -30,6 +30,8 @@ import java.util.ArrayList;
 /**
  * Adaptador para la lista de contactos
  */
+
+
 public class AdaptadorCuotas extends RecyclerView.Adapter<AdaptadorCuotas.ViewHolder> implements Filterable {
 
     private Cursor items;
