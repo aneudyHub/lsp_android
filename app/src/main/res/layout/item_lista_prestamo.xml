@@ -148,18 +148,6 @@
             app:layout_constraintRight_toRightOf="parent"
             android:textStyle="italic" />
 
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="#00"
-            android:textColor="@color/bg_login"
-            android:id="@+id/prestamo_id"
-            app:layout_constraintRight_toRightOf="parent"
-            android:textStyle="italic" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
