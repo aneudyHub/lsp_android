@@ -1,1 +1,3 @@
 include ':app', ':ZSDK_ANDROID_API'
+include ':Printer'
+include ':Logger'
