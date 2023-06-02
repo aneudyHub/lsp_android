@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.herprogramacion.peopleapp.fragmentos.FragmentTodasLasCuotas">
+    tools:context="com.system.lsp.fragmentos.FragmentTodasLasCuotas">
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reciclador_cuotas_pendientes"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
