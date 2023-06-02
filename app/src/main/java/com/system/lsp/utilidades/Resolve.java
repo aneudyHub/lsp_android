@@ -5,13 +5,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.system.lsp.provider.Contract;
-import com.system.lsp.provider.SessionManager;
-import com.system.lsp.sync.SyncAdapter;
-import com.system.lsp.ui.Login.LoginActivity;
 
 import java.net.InetAddress;
 

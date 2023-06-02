@@ -1,8 +1,6 @@
 package com.system.lsp.ui;
 
 import android.database.Cursor;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,11 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -55,8 +54,6 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
         // Campos respectivos de un item
         public TextView fecha;
         public TextView nombre_cliente;
-        public TextView num_documento;
-        public TextView direccion;
         public TextView id_prestamo;
         public TextView cuota;
         public TextView telefono;
@@ -70,8 +67,6 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
             super(v);
             fecha = (TextView) v.findViewById(R.id.fecha);
             nombre_cliente = (TextView) v.findViewById(R.id.nombre_cliente);
-            num_documento = (TextView) v.findViewById(R.id.documento_cliente);
-            direccion = (TextView) v.findViewById(R.id.direccion);
             id_prestamo = (TextView) v.findViewById(R.id.prestamo_id);
             valor = (TextView) v.findViewById(R.id.valor);
             total = (TextView) v.findViewById(R.id.total);
@@ -171,8 +166,6 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
         //indicator_appointment_status
         Log.e("VALOR CUOTA",cantida_cuota);
         holder.nombre_cliente.setText(c.getCLIENTE());
-        holder.num_documento.setText(c.getCEDULA());
-        holder.direccion.setText(c.getDIRECCION());
         holder.id_prestamo.setText("#"+c.getPRESTAMO());
         holder.fecha.setText(c.getFECHA());
         if (c.getTELEFONO().equals("NULL") || c.getTELEFONO().equals("null")){
@@ -280,8 +273,7 @@ public class AdaptadorPrestamos extends RecyclerView.Adapter<AdaptadorPrestamos.
 
                     for (DatosCliente androidVersion : mArrayList) {
 
-                        if (androidVersion.getCLIENTE().toLowerCase().contains(charString) || androidVersion.getCEDULA().toLowerCase().contains(charString) || androidVersion.getDIRECCION().toLowerCase().contains(charString) ||
-                                androidVersion.getTELEFONO().toLowerCase().contains(charString) || androidVersion.getPRESTAMO().toLowerCase().contains(charString)) {
+                        if (androidVersion.getCLIENTE().toLowerCase().contains(charString) || androidVersion.getDIRECCION().toLowerCase().contains(charString) || androidVersion.getTELEFONO().toLowerCase().contains(charString) || androidVersion.getPRESTAMO().toLowerCase().contains(charString)) {
                             Log.e("filter 4","estoy aca");
                             filteredList.add(androidVersion);
                         }

@@ -1,7 +1,10 @@
 package com.system.lsp.ui.Login;
+
 /**
  * Created by Suarez on 13/06/2017.
  */
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -43,15 +46,20 @@ import com.system.lsp.web.RespuestaApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class LoginActivity extends Activity {
     private static final String TAG = LoginActivity.class.getSimpleName();
+
+
     private Button btnLogin;
     private Button btnLinkToRegister;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
+
     private TextView nombreUsuario;
+
 
     private static final int ESTADO_PETICION_FALLIDA = 107;
     private static final int ESTADO_TIEMPO_ESPERA = 108;
@@ -68,9 +76,12 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+
+
                 if(UWeb.hayConexion(LoginActivity.this)) {
                     String email = inputEmail.getText().toString().trim();
                     String password = inputPassword.getText().toString().trim();
+
 
                     // Check for empty data in the form
                     if (!email.isEmpty() && !password.isEmpty()) {
@@ -93,7 +104,7 @@ public class LoginActivity extends Activity {
                             "No hay conexion disponible",
                             Snackbar.LENGTH_LONG).show();*/
 
-                    android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(LoginActivity.this);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
                     // set title
                     alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
 
@@ -111,12 +122,14 @@ public class LoginActivity extends Activity {
                             });
 
                     // create alert dialog
-                    android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
                     // show it
                     alertDialog.show();
 
                 }
+
+
             }
 
         });
@@ -126,6 +139,8 @@ public class LoginActivity extends Activity {
         pDialog.setCancelable(false);
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,7 +149,7 @@ public class LoginActivity extends Activity {
         setView();
         // Session manager
         session = new SessionManager(getApplicationContext());
-        Log.e("estoy en este lado","pendejo");
+
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
@@ -142,6 +157,9 @@ public class LoginActivity extends Activity {
             startActivity(intent);
             finish();
         }
+
+
+
     }
 
     /**
@@ -160,12 +178,11 @@ public class LoginActivity extends Activity {
         pDialog.setMessage("Logging in ...");
         showDialog();
 
-        String url = UPreferencias.obtenerUrlAPP(LoginActivity.this);
         Log.e("PASO 2","PASO 2");
-        Log.e("PASO 2",url + URL.LOGIN);
+        Log.e("PASO 2",URL.SERVER + URL.LOGIN);
 
         StringRequest strReq = new StringRequest(Method.POST,
-                url + URL.LOGIN, new Response.Listener<String>() {
+                URL.SERVER + URL.LOGIN, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -194,21 +211,13 @@ public class LoginActivity extends Activity {
                         UPreferencias.guardarIdUsuario(LoginActivity.this,id);
                         String name = jObj.getString("firstname")+ " " + jObj.getString("lastname");
                         UPreferencias.guardarNombreUsuario(LoginActivity.this,name);
-                        String nombreCompania = jObj.getString("compania_nombre");
-                        String direccionCompania = jObj.getString("compania_direccion");
-                        String telefonoCompania = jObj.getString("compania_telefono");
-                        String rncCompania = jObj.getString("compania_rnc");
-                        String notaCompania = jObj.getString("compania_nota");
-                        String lemaCompania = jObj.getString("compania_lema");
                         String username = jObj.getString("username");
                         String token = jObj.getString("token");
                         String email = jObj.getString("email");
                         String telefono = jObj.getString("celular");
-
-
-
-
                         UPreferencias.guardarTelefonoCobrador(LoginActivity.this,telefono);
+
+
 
                         // Inserting row in users table
                         ContentValues contentValues = new ContentValues();
@@ -217,14 +226,6 @@ public class LoginActivity extends Activity {
                         contentValues.put(Contract.Cobrador.USERNAME,username);
                         contentValues.put(Contract.Cobrador.TOKEN,token);
                         contentValues.put(Contract.Cobrador.EMAIL,email);
-                        contentValues.put(Contract.Cobrador.NOMBRECOMPANIA,nombreCompania);
-                        contentValues.put(Contract.Cobrador.DIRECCIONCOMPANIA,direccionCompania);
-                        contentValues.put(Contract.Cobrador.TELEFONOCOMPANIA,telefonoCompania);
-                        contentValues.put(Contract.Cobrador.RNCCOMPANIA,rncCompania);
-                        contentValues.put(Contract.Cobrador.NOTACOMPANIA,notaCompania);
-                        contentValues.put(Contract.Cobrador.LEMACOMPANIA,lemaCompania);
-
-
                         getContentResolver().insert(Contract.Cobrador.URI_CONTENIDO,contentValues);
 
 
@@ -315,6 +316,10 @@ public class LoginActivity extends Activity {
 
         return trimmedString;
     }
+
+
+
+
 
     public void tratarErrores(VolleyError error) {
         // Crear respuesta de error por defecto

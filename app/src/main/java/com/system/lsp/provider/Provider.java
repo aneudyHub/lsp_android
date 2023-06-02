@@ -9,14 +9,12 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.system.lsp.utilidades.UTiempo;
-
-import java.security.acl.LastOwnerException;
 
 /**
  * Created by aneudy on 7/7/2017.
@@ -149,7 +147,6 @@ public class Provider extends ContentProvider {
                         "count(pd.n_cuota) as "+Contract.Cobrador.CUOTA+","+
                         "pd.id as "+Contract.Cobrador.CUOTA_ID+","+
                         "cli.nombre as "+Contract.Cobrador.CLIENTE+","+
-                        "cli.documento as "+Contract.Cliente.DOCUMENTO+","+
                         "pd.fecha as "+Contract.Cobrador.FECHA+","+
                         "cli.direccion as "+Contract.Cobrador.DIRECCION+","+
                         "cli.celular as "+Contract.Cobrador.CELULAR+","+

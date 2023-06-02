@@ -5,17 +5,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Looper;
 import android.os.ParcelUuid;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.system.lsp.modelo.Recibo;
-import com.system.lsp.provider.Contract;
-import com.system.lsp.provider.OperacionesBaseDatos;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.comm.Connection;
 import com.zebra.sdk.comm.ConnectionException;
@@ -38,12 +34,10 @@ import static java.lang.Thread.sleep;
 public class ZebraPrint {
 
     private Context _context;
-    private Progress mListener;
     private List<HashMap<String, String>> detalles;// Conceptos de pago
     private String[] parametros;// TRN Conceptopago etc... etc...
     //private List<NameValuePair> param_post; //Parametros por post
-    private OperacionesBaseDatos datosBD;
-    private Cursor cursor;
+
     private String fechaPago;
     private String numPrestamo;
     private String nombreCliente;
@@ -66,44 +60,14 @@ public class ZebraPrint {
     private String imp_dat = "";
     private Recibo receipt;
 
-
-
-
-
-
-
     public ZebraPrint(Context context, String TAG,String nombreCobrador,String fechaCobro,
-                      String detalleCobro, Double totalPagado, Progress mListener){
+                      String detalleCobro, Double totalPagado){
         this._context = context;
         this.imp_dat=TAG;
         this.nombreCobrador = nombreCobrador;
         this.fechaPago = fechaCobro;
         this.detalleFactura = detalleCobro;
         this.totalPagado = totalPagado;
-        datosBD = OperacionesBaseDatos
-                .obtenerInstancia(context);
-        cursor = datosBD.datosCompania();
-        this.mListener = mListener;
-    }
-
-    public ZebraPrint(Context context, String TAG,String fechaPago, String numPrestamo, String nombreCliente,
-                      String detalleFactura, Double totalPagado,Double totalMora, String nombreCobrador,String telefono,Progress mListener) {
-        this._context = context;
-        this.imp_dat=TAG;
-        this.fechaPago = fechaPago;
-        this.numPrestamo = numPrestamo;
-        this.nombreCliente = nombreCliente;
-        this.detalleFactura = detalleFactura;
-        this.totalPagado = totalPagado;
-        this.totalMora = totalMora;
-        this.nombreCobrador = nombreCobrador;
-        this.telefono = telefono;
-        datosBD = OperacionesBaseDatos
-                .obtenerInstancia(context);
-
-        cursor = datosBD.datosCompania();
-        this.mListener=mListener;
-
     }
 
     public ZebraPrint(Context context, String TAG,String fechaPago, String numPrestamo, String nombreCliente,
@@ -118,12 +82,6 @@ public class ZebraPrint {
         this.totalMora = totalMora;
         this.nombreCobrador = nombreCobrador;
         this.telefono = telefono;
-        datosBD = OperacionesBaseDatos
-                .obtenerInstancia(context);
-
-        cursor = datosBD.datosCompania();
-
-
     }
 
 
@@ -135,11 +93,10 @@ public class ZebraPrint {
         //this.cliente = cl;
     }*/
 
-    public ZebraPrint(Context context, Recibo receipt, String TAG,Progress mListener){
+    public ZebraPrint(Context context, Recibo receipt, String TAG){
         this._context = context;
         this.receipt=receipt;
         this.imp_dat=TAG;
-        this.mListener=mListener;
     }
 
     public ZebraPrint(Context _context) {
@@ -152,15 +109,6 @@ public class ZebraPrint {
     }
 
     public  void probarlo(){
-        Toast.makeText(_context.getApplicationContext(), "INICIANDO PRUEBA DE IMPRESION!",
-                Toast.LENGTH_LONG).show();
-        if (mListener!=null){
-            mListener.showProgressPrint(true);
-        }else {
-            Toast.makeText(_context.getApplicationContext(), "INICIANDO PRUEBA DE IMPRESION!",
-                    Toast.LENGTH_LONG).show();
-        }
-        Log.e("HOLA","EL PROBLEMA 2");
         new Thread(new Runnable() {
             public void run() {
 
@@ -171,26 +119,14 @@ public class ZebraPrint {
                     Looper.loop();
                     Looper.myLooper().quit();
                 } catch (InterruptedException e) {
+                    Log.e("CONECT ERROR","error conection");
 
-
-                    if (mListener!=null){
-                        mListener.error("ERROR CONECTION TO PRINTER1");
-                    }else {
-                        Toast.makeText(_context.getApplicationContext(), "ERROR CONECTION TO PRINTER1!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                    Log.e("CONECT ERROR","error conection1");
                     e.printStackTrace();
                 }
 
             }
         }).start();
     }
-
-
-
-
-
 
     /*protected void imprimelo(){
         Log.d("Impresora", "Imprimiendo Datos");
@@ -313,14 +249,6 @@ public class ZebraPrint {
             BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             if(mBluetoothAdapter == null){
                 //((MainActivity)this._context).showAlert("NO BLUETOOH ADAPTER AVAIBLE!!");
-
-                if (mListener!=null){
-                    mListener.error("NO BLUETOOH ADAPTER AVAIBLE!!11");
-                }else {
-                    Toast.makeText(_context.getApplicationContext(), "NO BLUETOOH ADAPTER AVAIBLE!!11!",
-                            Toast.LENGTH_LONG).show();
-                }
-
             }
 
             if(!mBluetoothAdapter.isEnabled()) {
@@ -348,11 +276,6 @@ public class ZebraPrint {
                         printerConnection = new BluetoothConnection(mmDevice.getAddress());
                         break;
                     }
-                    else if (device.getName().equals("XXXXJ162002490")) {
-                        mmDevice = device;
-                        printerConnection = new BluetoothConnection(mmDevice.getAddress());
-                        break;
-                    }
                 }
             }
 
@@ -361,16 +284,8 @@ public class ZebraPrint {
 
             //SettingsHelper.saveBluetoothAddress(this._context, "00:22:58:01:6B:50");
         } else {
-            Log.e("CONECT ERROR","error conection21");
+            Log.e("CONECT ERROR","error conection");
 
-
-
-            if (mListener!=null){
-                mListener.error("ERROR CONECTION TO PRINTER21");
-            }else {
-                Toast.makeText(_context.getApplicationContext(), "ERROR CONECTION TO PRINTER21!",
-                        Toast.LENGTH_LONG).show();
-            }
             return null;
         }
 
@@ -381,21 +296,8 @@ public class ZebraPrint {
         {
             //((MainActivity)this._context).showAlert("FAILD, CONECTING TO PRINTER");
             setStatus("Comm Error! Disconnecting", Color.RED);
-            Toast.makeText(_context.getApplicationContext(), "ERROR CONECTION TO PRINTER1!",
-                    Toast.LENGTH_LONG).show();
-Log.e("holaOOOO","Error de conection printter");
-
-
-            if (mListener!=null){
-                mListener.error("FAILD CONECTION TO PRINTER22");
-            }else {
-                Toast.makeText(_context.getApplicationContext(), "ERROR CONECTION TO PRINTER22!",
-                        Toast.LENGTH_LONG).show();
-            }
-            //sleep(1000);
-
+            sleep(1000);
             disconnect();
-
         }
 
         ZebraPrinter printer = null;
@@ -409,22 +311,13 @@ Log.e("holaOOOO","Error de conection printter");
             } catch (ConnectionException e) {
                 //setStatus("Unknown Printer Language", Color.RED);
                 printer = null;
-                //sleep(1000);
+                sleep(1000);
                 disconnect();
             } catch (ZebraPrinterLanguageUnknownException e) {
                 //setStatus("Unknown Printer Language", Color.RED);
                 //((MainActivity)this._context).showAlert("UNKNOW PRINTER LANGUAGE");
-
-
-
-                if (mListener!=null){
-                    mListener.error("UNKNOW PRINTER LANGUAGE");
-                }else {
-                    Toast.makeText(_context.getApplicationContext(), "UNKNOW PRINTER LANGUAGE!",
-                            Toast.LENGTH_LONG).show();
-                }
                 printer = null;
-                //sleep(1000);
+                sleep(1000);
                 disconnect();
             }
         }else{
@@ -439,13 +332,6 @@ Log.e("holaOOOO","Error de conection printter");
             if(this._context instanceof Pay_Credits){
                 ((Pay_Credits)this._context).showAlert("ERROR CONECTION TO PRINTER");
             }*/
-
-            if (mListener!=null){
-                mListener.error("ERROR CONECTION TO PRINTER24");
-            }else {
-                Toast.makeText(_context.getApplicationContext(), "ERROR CONECTION TO PRINTER24!",
-                        Toast.LENGTH_LONG).show();
-            }
         }
 
         return printer;
@@ -531,8 +417,14 @@ Log.e("holaOOOO","Error de conection printter");
                 }
 
 
-                case "imprimir":
-                case "reimprimir": {
+                case "imprimir":{
+                    printerConnection.write(imprmir());
+                    break;
+
+                }
+
+
+                case "reimprimir":{
                     printerConnection.write(imprmir());
                     break;
 
@@ -546,11 +438,11 @@ Log.e("holaOOOO","Error de conection printter");
 
             setStatus("Sending Data", Color.BLUE);
 
-           // sleep(1500);
+            sleep(1500);
             if (printerConnection instanceof BluetoothConnection) {
                 String friendlyName = ((BluetoothConnection) printerConnection).getFriendlyName();
                 setStatus(friendlyName, Color.MAGENTA);
-               // sleep(500);
+                sleep(500);
             }
             /*if(this._context instanceof MainActivity)
                 ((MainActivity)this._context).finish();
@@ -558,25 +450,8 @@ Log.e("holaOOOO","Error de conection printter");
             if(this._context instanceof Pay_Credits)
                 ((Pay_Credits)this._context).finish();*/
 
-
-
-            if (mListener!=null){
-                mListener.finishPrint("Impresion Exitosa");
-            }else {
-                Toast.makeText(_context.getApplicationContext(), "Impresion Exitosa!",
-                        Toast.LENGTH_LONG).show();
-            }
-
         } catch (ConnectionException e) {
             //((MainActivity)this._context).showAlert("ERROR PRINTER");
-
-
-            if (mListener!=null){
-                mListener.error("ERROR DEL PRINTER51");
-            }else {
-                Toast.makeText(_context.getApplicationContext(), "ERROR DEL PRINTER51!",
-                        Toast.LENGTH_LONG).show();
-            }
             setStatus(e.getMessage(), Color.RED);
         } finally {
             disconnect();
@@ -827,20 +702,14 @@ Log.e("holaOOOO","Error de conection printter");
         if (printerLanguage == PrinterLanguage.ZPL) {
             configLabel = "^XA^FO17,16^GB379,371,8^FS^FT65,255^A0N,135,134^FDTEST^FS^XZ".getBytes();
         } else if (printerLanguage == PrinterLanguage.CPCL) {
-
-            Log.e("NOMBRE COMPANIAAA",cursor.getString(cursor.getColumnIndex(Contract.Cobrador.NOMBRECOMPANIA)));
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(cursor.getString(cursor.getColumnIndex(Contract.Cobrador.NOMBRECOMPANIA)),
-                            caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("PRESTAMOS LA SOLUCION HERNADEZ", caracteres_X_linea) + Final_Linea +
                     // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(cursor.getString(cursor.getColumnIndex(Contract.Cobrador.LEMACOMPANIA)), caracteres_X_linea) + Final_Linea +
-
-                    Resolve.alinea_centro(cursor.getString(cursor.getColumnIndex(Contract.Cobrador.DIRECCIONCOMPANIA)), caracteres_X_linea) + Final_Linea +
-
-                    //Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Tel:"+cursor.getString(cursor.getColumnIndex(Contract.Cobrador.TELEFONOCOMPANIA)), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("AL INSTANTE DONDE SU DINERO.", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Tel: 829-201-3448", caracteres_X_linea) + Final_Linea +
 
                     Resolve.dos_columna("", caracteres_X_linea, "") + Final_Linea +
                     //"RNC: 104-01619-1" + Final_Linea +
@@ -874,7 +743,7 @@ Log.e("holaOOOO","Error de conection printter");
                     Resolve.alinea_centro(telefono, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro(linea_mitad, caracteres_X_linea) + Final_Linea +
                     Resolve.alinea_centro("LE ATENDIO", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("***"+cursor.getString(cursor.getColumnIndex(Contract.Cobrador.NOTACOMPANIA))+" ***", caracteres_X_linea) + Final_Linea +
+                    // Resolve.alinea_centro("***No somos responsable de dinero entregado sin recibo firmado ***", caracteres_X_linea) + Final_Linea +
                     " " + Final_Linea;
 
 
@@ -895,16 +764,14 @@ Log.e("holaOOOO","Error de conection printter");
         if (printerLanguage == PrinterLanguage.ZPL) {
             configLabel = "^XA^FO17,16^GB379,371,8^FS^FT65,255^A0N,135,134^FDTEST^FS^XZ".getBytes();
         } else if (printerLanguage == PrinterLanguage.CPCL) {
-            Log.e("NOMBRE COMPANIAAA",cursor.getString(cursor.getColumnIndex(Contract.Cobrador.NOMBRECOMPANIA)));
             String cpclConfigLabel = "! U1 SETLP 7 0 20 \r\n" +
                     "! U1 CONTRAST 3" + Final_Linea +
                     "! U1 CENTER" + Final_Linea + //No funciona D:!!
-                    Resolve.alinea_centro(cursor.getString(cursor.getColumnIndex(Contract.Cobrador.NOMBRECOMPANIA)),
-                            caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("PRESTAMOS LA SOLUCION HERNADEZ", caracteres_X_linea) + Final_Linea +
                     // Resolve.alinea_centro("Una empresa al servicio de su gente", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro(cursor.getString(cursor.getColumnIndex(Contract.Cobrador.LEMACOMPANIA)), caracteres_X_linea) + Final_Linea +
-                    //Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
-                    Resolve.alinea_centro("Tel:"+cursor.getString(cursor.getColumnIndex(Contract.Cobrador.TELEFONOCOMPANIA)), caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("AL INSTANTE DONDE SU DINERO.", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("LE SERA DE BUEN PROVECHO", caracteres_X_linea) + Final_Linea +
+                    Resolve.alinea_centro("Tel: 829-201-3448", caracteres_X_linea) + Final_Linea +
 
                     Resolve.dos_columna("", caracteres_X_linea, "") + Final_Linea +
                     //"RNC: 104-01619-1" + Final_Linea +

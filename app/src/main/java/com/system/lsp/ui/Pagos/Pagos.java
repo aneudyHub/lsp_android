@@ -1,49 +1,37 @@
 package com.system.lsp.ui.Pagos;
 
-import android.app.Dialog;
 import android.app.FragmentManager;
-import android.app.ProgressDialog;
 import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.RemoteException;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.RemoteException;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
-import android.text.style.UpdateAppearance;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.system.lsp.R;
 import com.system.lsp.fragmentos.FragmentDialogInformacionPrestamo;
-import com.system.lsp.modelo.Cobrador;
-import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
-import com.system.lsp.ui.AdaptadorCuotas;
-import com.system.lsp.ui.Login.LoginActivity;
-import com.system.lsp.utilidades.Progress;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
@@ -51,13 +39,10 @@ import com.system.lsp.utilidades.ZebraPrint;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Pagos extends AppCompatActivity implements Progress,LoaderManager.LoaderCallbacks<Cursor>{
+public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private String mPrestamoURI;
-    private Cursor cursor;
     public static String  idPrestamos;
     private RecyclerView mList;
     public static EditText mMonto;
@@ -73,27 +58,16 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
     private String detallePago;
     private double totalPagado;
     private double totalMoraF;
-    private double totalPendiente;
     private Context context;
     private ImageView infoPrestamo;
     private TextView nombreClienteDia;
     private ArrayList<ContentProviderOperation> ops  = new ArrayList<>();
-    private ProgressDialog server_prog;
-    public ProgressDialog mPrinterProgress;
-    public ProgressDialog progress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagos);
-
-        mPrinterProgress = new ProgressDialog(Pagos.this);
-        mPrinterProgress.setTitle("Printing...");
-        mPrinterProgress.setCancelable(false);
-        mPrinterProgress.setIndeterminate(true);
-
-
-
 
         datosBD = OperacionesBaseDatos
                 .obtenerInstancia(this);
@@ -117,8 +91,6 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
         });
         getSupportLoaderManager().restartLoader(1, null, this);
         prepareView();
-
-
     }
 
     private void prepareView(){
@@ -169,7 +141,6 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Cuotas a Pagar");
 
-
     }
 
     @Override
@@ -188,47 +159,13 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
         //noinspection SimplifiableIfStatement
         if (id == R.id.Procesar) {
 
-
             android.app.AlertDialog.Builder alertDialogBuilder = new android.app.AlertDialog.Builder(this);
             alertDialogBuilder.setMessage("ESTA SEGURO DE REALIZAR EL PAGO DE: "+ montoDigitado +" ?");
 
             alertDialogBuilder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface arg0, int arg1) {
-
-                    Log.e("ESTEEEEE ES  PENDIENTE",""+totalPendiente);
-
-                    if(montoDigitado > totalPendiente){
-                        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(Pagos.this);
-                        // set title
-                        alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage(Html.fromHtml("MONTO DIGITADO.<br/><br/>" +
-                                        "<font color='#FF0000'> El monto digitado es mayor que el Total A pagar. Debe digitar un monto igual o menor</font>") )
-                                .setCancelable(false)
-                                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        // create alert dialog
-                        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // show it
-                        alertDialog.show();
-                    }else{
-
-
-                        pagar();
-
-                    }
-
-
+                    pagar();
                 }
             });
 
@@ -270,14 +207,11 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
 
     public void setTotalPendiente(double r){
         DecimalFormat precision = new DecimalFormat("0.00");
-        Log.e("TOTAL-PENDIENTE", precision.format(r));
-        totalPendiente = r;
         mPendiente.setText(precision.format(r));
     }
 
 
     public void pagar(){
-        showProgress("CARGANDO DATOS. ESPERE!!!!");
 
         StringBuilder sb= new StringBuilder() ;
         String cantidadCuota="";
@@ -420,131 +354,23 @@ public class Pagos extends AppCompatActivity implements Progress,LoaderManager.L
 
 
         getContentResolver().insert(Contract.CuotaPaga.URI_CONTENIDO,valores);
-
-
         detallePago =sb.toString();
 
-
-
         Resolve.sincronizarData(Pagos.this);
-//        setResult(RESULT_OK);
+        setResult(RESULT_OK);
         Log.e("TOTAL-E-MORA",String.valueOf(CuotasAdapter.totalMora));
         Log.e("VALOR-FATURA",CuotasAdapter.datos);
-
-
-
-
-
         ZebraPrint zebraprint = new ZebraPrint(Pagos.this,"imprimir",UTiempo.obtenerFechaHora(),idPrestamos,nombreCliente,
-                detallePago,totalPagado,totalMoraF, UPreferencias.obtenerNombreUsuario(Pagos.this),
-                UPreferencias.obtenerTelefonoCobrador(Pagos.this),this);
+                detallePago,totalPagado,totalMoraF,
+                UPreferencias.obtenerNombreUsuario(Pagos.this),
+                UPreferencias.obtenerTelefonoCobrador(Pagos.this));
         zebraprint.probarlo();
 
-
-
-
-
+        finish();
 
 
 
     }
-
-
-    public void showProgress(String title){
-        progress = new ProgressDialog(this);
-        progress.setTitle(title);
-        progress.setCancelable(false);
-        if(progress !=null){
-            if(!progress.isShowing())
-                progress.show();
-        }
-
-    }
-
-
-
-    public void showAlert(String mensaje){
-        if(server_prog!=null)
-            server_prog.dismiss();
-
-
-        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(mensaje);
-
-        alertDialogBuilder.setPositiveButton("salir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                finish();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();*/
-
-         /*Snackbar.make(findViewById(R.id.coordinador),
-                            "No hay conexion disponible",
-                            Snackbar.LENGTH_LONG).show();*/
-
-        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(Pagos.this);
-        // set title
-        alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FFF'>INFORMACION</font>"));
-
-        // set dialog message
-        alertDialogBuilder
-                .setMessage(mensaje)
-                .setCancelable(false)
-                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, close
-                        // current activity
-                        dialog.cancel();
-                        finish();
-                    }
-                });
-
-        // create alert dialog
-        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-
-
-    }
-
-
-
-    @Override
-    public void showProgressPrint(Boolean b) {
-        Log.e("HOLA","EL PROBLEMA 1.0");
-        if(b){
-            Log.e("HOLA","EL PROBLEMA 1.1");
-            mPrinterProgress.show();
-        }else{
-            Log.e("HOLA","EL PROBLEMA 1.2");
-            mPrinterProgress.dismiss();
-        }
-    }
-
-    @Override
-    public void error(String msj) {
-        Log.e("valor",mPrinterProgress.toString());
-        if(mPrinterProgress!=null){
-            mPrinterProgress.dismiss();
-        }
-        Log.e("error printer",msj);
-        showAlert(msj);
-
-
-    }
-
-    @Override
-    public void finishPrint(String msj) {
-        setResult(RESULT_OK);
-
-        showAlert(msj);
-
-    }
-
 
 
 }

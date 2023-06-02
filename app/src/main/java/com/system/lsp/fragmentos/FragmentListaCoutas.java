@@ -1,6 +1,5 @@
 package com.system.lsp.fragmentos;
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,20 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,8 +19,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
@@ -49,7 +49,6 @@ import com.system.lsp.utilidades.URL;
 import com.system.lsp.utilidades.UTiempo;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -69,7 +68,6 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private ConstraintLayout mInfoNoData;
     private BroadcastReceiver receptorSync;
     private Context globalContext = null;
-    public ProgressDialog progress;
 
     private Cursor cursor;
     public OperacionesBaseDatos operacionesBaseDatos;
@@ -77,14 +75,13 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     private static Timer timer;
     private TimerTask timerTask;
     final Handler handler = new Handler();
-    private ProgressDialog dialog;
 
     @Override
     public void onResume() {
         super.onResume();
         IntentFilter filtroSync = new IntentFilter(Intent.ACTION_SYNC);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
-        LocalBroadcastManager.getInstance(Objects.requireNonNull(getContext())).registerReceiver(receptorSync, filtroSync);
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(receptorSync, filtroSync);
         Log.e("ESTOY EN RESUME","");
         //startTime(getContext());
 
@@ -99,10 +96,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
         prepararLista(view);
         getActivity().getSupportLoaderManager().restartLoader(1, null, this);
-
         Log.e("broadcast","llego");
-
-
         // Crear receptor de mensajes de sincronización
         receptorSync = new BroadcastReceiver() {
 
@@ -114,12 +108,6 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                 String mensaje = intent.getStringExtra("extra.mensaje");
                 Snackbar.make(view.findViewById(R.id.coordinador),
                         mensaje, Snackbar.LENGTH_LONG).show();
-
-                if(progress !=null){
-                    if(progress.isShowing())
-                        progress.dismiss();
-                }
-
 
             }
         };
@@ -135,7 +123,6 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                showProgress("CARGANDO DATOS");
                     Resolve.sincronizarData(getContext());
 
                     swipeRefreshLayout.setRefreshing(true);
@@ -173,15 +160,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         reciclador = (RecyclerView) view.findViewById(R.id.reciclador);
         layoutManager = new LinearLayoutManager(getContext());
         reciclador.setLayoutManager(layoutManager);
-        reciclador.setHasFixedSize(true);
-        reciclador.setAdapter(adaptador);
-
-
-
-
-
-
-
+        //reciclador.setAdapter(adaptador);
     }
 
 
@@ -258,7 +237,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         }else {
             Log.e("VALOR FECHA",fechaExtraida);
             Log.e("VALOR FECHA-ACTUAL",UTiempo.obtenerFecha());
-            android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(getContext());
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
             // set title
             alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>SALUDO!!!</font>"));
 
@@ -271,14 +250,13 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                         public void onClick(DialogInterface dialog,int id) {
                             // if this button is clicked, close
                             // current activity
-                            showProgress("CARGANDO DATOS");
                             Resolve.sincronizarData(getActivity());
                             dialog.cancel();
                         }
                     });
 
             // create alert dialog
-            android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
+            AlertDialog alertDialog = alertDialogBuilder.create();
 
             // show it
             alertDialog.show();
@@ -383,14 +361,6 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receptorSync);
     }
 
-    public void showProgress(String title){
-        progress = new ProgressDialog(getContext());
-        progress.setTitle(title);
-        progress.setCancelable(false);
-        progress.show();
-    }
-
-
 
     public void startTime(Context context){
         //set a new Timer
@@ -436,8 +406,5 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
             timer = null;
         }
     }*/
-
-
-
 
 }

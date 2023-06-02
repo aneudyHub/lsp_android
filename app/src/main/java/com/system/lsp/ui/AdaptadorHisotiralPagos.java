@@ -1,8 +1,6 @@
 package com.system.lsp.ui;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +10,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
-import com.system.lsp.modelo.DatosCliente;
-import com.system.lsp.modelo.PrestamoDetalle;
-import com.system.lsp.ui.Pagos.CuotasAdapter;
-import com.system.lsp.ui.Pagos.Pagos;
-import com.system.lsp.utilidades.Progress;
 import com.system.lsp.utilidades.UPreferencias;
-import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.utilidades.ZebraPrint;
 
 import java.util.ArrayList;
@@ -30,7 +25,7 @@ import java.util.List;
  * Created by Suarez on 20/01/2018.
  */
 
-public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder> implements Progress, Filterable {
+public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisotiralPagos.ViewHolder> implements Filterable {
 
     private List<CuotaPaga> mArrayList;
     private ArrayList<CuotaPaga> mFilteredList;
@@ -45,20 +40,6 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
 
     }
 
-    @Override
-    public void showProgressPrint(Boolean b) {
-
-    }
-
-    @Override
-    public void error(String msj) {
-
-    }
-
-    @Override
-    public void finishPrint(String msj) {
-
-    }
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {

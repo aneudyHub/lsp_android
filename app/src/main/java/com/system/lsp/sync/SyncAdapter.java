@@ -6,15 +6,12 @@ import android.content.ContentProviderClient;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,12 +20,10 @@ import com.android.volley.NetworkResponse;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.DatabaseHandler;
 import com.system.lsp.provider.OperacionesBaseDatos;
@@ -43,7 +38,6 @@ import com.system.lsp.utilidades.UTiempo;
 import com.system.lsp.web.RESTService;
 import com.system.lsp.web.RespuestaApi;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -135,7 +129,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         boolean t = Resolve.isInternetAvailable();
         Log.e("verifica red==>",String.valueOf(t));
         //if(t){
-            new RESTService(getContext()).get(UPreferencias.obtenerUrlAPP(getContext())+URL.SYNC,
+            new RESTService(getContext()).get(URL.SERVER+URL.SYNC,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
@@ -234,7 +228,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             boolean t = Resolve.isInternetAvailable();
 
             //if(t){
-                new RESTService(getContext()).post(UPreferencias.obtenerUrlAPP(getContext())+URL.SYNC, datos,
+                new RESTService(getContext()).post(URL.SERVER+URL.SYNC, datos,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {

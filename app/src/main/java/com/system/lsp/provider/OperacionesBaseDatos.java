@@ -434,20 +434,6 @@ public class OperacionesBaseDatos {
         //return resultado > 0;
     }
 
-    public Cursor datosCompania() {
-        SQLiteDatabase db = baseDatos.getWritableDatabase();
-
-        String sql = String.format("SELECT * FROM %s", Contract.COBRADOR);
-        Cursor c;
-            c = db.rawQuery(sql, null);
-        if (c != null) {
-            c.moveToFirst();
-        }
-        return c;
-
-        //return resultado > 0;
-    }
-
     public boolean isCuotasPagasExists() {
         Cursor cursor = null;
         SQLiteDatabase db = baseDatos.getWritableDatabase();

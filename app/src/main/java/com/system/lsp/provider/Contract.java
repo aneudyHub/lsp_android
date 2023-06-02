@@ -90,7 +90,6 @@ public class Contract {
 
 
 
-
     interface ColumnasCobrador{
         String COBRADOR_ID="id";
         String USERNAME="username";
@@ -98,12 +97,6 @@ public class Contract {
         String ZONA="zona";
         String TOKEN="token";
         String EMAIL="email";
-        String NOMBRECOMPANIA="compania_nombre";
-        String DIRECCIONCOMPANIA="compania_direccion";
-        String TELEFONOCOMPANIA="compania_telefono";
-        String RNCCOMPANIA="compania_rnc";
-        String NOTACOMPANIA="compania_nota";
-        String LEMACOMPANIA="compania_lema";
         String SYNC_TIME="sync_time";
     }
 

@@ -48,7 +48,7 @@ public class RESTService {
 
         // Añadir petición a la pila
         // Añadir petición a la pila
-        peticion.setRetryPolicy(new DefaultRetryPolicy(30000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        peticion.setRetryPolicy(new DefaultRetryPolicy(36000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         peticion.setShouldCache(false);
         VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
     }

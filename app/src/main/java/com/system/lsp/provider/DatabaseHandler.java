@@ -114,20 +114,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Log.e("PagosT table",PagosT);
         db.execSQL(PagosT);
 
-        String CobradorT ="CREATE TABLE "+Contract.COBRADOR+" ("+
-                Cobrador.COBRADOR_ID + " INTEGER PRIMARY KEY,"+
-                Cobrador.USERNAME + " TEXT,"+
-                Cobrador.NOMBRE + " TEXT,"+
-                Cobrador.ZONA + " TEXT,"+
-                Cobrador.TOKEN + " TEXT,"+
-                Cobrador.EMAIL + " TEXT,"+
-                Cobrador.NOMBRECOMPANIA + " TEXT,"+
-                Cobrador.DIRECCIONCOMPANIA + " TEXT,"+
-                Cobrador.TELEFONOCOMPANIA + " TEXT,"+
-                Cobrador.RNCCOMPANIA + " TEXT,"+
-                Cobrador.NOTACOMPANIA + " TEXT,"+
-                Cobrador.LEMACOMPANIA + " TEXT,"+
-                Cobrador.SYNC_TIME + " TIMESTAMP);";
+        String CobradorT ="CREATE TABLE "+Contract.COBRADOR+"("+
+                Cobrador.COBRADOR_ID+" INTEGER PRIMARY KEY,"+
+                Cobrador.USERNAME+" TEXT,"+
+                Cobrador.NOMBRE+" TEXT,"+
+                Cobrador.ZONA+" TEXT,"+
+                Cobrador.TOKEN+" TEXT,"+
+                Cobrador.EMAIL+" TEXT,"+
+                Cobrador.SYNC_TIME+" TIMESTAMP);";
 
         db.execSQL(CobradorT);
 

@@ -1,31 +1,22 @@
 package com.system.lsp.ui.Pagos;
 
-import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
-import android.net.Uri;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.system.lsp.R;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
-import com.system.lsp.ui.AdaptadorCuotas;
-import com.system.lsp.ui.Login.LoginActivity;
-import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UConsultas;
-import com.system.lsp.utilidades.UPreferencias;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,13 +102,13 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
                 if(key.equalsIgnoreCase(mItems.getString(mItems.getColumnIndex(Contract.PrestamoDetalle.ID)))){
                     if(value[0].equalsIgnoreCase("1")){
 
-                        //holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_check_box_black_24dp));
-                        //holder.mIcon.setVisibility(View.VISIBLE);
+                        holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_check_box_black_24dp));
+                        holder.mIcon.setVisibility(View.VISIBLE);
                         holder.mRestante.setVisibility(View.GONE);
                     }else{
 
-                        //holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
-                       // holder.mIcon.setVisibility(View.VISIBLE);
+                        holder.mIcon.setImageDrawable(mCtx.getResources().getDrawable(R.drawable.ic_indeterminate_check_box_black_24dp));
+                        holder.mIcon.setVisibility(View.VISIBLE);
                         holder.mRestante.setVisibility(View.VISIBLE);
                         double restante = Math.abs(total) - Math.abs(montoRestante);
 

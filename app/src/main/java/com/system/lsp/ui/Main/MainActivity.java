@@ -1,27 +1,22 @@
 package com.system.lsp.ui.Main;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.navigation.NavigationView;
 import com.system.lsp.R;
 import com.system.lsp.fragmentos.FragmentHistorialPagos;
 import com.system.lsp.fragmentos.FragmentListaCoutas;
@@ -30,22 +25,17 @@ import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.SessionManager;
 import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Login.LoginActivity;
-import com.system.lsp.ui.Pagos.Pagos;
-import com.system.lsp.utilidades.Progress;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.ZebraPrint;
-import com.system.lsp.utilidades.ZebraprintOld;
 
 
 public class MainActivity extends AppCompatActivity
-        implements Progress, NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private Handler mHandler;
     private SessionManager session;
     private AdaptadorCuotas mAdapter;
     private TextView nombreUsuario;
-    private ProgressDialog server_prog;
-    public ProgressDialog mPrinterProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +43,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        mPrinterProgress = new ProgressDialog(this);
-        mPrinterProgress.setTitle("Printing...");
-        mPrinterProgress.setCancelable(false);
-        mPrinterProgress.setIndeterminate(true);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -91,14 +75,8 @@ public class MainActivity extends AppCompatActivity
         }
         userdb.moveToNext();
 
-        String claveApi = userdb.getString(userdb.getColumnIndex(Contract.Cobrador.TOKEN));
-        if (claveApi==null){
-            logoutUser();
-            Log.e("Esta es la api",claveApi);
-        }
-        Log.e("Esta es la api",claveApi);
         // Reemplaza con tu clave
-        UPreferencias.guardarClaveApi(this,claveApi);
+        UPreferencias.guardarClaveApi(this, userdb.getString(userdb.getColumnIndex(Contract.Cobrador.TOKEN)));
 
         setFragment(0);
     }
@@ -127,7 +105,7 @@ public class MainActivity extends AppCompatActivity
             /*ZebraprintOld zebraprint = new ZebraprintOld(this,null,"prueba");
             zebraprint.probarlo();*/
 
-            ZebraPrint zebraprint = new ZebraPrint(this,null,"prueba",this);
+            ZebraPrint zebraprint = new ZebraPrint(this,null,"prueba");
             zebraprint.probarlo();
 
             return true;
@@ -180,12 +158,11 @@ public class MainActivity extends AppCompatActivity
                         fragmentManager = getSupportFragmentManager();
                         FragmentListaCoutas main_fragment = new FragmentListaCoutas();
                         fragmentTransaction = fragmentManager.beginTransaction();
-                        //fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                          //      android.R.anim.fade_out);
+                        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                                android.R.anim.fade_out);
                         fragmentTransaction.replace(R.id.container, main_fragment);
                         fragmentTransaction.commitAllowingStateLoss();
                         getSupportActionBar().setTitle("COBRAR CUOTAS");
-                        Log.e("Estoy:"," en el FRAGMENT PRINCIPAL");
                     }
                 };
 
@@ -269,81 +246,4 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void showAlert(String mensaje){
-        if(server_prog!=null)
-            server_prog.dismiss();
-
-
-        /*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage(mensaje);
-
-        alertDialogBuilder.setPositiveButton("salir", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                finish();
-            }
-        });
-
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();*/
-
-         /*Snackbar.make(findViewById(R.id.coordinador),
-                            "No hay conexion disponible",
-                            Snackbar.LENGTH_LONG).show();*/
-
-        android.support.v7.app.AlertDialog.Builder alertDialogBuilder = new android.support.v7.app.AlertDialog.Builder(this);
-        // set title
-        alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FFF'>INFORMACION</font>"));
-
-        // set dialog message
-        alertDialogBuilder
-                .setMessage(mensaje)
-                .setCancelable(false)
-                .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, close
-                        // current activity
-                        dialog.cancel();
-                        mPrinterProgress.dismiss();
-                        //finish();
-                    }
-                });
-
-        // create alert dialog
-        android.support.v7.app.AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-
-
-    }
-
-
-    @Override
-    public void showProgressPrint(Boolean b) {
-        Log.e("HOLA","EL PROBLEMA 1.0");
-        if(b){
-            Log.e("HOLA","EL PROBLEMA 1.1");
-            mPrinterProgress.show();
-        }else{
-            Log.e("HOLA","EL PROBLEMA 1.2");
-            mPrinterProgress.dismiss();
-        }
-    }
-
-    @Override
-    public void error(String msj) {
-        Log.e("valor",mPrinterProgress.toString());
-        if(mPrinterProgress!=null){
-            mPrinterProgress.dismiss();
-        }
-        Log.e("error printer",msj);
-        showAlert(msj);
-    }
-
-    @Override
-    public void finishPrint(String msj) {
-        setResult(RESULT_OK);
-        showAlert(msj);
-    }
 }
