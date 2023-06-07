@@ -35,7 +35,7 @@ import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
-import com.system.lsp.utilidades.ZebraPrint;
+import com.example.printer.ZebraPrint;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

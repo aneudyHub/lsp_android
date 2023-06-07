@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.utilidades.UPreferencias;
-import com.system.lsp.utilidades.ZebraPrint;
+import com.example.printer.ZebraPrint;
 
 import java.util.ArrayList;
 import java.util.List;

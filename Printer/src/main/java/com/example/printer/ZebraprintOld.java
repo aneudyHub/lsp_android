@@ -1,4 +1,4 @@
-package com.system.lsp.utilidades;
+package com.example.printer;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -9,7 +9,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.system.lsp.modelo.Recibo;
+//import com.system.lsp.modelo.Recibo;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.comm.Connection;
 import com.zebra.sdk.comm.ConnectionException;

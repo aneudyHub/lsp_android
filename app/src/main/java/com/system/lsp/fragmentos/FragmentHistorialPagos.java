@@ -43,7 +43,7 @@ import com.system.lsp.ui.AdaptadorHisotiralPagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
-import com.system.lsp.utilidades.ZebraPrint;
+import com.example.printer.ZebraPrint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
