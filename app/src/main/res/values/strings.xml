@@ -97,4 +97,10 @@
     <string name="dialog_message">I am a dialog created in onCreateDialog of a DialogFragment.</string>
     <string name="dialog_tag">dialog</string>
 
+
+    <!--    MIGRATION-->
+
+    <string name="api_error_user_pass_are_bad">Usuario y contraseña son incorrectos</string>
+    <string name="api_error_server_outage">El Sistema esta fuera de servicio</string>
+    <string name="thrown_exception">Ha ocurrido un error interno, intente de nuevo.</string>
 </resources>
