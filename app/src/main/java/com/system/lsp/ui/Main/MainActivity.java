@@ -24,9 +24,9 @@ import com.system.lsp.fragmentos.FragmentListaPrestamos;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.SessionManager;
 import com.system.lsp.ui.AdaptadorCuotas;
-import com.system.lsp.ui.Login.LoginActivity;
+import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
-import com.example.printer.ZebraPrint;
+import com.lsp.printer.ZebraPrint;
 
 
 public class MainActivity extends AppCompatActivity

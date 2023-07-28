@@ -10,20 +10,20 @@ class UserSessionSharedPreferencesImpl @Inject constructor(
 
     override var token: String?
         get() {
-            return sharedPreferences.getString(KEY_TOKEN, DEFAULT_VALUE)
+            return sharedPreferences.getString(KEY_TOKEN, null)
         }
         set(value) {
-            sharedPreferences.edit().putString(KEY_TOKEN, value)
+            sharedPreferences.edit().putString(KEY_TOKEN, value).apply()
         }
 
     override fun saveUser(user: User) {
         with(sharedPreferences.edit()) {
-            putString(KEY_USER_ID, user.id.toString())
+            putInt(KEY_USER_ID, user.id)
             putString(KEY_USER_FIRST_NAME, user.firstName)
             putString(KEY_USER_LAST_NAME, user.lastName)
             putString(KEY_USER_EMAIL, user.email)
             putString(KEY_USER_PHONE, user.phone)
-        }
+        }.apply()
     }
 
     override fun retrieveUser(): User? {
@@ -40,7 +40,7 @@ class UserSessionSharedPreferencesImpl @Inject constructor(
     }
 
     override fun dropSession() {
-        sharedPreferences.edit().clear()
+        sharedPreferences.edit().clear().apply()
     }
 
     companion object {

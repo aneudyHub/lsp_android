@@ -1,16 +1,18 @@
 package com.system.lsp.di
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import androidx.room.Room
 import com.system.lsp.BuildConfig
 import com.system.lsp.data.local.database.AppDatabase
 import com.system.lsp.data.local.database.AppDatabase.Companion.DATABASE_NAME
+import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
+import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferencesImpl
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferencesImpl
 import com.system.lsp.data.remote.api.ApiService
+import com.system.lsp.data.remote.api.PlatformService
+import com.system.lsp.data.utils.getDeviceId
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,21 +22,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private val BASE_URL: String
-        get() {
-            return if (BuildConfig.DEBUG) {
-                BuildConfig.BASE_URL
-            } else {
-                // todo - create a shared preference to store the prod base url tied to the code-auth of the system
-                // lets use a placeholder for now
-                "https://google.com.do"
-            }
-        }
+    private const val PLATFORM_BASE_URL = BuildConfig.PLATFORM_URL
 
     @Provides
     @Singleton
@@ -60,25 +54,64 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .client(okHttpClient)
-        .build()
+    @Named("apiService")
+    fun provideRetrofit(okHttpClient: OkHttpClient, @Named("baseUrl") baseUrl: String?): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
 
+    @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    @Named("baseUrl")
+    fun provideBaseUrl(platformSessionSharedPreferences: PlatformSessionSharedPreferences): String? {
+        return if (BuildConfig.DEBUG) {
+            BuildConfig.BASE_URL
+        } else {
+            platformSessionSharedPreferences.apiUrl
+        }
     }
 
     @Provides
     @Singleton
-    fun provideSharedPreferences(application: Application): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(application)
+    @Named("platformService")
+    fun providePlatformRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(PLATFORM_BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+
+    @Provides
+    fun provideApiService(@Named("apiService") retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    fun providePlatformService(@Named("platformService") retrofit: Retrofit): PlatformService {
+        return retrofit.create(PlatformService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("LSP_LOCAL_STORAGE", Context.MODE_PRIVATE)
     }
 
     @Provides
     fun provideUserSharedPreferences(sharedPreferences: SharedPreferences): UserSessionSharedPreferences {
         return UserSessionSharedPreferencesImpl(sharedPreferences)
     }
+
+    @Provides
+    fun providePlatformSessionSharedPreferences(sharedPreferences: SharedPreferences): PlatformSessionSharedPreferences {
+        return PlatformSessionSharedPreferencesImpl(sharedPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun providesDeviceId(@ApplicationContext context: Context): String {
+        return getDeviceId(context)
+    }
+
 }

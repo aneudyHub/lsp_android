@@ -1,9 +1,13 @@
 package com.system.lsp.di
 
+import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
 import com.system.lsp.data.remote.api.ApiService
-import com.system.lsp.data.remote.repositories.UsersRepository
-import com.system.lsp.data.remote.repositories.UsersRepositoryImpl
+import com.system.lsp.data.remote.api.PlatformService
+import com.system.lsp.data.repositories.PlatformSessionRepository
+import com.system.lsp.data.repositories.PlatformSessionRepositoryImpl
+import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.data.repositories.UsersRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +25,19 @@ object RepositoriesModule {
         userSessionSharedPreferences: UserSessionSharedPreferences
     ): UsersRepository {
         return UsersRepositoryImpl(apiService, userSessionSharedPreferences)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPlatformSessionRepository(
+        platformService: PlatformService,
+        platformSessionSharedPreferences: PlatformSessionSharedPreferences,
+        deviceId: String
+    ): PlatformSessionRepository {
+        return PlatformSessionRepositoryImpl(
+            platformService,
+            platformSessionSharedPreferences,
+            deviceId
+        )
     }
 }

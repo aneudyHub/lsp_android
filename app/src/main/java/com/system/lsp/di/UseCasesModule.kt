@@ -1,6 +1,7 @@
 package com.system.lsp.di
 
-import com.system.lsp.data.remote.repositories.UsersRepository
+import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.GetCurrentUserUseCase
 import com.system.lsp.domain.SignInUseCase
 import dagger.Module
 import dagger.Provides
@@ -16,5 +17,11 @@ object UseCasesModule {
     @Singleton
     fun providesSignInUseCase(usersRepository: UsersRepository): SignInUseCase {
         return SignInUseCase(usersRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesGetCurrentUserUseCase(usersRepository: UsersRepository): GetCurrentUserUseCase {
+        return GetCurrentUserUseCase(usersRepository)
     }
 }

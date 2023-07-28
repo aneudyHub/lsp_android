@@ -1,20 +1,38 @@
 package com.system.lsp.domain
 
-import com.system.lsp.data.remote.models.ErrorType
-import com.system.lsp.data.remote.repositories.UsersRepository
+import com.system.lsp.data.remote.models.HttpResponseErrorCode
+import com.system.lsp.data.repositories.UsersRepository
 import java.lang.Exception
 import javax.inject.Inject
 import com.system.lsp.data.remote.models.Result
 
-class SignInUseCase @Inject constructor(
-    private val usersRepository: UsersRepository
+open class SignInUseCase @Inject constructor(
+    private val usersRepository: UsersRepository?
 ) {
-    suspend fun execute(userName: String, password: String): Result<Unit?> {
+    suspend operator fun invoke(userName: String, password: String): UseCaseResult<Unit?> {
         return try {
-            val response = usersRepository.signIn(userName, password)
-            response
+            when (val response = usersRepository!!.signIn(userName, password)) {
+                is Result.Success -> UseCaseResult.Success(response.data)
+                is Result.Error -> {
+                    val error = handleErrorResponse(response.error)
+                    UseCaseResult.Error(error)
+                }
+            }
         } catch (e: Exception) {
-            Result.Error(ErrorType.THROWN_EXCEPTION)
+            UseCaseResult.Error(UseCaseErrorType.THROWN_EXCEPTION)
+        }
+    }
+
+    private fun handleErrorResponse(httpResponseErrorCode: HttpResponseErrorCode): UseCaseErrorType {
+        return when (httpResponseErrorCode) {
+            HttpResponseErrorCode.BAD_REQUEST,
+            HttpResponseErrorCode.UNAUTHORIZED,
+            HttpResponseErrorCode.FORBIDDEN -> UseCaseErrorType.USER_AND_PASS_WRONG
+
+            HttpResponseErrorCode.INTERNAL_SERVER_ERROR -> UseCaseErrorType.SERVER_ERROR
+            HttpResponseErrorCode.UNKNOWN, HttpResponseErrorCode.THROWN_EXCEPTION -> UseCaseErrorType.THROWN_EXCEPTION
+
+            HttpResponseErrorCode.NOT_FOUND -> UseCaseErrorType.API_REQUEST_NOT_FOUND
         }
     }
 }

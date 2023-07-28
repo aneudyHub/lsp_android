@@ -103,4 +103,8 @@
     <string name="api_error_user_pass_are_bad">Usuario y contraseña son incorrectos</string>
     <string name="api_error_server_outage">El Sistema esta fuera de servicio</string>
     <string name="thrown_exception">Ha ocurrido un error interno, intente de nuevo.</string>
+    <string name="user_password_should_be_not_empty">Usuario y contraseña no deben estar en blanco.</string>
+    <string name="authentication_platform_failed">El codigo de plataforma es invalido</string>
+    <string name="platform_hash_code_placeholder">0000</string>
+    <string name="authentication_button">Autenticar</string>
 </resources>

@@ -30,7 +30,7 @@ import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.provider.ProcesadorLocal;
 import com.system.lsp.provider.ProcesadorRemoto;
 import com.system.lsp.provider.SessionManager;
-import com.system.lsp.ui.Login.LoginActivity;
+import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;
