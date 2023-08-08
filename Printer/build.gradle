@@ -32,6 +32,9 @@ android {
 
 dependencies {
     implementation project(':ZSDK_ANDROID_API')
+    implementation 'androidx.test:monitor:1.6.1'
+    implementation 'androidx.test.ext:junit-ktx:1.1.5'
 
     testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'junit:junit:4.12'
 }

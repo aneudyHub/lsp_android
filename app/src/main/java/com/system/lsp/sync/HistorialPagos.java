@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
-import android.preference.Preference;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,7 +23,7 @@ import com.system.lsp.provider.DatabaseHandler;
 import com.system.lsp.provider.ProcesadorLocal;
 import com.system.lsp.provider.ProcesadorRemoto;
 import com.system.lsp.provider.SessionManager;
-import com.system.lsp.ui.Login.LoginActivity;
+import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.URL;

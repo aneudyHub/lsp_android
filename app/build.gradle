@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.dagger.hilt.android'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
 }
 
@@ -12,6 +13,7 @@ android {
     def developProperties = new Properties()
     developProperties.load(new FileInputStream(developPropertiesFile))
     def developBaseUrl = developProperties.getProperty("BASE_URL")
+    def platformUrl = developProperties.getProperty("PLATFORM_URL")
 
     defaultConfig {
         applicationId "com.system.lsp"
@@ -20,19 +22,21 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.system.lsp.HiltTestRunner"
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String", "PLATFORM_URL", "\"" + platformUrl + "\"")
         }
 
         debug {
             applicationIdSuffix ".debug"
             debuggable true
             buildConfigField("String", "BASE_URL", "\"" + developBaseUrl + "\"")
+            buildConfigField("String", "PLATFORM_URL", "\"" + platformUrl + "\"")
         }
     }
 
@@ -59,6 +63,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+
     namespace 'com.system.lsp'
 
 }
@@ -74,6 +79,17 @@ dependencies {
 
     //kt
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation 'androidx.test:runner:1.5.2'
+    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    implementation "androidx.activity:activity-ktx:1.3.1"
+
+
+
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+
 
     //  Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -92,25 +108,36 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.room:room-ktx:2.5.1'
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation 'androidx.room:room-ktx:2.5.1'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    //implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
+    //kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     // For instrumentation tests
     androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptAndroidTest "com.google.dagger:hilt-compiler:$hilt_version"
 
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+
+    androidTestImplementation "com.squareup.okhttp3:mockwebserver:3.12.0"
+    androidTestImplementation 'io.mockk:mockk:1.12.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
     // For local unit tests
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptTest "com.google.dagger:hilt-compiler:$hilt_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2"
 
     // http clients todo - change to retrofit when the migration is done
     implementation 'com.mcxiaoke.volley:library:1.0.19'
 
     // firebase todo - move this lib to the logger module
-    implementation "com.google.firebase:firebase-crash:$firebase_version"
+//    implementation "com.google.firebase:firebase-crash:$firebase_version"
+//    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
 
     // glide
     implementation "com.github.bumptech.glide:glide:$glide_version"
