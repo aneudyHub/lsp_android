@@ -6,6 +6,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.lsp.logger.LogFactory
+import com.lsp.printer.PrinterActivity
+import com.lsp.printer.ui.PrintingBottomSheet
 import com.system.lsp.databinding.ActivitySplashBinding
 import com.system.lsp.ui.Main.MainActivity
 import com.system.lsp.ui.viewmodels.SplashViewModel
@@ -26,6 +28,7 @@ class SplashActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
+
         loggerFactory.logInfo(TAG, "onStart() has been called")
         viewModel.uiState.onEach {
             loggerFactory.logDebug(TAG, "uiState has been changed", mapOf("state" to it))
@@ -71,6 +74,9 @@ class SplashActivity : BaseActivity() {
         loggerFactory.logDebug(TAG, "onCreated has been called")
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val bottomSheetFragment = PrintingBottomSheet()
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
     companion object {

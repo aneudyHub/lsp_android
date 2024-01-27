@@ -25,34 +25,34 @@ class SplashViewModel @Inject constructor(
     init {
         updateState(UiState.Loading(40))
         viewModelScope.launch {
-            delay(3000L)
-            updateState(UiState.Loading(100))
-            delay(500L)
-            when (val platformData = loadPlatformDataUseCase()) {
-                is UseCaseResult.Success -> {
-                    if (platformData.data == null) {
-                        updateState(UiState.UnAuthorized)
-                    } else {
-                        when (val currentUser = getCurrentUserUseCase()) {
-                            is UseCaseResult.Success -> {
-                                if (currentUser.data == null) {
-                                    updateState(UiState.UserNotSignedIn)
-                                } else {
-                                    updateState(UiState.AuthorizedAndSignedIn)
-                                }
-                            }
-
-                            is UseCaseResult.Error -> {
-                                updateState(UiState.Error(currentUser.errorType.getStringResource()))
-                            }
-                        }
-                    }
-                }
-
-                is UseCaseResult.Error -> {
-                    updateState(UiState.Error(platformData.errorType.getStringResource()))
-                }
-            }
+//            delay(3000L)
+//            updateState(UiState.Loading(100))
+//            delay(500L)
+//            when (val platformData = loadPlatformDataUseCase()) {
+//                is UseCaseResult.Success -> {
+//                    if (platformData.data == null) {
+//                        updateState(UiState.UnAuthorized)
+//                    } else {
+//                        when (val currentUser = getCurrentUserUseCase()) {
+//                            is UseCaseResult.Success -> {
+//                                if (currentUser.data == null) {
+//                                    updateState(UiState.UserNotSignedIn)
+//                                } else {
+//                                    updateState(UiState.AuthorizedAndSignedIn)
+//                                }
+//                            }
+//
+//                            is UseCaseResult.Error -> {
+//                                updateState(UiState.Error(currentUser.errorType.getStringResource()))
+//                            }
+//                        }
+//                    }
+//                }
+//
+//                is UseCaseResult.Error -> {
+//                    updateState(UiState.Error(platformData.errorType.getStringResource()))
+//                }
+//            }
         }
     }
 
