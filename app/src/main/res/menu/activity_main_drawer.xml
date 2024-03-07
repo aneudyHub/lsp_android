@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_princial"
+            android:id="@+id/menu_item_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/nav_princial" />
+            android:title="@string/nav_home"/>
 
     </group>
 
-    <item android:title="Other">
+    <item android:title="@string/nav_menu">
         <menu>
             <item
-                android:id="@+id/nav_prestamos"
-                android:title="@string/nav_prestamos" />
+                android:id="@+id/menu_item_customers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="@string/nav_customers" />
             <item
-            android:id="@+id/nav_h_pagos"
-            android:title="@string/nav_h_pagos" />
+                android:id="@+id/menu_item_prestamos"
+                android:title="@string/nav_loans_list" />
+            <item
+                android:id="@+id/menu_item_payments"
+                android:title="@string/nav_payments" />
 
             <item
-                android:id="@+id/nav_logout"
-                android:title="@string/nav_logout" />
+                android:id="@+id/menu_item_printers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="@string/nav_printers" />
+            <item
+                android:id="@+id/menu_item_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="@string/nav_zone" />
+            <item
+                android:id="@+id/menu_item_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="@string/nav_profile" />
+            <item
+                android:id="@+id/menu_item_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:title="@string/nav_settings" />
         </menu>
     </item>
 

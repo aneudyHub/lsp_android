@@ -121,20 +121,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch (id){
-            case R.id.nav_princial:
+            case R.id.menu_item_home:
                 setFragment(0);
                 break;
 
-            case R.id.nav_prestamos:
+            case R.id.menu_item_prestamos:
                 setFragment(1);
                 break;
 
-            case R.id.nav_h_pagos:
+            case R.id.menu_item_payments:
                 setFragment(2);
-                break;
-
-            case R.id.nav_logout:
-                logoutUser();
                 break;
         }
 

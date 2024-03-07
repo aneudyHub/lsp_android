@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     def developPropertiesFile = rootProject.file("develop.properties")
     def developProperties = new Properties()
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId "com.system.lsp"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -83,6 +83,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
     implementation 'androidx.test:runner:1.5.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.6'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.6'
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     implementation "androidx.activity:activity-ktx:1.3.1"
 
@@ -109,6 +111,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.room:room-ktx:2.5.1'
+    kapt "androidx.room:room-compiler:2.5.1"
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
@@ -127,6 +130,7 @@ dependencies {
     androidTestImplementation 'io.mockk:mockk:1.12.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     // For local unit tests
     testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
     kaptTest "com.google.dagger:hilt-compiler:$hilt_version"

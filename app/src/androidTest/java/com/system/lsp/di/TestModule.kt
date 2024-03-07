@@ -2,6 +2,13 @@ package com.system.lsp.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
+import com.system.lsp.data.local.database.AppDatabase
+import com.system.lsp.data.local.database.dao.CustomersDao
+import com.system.lsp.data.local.database.dao.LoanDetailsDao
+import com.system.lsp.data.local.database.dao.LoansDao
+import com.system.lsp.data.local.database.dao.PaymentDetailDao
+import com.system.lsp.data.local.database.dao.PaymentsDao
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferencesImpl
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
@@ -29,6 +36,14 @@ object TestModule {
 
     private const val BASE_URL = "http://127.0.0.1:8080"
     private const val PLATFORM_BASE_URL = "http://127.0.0.1:8080"
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
+        return Room.inMemoryDatabaseBuilder(
+            appContext, AppDatabase::class.java
+        ).allowMainThreadQueries().build()
+    }
 
     @Singleton
     @Provides
@@ -104,5 +119,34 @@ object TestModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
+    @Provides
+    @Singleton
+    fun providesCustomersDao(appDatabase: AppDatabase): CustomersDao {
+        return appDatabase.customersDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesLoansDao(appDatabase: AppDatabase): LoansDao {
+        return appDatabase.loansDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesLoanDetailsDao(appDatabase: AppDatabase): LoanDetailsDao{
+        return appDatabase.loansDetailsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPaymentsDao(appDatabase: AppDatabase): PaymentsDao {
+        return appDatabase.paymentsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providesPaymentsDetailsDao(appDatabase: AppDatabase): PaymentDetailDao {
+        return appDatabase.paymentsDetailsDao()
+    }
 
 }
