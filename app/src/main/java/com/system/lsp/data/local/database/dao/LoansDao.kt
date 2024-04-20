@@ -5,11 +5,10 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import com.google.android.material.circularreveal.CircularRevealHelper.Strategy
 import com.system.lsp.data.local.database.AppDatabase
-import com.system.lsp.data.local.database.entities.CustomerWithLoans
+import com.system.lsp.data.local.database.entities.relations.CustomerWithLoans
 import com.system.lsp.data.local.database.entities.LoanEntity
-import com.system.lsp.data.local.database.entities.LoanWithDetails
+import com.system.lsp.data.local.database.entities.relations.LoanWithDetails
 
 @Dao
 interface LoansDao {

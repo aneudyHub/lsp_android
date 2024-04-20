@@ -7,8 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.system.lsp.data.local.database.AppDatabase
 import com.system.lsp.data.local.database.entities.PaymentEntity
-import com.system.lsp.data.local.database.entities.PaymentWithCustomerAndPaymentDetails
-import com.system.lsp.data.local.database.entities.PaymentWithDetails
+import com.system.lsp.data.local.database.entities.relations.PaymentWithDetails
 import java.util.Date
 
 @Dao
@@ -23,16 +22,22 @@ interface PaymentsDao {
     @Query("DELETE FROM ${AppDatabase.PAYMENTS_TABLE_NAME}")
     suspend fun deleteAll()
 
+    @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME}")
+    suspend fun getAll(): List<PaymentEntity>
+
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where id=:id")
     suspend fun getById(id: Long): PaymentWithDetails
+
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where userId=:userId and date=:sortDate")
-    suspend fun getListByUserId(userId: Long, sortDate: Date? = null): List<PaymentWithDetails>
+    suspend fun getListByUserIdAndDate(userId: Long, sortDate: Date? = null): List<PaymentWithDetails>
+
     @Transaction
-    @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where id=:id")
-    suspend fun getPaymentsWithDetailsById(id: Long): PaymentWithCustomerAndPaymentDetails
+    @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where userId=:userId")
+    suspend fun getListByUserId(userId: Long): List<PaymentWithDetails>
+
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where loanId=:loanId")
-    suspend fun getPaymentsWithDetailsByLoanId(loanId: Long): PaymentWithCustomerAndPaymentDetails
+    suspend fun getPaymentsWithDetailsByLoanId(loanId: Long): List<PaymentWithDetails>
 }

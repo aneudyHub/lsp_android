@@ -1,7 +1,9 @@
-package com.system.lsp.data.local.database.entities
+package com.system.lsp.data.local.database.entities.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.system.lsp.data.local.database.entities.CustomerEntity
+import com.system.lsp.data.local.database.entities.LoanEntity
 
 
 data class CustomerWithLoans(

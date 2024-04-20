@@ -67,9 +67,16 @@ class LoansDaoTest {
             updatedAt = Date()
         )
 
-        loansDao.insertAndUpdate(loan)
-        val result = loansDao.getById(loan.id!!)
+        for (i in 1..10){
+            loansDao.insertAndUpdate(loan.copy(id = i.toLong()))
+        }
+
+
+        val result = loansDao.getById(1)
         Assert.assertEquals(loan, result)
+
+        val allLoans = loansDao.getAll()
+        Assert.assertEquals(10, allLoans.size)
     }
 
     @Test

@@ -9,7 +9,7 @@ import com.system.lsp.data.local.database.dao.LoanDetailsDao
 import com.system.lsp.data.local.database.dao.LoansDao
 import com.system.lsp.data.local.database.dao.PaymentDetailDao
 import com.system.lsp.data.local.database.dao.PaymentsDao
-import com.system.lsp.data.local.database.entities.Converters
+import com.system.lsp.data.local.database.utils.Converters
 import com.system.lsp.data.local.database.entities.CustomerEntity
 import com.system.lsp.data.local.database.entities.LoanEntity
 import com.system.lsp.data.local.database.entities.LoansDetailsEntity

@@ -1,4 +1,4 @@
-package com.system.lsp.data.local.database.entities
+package com.system.lsp.data.local.database.utils
 
 import androidx.room.TypeConverter
 import java.util.Date
