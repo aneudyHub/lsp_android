@@ -147,17 +147,26 @@ public class Autentication extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_antentication);
 
+        UPreferencias.guardaUrlAPP(Autentication.this,"http://api.hermanoshdez.com/");
+
+        // Launch main activity
+        Intent intent = new Intent(Autentication.this,
+                LoginActivity.class);
+
+        startActivity(intent);
+
+        finish();
 
         // Session manager
         //session = new SessionManager(getApplicationContext());
         Log.e("estoy en este lado1","pendejo1");
         // Check if user is already logged in or not
-        if (UPreferencias.obtenerUrlAPP(Autentication.this) != null) {
-            // User is already logged in. Take him to main activity
-            Intent intent = new Intent(Autentication.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }
+//        if (UPreferencias.obtenerUrlAPP(Autentication.this) != null) {
+//            // User is already logged in. Take him to main activity
+//            Intent intent = new Intent(Autentication.this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
 
         setView();
     }
