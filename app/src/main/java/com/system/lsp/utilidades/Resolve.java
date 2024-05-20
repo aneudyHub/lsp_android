@@ -5,10 +5,18 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
 import android.util.Log;
 
 import com.system.lsp.provider.Contract;
+import com.system.lsp.provider.DatabaseHandler;
+import com.system.lsp.provider.SessionManager;
+import com.system.lsp.ui.Login.LoginActivity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.InetAddress;
 
@@ -22,7 +30,7 @@ public class Resolve {
     private static final String EXTRA_MENSAJE = "extra.mensaje";
 
 
-    public static void sincronizarData(Context context){
+    public static void sincronizarData(Context context) {
         // Verificación para evitar iniciar más de una sync a la vez
         Account cuentaActiva = UCuentas.obtenerCuentaActiva(context);
         if (ContentResolver.isSyncActive(cuentaActiva, Contract.AUTORIDAD)) {
@@ -31,31 +39,31 @@ public class Resolve {
         }
 
         Log.d("SINCRONIZADOR", "Solicitando sincronización manual");
-        if(UWeb.hayConexion(context)){
+        if (UWeb.hayConexion(context)) {
             Bundle bundle = new Bundle();
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
             bundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
             ContentResolver.requestSync(cuentaActiva, Contract.AUTORIDAD, bundle);
-        }else {
-            Log.e("No tien internet","Estoy aca");
-            enviarBroadcast(context,true, "NO INTERNET");
+        } else {
+            Log.e("No tien internet", "Estoy aca");
+            enviarBroadcast(context, true, "NO INTERNET");
         }
     }
 
 
-    public static void enviarBroadcast(Context context,boolean estado, String mensaje) {
+    public static void enviarBroadcast(Context context, boolean estado, String mensaje) {
         Intent intentLocal = new Intent(Intent.ACTION_SYNC);
         intentLocal.putExtra(EXTRA_RESULTADO, estado);
         intentLocal.putExtra(EXTRA_MENSAJE, mensaje);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intentLocal);
     }
 
-    public static String alinea_centro(String Texto, int Maximo){
+    public static String alinea_centro(String Texto, int Maximo) {
 
         StringBuilder SB = new StringBuilder(Texto);
         Maximo = Math.round((Maximo - Texto.length()) / 2);
 
-        for (Integer x = 0; x < Maximo ; x++ ) {
+        for (Integer x = 0; x < Maximo; x++) {
             SB.insert(0, " ");
         }
 
@@ -63,7 +71,7 @@ public class Resolve {
     }
 
 
-    public static String dos_columna(String Texto, Integer Maximo, String Texto_dos){
+    public static String dos_columna(String Texto, Integer Maximo, String Texto_dos) {
 
         StringBuilder SB = new StringBuilder(Texto);
         Integer cantidad = Maximo - Texto.length() - Texto_dos.length();
@@ -77,7 +85,7 @@ public class Resolve {
     }
 
     public static boolean isInternetAvailable() {
-        try{
+        try {
             InetAddress ipAddr = InetAddress.getByName("google.com");
             //You can replace it with your name
             return !ipAddr.equals("");
@@ -85,6 +93,31 @@ public class Resolve {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static void logoutUser(Context context) {
+        DatabaseHandler db = new DatabaseHandler(context);
+        SessionManager session = new SessionManager(context);
+        session.setLogin(false);
+        db.deleteCobrador();
+        db.close();
+        // Launching the login activity
+        Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    public static String getValueFromJsonByKey(String json, String key){
+        String trimmedString = null;
+        try{
+            JSONObject obj = new JSONObject(json);
+            trimmedString = obj.getString(key);
+        } catch(JSONException e){
+            e.printStackTrace();
+            return null;
+        }
+
+        return trimmedString;
     }
 
 

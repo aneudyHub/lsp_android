@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,7 +27,8 @@ import com.system.lsp.provider.SessionManager;
 import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.Login.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
-import com.system.lsp.utilidades.ZebraPrint;
+import com.system.lsp.printer.ZebraPrint;
+import com.system.lsp.utils.BluetoothPermissionHelper;
 
 
 public class MainActivity extends AppCompatActivity
@@ -79,6 +81,14 @@ public class MainActivity extends AppCompatActivity
         UPreferencias.guardarClaveApi(this, userdb.getString(userdb.getColumnIndex(Contract.Cobrador.TOKEN)));
 
         setFragment(0);
+
+        BluetoothPermissionHelper.requestBluetoothPermissions(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        BluetoothPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -104,6 +114,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             /*ZebraprintOld zebraprint = new ZebraprintOld(this,null,"prueba");
             zebraprint.probarlo();*/
+
 
             ZebraPrint zebraprint = new ZebraPrint(this,null,"prueba");
             zebraprint.probarlo();

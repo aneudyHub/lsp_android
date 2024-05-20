@@ -34,6 +34,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.system.lsp.R;
+import com.system.lsp.printer.ZebraPrint;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.SessionManager;
 import com.system.lsp.ui.Main.MainActivity;
@@ -77,57 +78,61 @@ public class LoginActivity extends Activity {
 
             public void onClick(View view) {
 
-
-                if(UWeb.hayConexion(LoginActivity.this)) {
-                    String email = inputEmail.getText().toString().trim();
-                    String password = inputPassword.getText().toString().trim();
+                ZebraPrint zebraprint = new ZebraPrint(LoginActivity.this,null,"prueba");
+                zebraprint.probarlo();
 
 
-                    // Check for empty data in the form
-                    if (!email.isEmpty() && !password.isEmpty()) {
-                        // login user
-                        try {
-                            Log.e("Valores", "" + email + " " + password);
-                            checkLogin(email, password);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        // Prompt user to enter credentials
-                        Toast.makeText(getApplicationContext(),
-                                "Favor digites sus credenciales!", Toast.LENGTH_LONG)
-                                .show();
-                    }
-                }else {
-
-                     /*Snackbar.make(findViewById(R.id.coordinador),
-                            "No hay conexion disponible",
-                            Snackbar.LENGTH_LONG).show();*/
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-                    // set title
-                    alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setMessage(Html.fromHtml("NO TIENE INTERNET.<br/><br/>" +
-                                    "<font color='#FF0000'> Porfavor apague el MODO AVION o conectese a traves de WIFI o 3G</font>") )
-                            .setCancelable(false)
-                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog,int id) {
-                                    // if this button is clicked, close
-                                    // current activity
-                                    dialog.cancel();
-                                }
-                            });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
-
-                }
+//
+//                if(UWeb.hayConexion(LoginActivity.this)) {
+//                    String email = inputEmail.getText().toString().trim();
+//                    String password = inputPassword.getText().toString().trim();
+//
+//
+//                    // Check for empty data in the form
+//                    if (!email.isEmpty() && !password.isEmpty()) {
+//                        // login user
+//                        try {
+//                            Log.e("Valores", "" + email + " " + password);
+//                            checkLogin(email, password);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//                        // Prompt user to enter credentials
+//                        Toast.makeText(getApplicationContext(),
+//                                "Favor digites sus credenciales!", Toast.LENGTH_LONG)
+//                                .show();
+//                    }
+//                }else {
+//
+//                     /*Snackbar.make(findViewById(R.id.coordinador),
+//                            "No hay conexion disponible",
+//                            Snackbar.LENGTH_LONG).show();*/
+//
+//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+//                    // set title
+//                    alertDialogBuilder.setTitle(Html.fromHtml("<font color='#FF0000'>ERROR</font>"));
+//
+//                    // set dialog message
+//                    alertDialogBuilder
+//                            .setMessage(Html.fromHtml("NO TIENE INTERNET.<br/><br/>" +
+//                                    "<font color='#FF0000'> Porfavor apague el MODO AVION o conectese a traves de WIFI o 3G</font>") )
+//                            .setCancelable(false)
+//                            .setPositiveButton("OK",new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog,int id) {
+//                                    // if this button is clicked, close
+//                                    // current activity
+//                                    dialog.cancel();
+//                                }
+//                            });
+//
+//                    // create alert dialog
+//                    AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                    // show it
+//                    alertDialog.show();
+//
+//                }
 
 
             }

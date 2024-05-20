@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -128,31 +127,8 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                     swipeRefreshLayout.setRefreshing(true);
             }
         });
-        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                sincronizar(view);
-            }
-        });
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                //sincronizar(view);
-
-            }
-        });*/
 
         return  view;
-    }
-
-    private void sincronizar(View view) {
-        swipeRefreshLayout.setRefreshing(true);
-        // Verificación para evitar iniciar más de una sync a la vez
-        Resolve.sincronizarData(getContext());
-    }
-
-    private void mostrarProgreso(boolean mostrar) {
-        //findViewById(R.id.barra).setVisibility(mostrar ? View.VISIBLE : View.GONE);
     }
 
     private void prepararLista(View view) {
@@ -160,7 +136,6 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         reciclador = (RecyclerView) view.findViewById(R.id.reciclador);
         layoutManager = new LinearLayoutManager(getContext());
         reciclador.setLayoutManager(layoutManager);
-        //reciclador.setAdapter(adaptador);
     }
 
 
@@ -222,18 +197,14 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
         operacionesBaseDatos = OperacionesBaseDatos
                 .obtenerInstancia(getContext());
-        String fechaSync="";
-        cursor = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(globalContext));
-        if (cursor.moveToFirst()) {
-            fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
-        }
+        String fechaSync= operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(globalContext));
         if (fechaSync==null){
             fechaSync="2000-01-01";
         }
         String fechaExtraida = fechaSync.substring(0,10);
 
         if (fechaExtraida.equals(UTiempo.obtenerFecha())){
-
+            // TODO: 27/4/24 ???  
         }else {
             Log.e("VALOR FECHA",fechaExtraida);
             Log.e("VALOR FECHA-ACTUAL",UTiempo.obtenerFecha());
@@ -250,6 +221,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
                         public void onClick(DialogInterface dialog,int id) {
                             // if this button is clicked, close
                             // current activity
+                            swipeRefreshLayout.setRefreshing(true);
                             Resolve.sincronizarData(getActivity());
                             dialog.cancel();
                         }
@@ -287,31 +259,22 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu);
-        MenuItem search = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
-        search(searchView);
+        MenuItem searchItem = menu.findItem(R.id.searchMain);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
 
-    }
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
 
-
-
-    private void search(SearchView searchView) {
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                adaptador.getFilter().filter(newText);
-//                return true;
-//            }
-//        });
+                adaptador.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 
 
@@ -360,51 +323,5 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         super.onDestroy();
         LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(receptorSync);
     }
-
-
-    public void startTime(Context context){
-        //set a new Timer
-        timer = new Timer();
-
-        //initialize the TimerTask's job
-       //initializeTimerTask(context);
-
-        //schedule the timer, after the first 5000ms the TimerTask will run every 10000ms
-        timer.schedule(timerTask, 5000, 30000); //
-    }
-
-
-      /*  public void initializeTimerTask(final Context context) {
-
-            timerTask = new TimerTask() {
-                public void run() {
-                    //use a handler to run a toast that shows the current timestamp
-                    handler.post(new Runnable() {
-                        public void run() {
-                            //get the current timeStamp
-
-                            Calendar calendar = Calendar.getInstance();
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd:MMMM:yyyy HH:mm:ss a");
-                            final String strDate = simpleDateFormat.format(calendar.getTime());
-
-                            //show the toast
-                             int duration = Toast.LENGTH_SHORT;
-
-                            Toast toast = Toast.makeText(getContext(), strDate, duration);
-                            toast.show();
-                            Resolve.sincronizarData(context);
-                        }
-                    });
-                }
-            };
-        }
-
-    public static void stoptimertask() {
-        //stop the timer, if it's not already null
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }*/
 
 }
