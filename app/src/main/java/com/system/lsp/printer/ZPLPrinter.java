@@ -1,5 +1,7 @@
 package com.system.lsp.printer;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
@@ -21,15 +23,15 @@ public class ZPLPrinter extends Printer {
 
     @Override
     public String getFontFormat(PrinterTextFormat textFormat) {
-        String fontFormat = "N";
+        String fontFormat = "0N";
 
         switch (textFormat) {
             case BOLD: {
-                fontFormat = "B";
+                fontFormat = "1N";
                 break;
             }
             case NORMAL: {
-                fontFormat = "N";
+                fontFormat = "0N";
                 break;
             }
             case ITALIC: {
@@ -54,16 +56,16 @@ public class ZPLPrinter extends Printer {
         String result = "";
         switch (textAlignment) {
             case LEFT: {
-                result = PrinterCommands.ALIGN_TO_LEFT.zpl(String.valueOf(dotsAvailable));
+                result = PrinterCommands.ALIGN_TO_LEFT.zpl(String.valueOf(dotsWidthAvailablePerRow));
                 break;
             }
             case CENTER: {
-                result = PrinterCommands.ALIGN_TO_CENTER.zpl(String.valueOf(dotsAvailable));
+                result = PrinterCommands.ALIGN_TO_CENTER.zpl(String.valueOf(dotsWidthAvailablePerRow));
                 break;
             }
 
             case RIGHT: {
-                result = PrinterCommands.ALIGN_TO_RIGHT.zpl(String.valueOf(dotsAvailable));
+                result = PrinterCommands.ALIGN_TO_RIGHT.zpl(String.valueOf(dotsWidthAvailablePerRow));
                 break;
             }
         }
@@ -91,11 +93,15 @@ public class ZPLPrinter extends Printer {
 
         String[] splitLines = splitLines(fontSizeInDots, text);
         StringBuilder stringBuilder = new StringBuilder();
-        for (int x = 0; x < splitLines.length; x++) {
-            int y = x * fontSizeInDots;
+        int line = 1;
+        for (String splitLine : splitLines) {
+            Log.e("ANEUDY", String.valueOf(currentYPosition));
             stringBuilder.append(
-                    createLineStringBuilder(fontSize, textFormat, splitLines[x], null, currentYPosition + y)
+                    createLineStringBuilder(fontSize, textFormat, splitLine, null, currentYPosition)
             );
+            int y = line * fontSizeInDots;
+            currentYPosition = currentYPosition + y;
+            line++;
         }
         return stringBuilder.toString().getBytes();
     }
@@ -106,11 +112,14 @@ public class ZPLPrinter extends Printer {
 
         String[] splitLines = splitLines(fontSizeInDots, text);
         StringBuilder stringBuilder = new StringBuilder();
-        for (int x = 0; x < splitLines.length; x++) {
-            int y = x * fontSizeInDots;
+        int line = 1;
+        for (String splitLine : splitLines) {
             stringBuilder.append(
-                    createLineStringBuilder(fontSize, textFormat, splitLines[x], alignment, currentYPosition + y)
+                    createLineStringBuilder(fontSize, textFormat, splitLine, alignment, currentYPosition)
             );
+            int y = line * fontSizeInDots;
+            currentYPosition = currentYPosition + y;
+            line++;
         }
 
         return stringBuilder.toString().getBytes();
@@ -130,6 +139,51 @@ public class ZPLPrinter extends Printer {
     @Override
     public byte[] printNewline() {
         return PrinterCommands.SKIP_LINE.zpl().getBytes();
+    }
+
+    @Override
+    public byte[] printTable(int fontSize, PrinterTextFormat textFormat, String... strings) {
+        int fontSizeInDots = TextSizeConverter.convertSpToDots(fontSize);
+
+        StringBuilder zpl = new StringBuilder();
+
+        int a = (int) Math.round(dotsWidthAvailablePerRow * .7);
+        int b = (int) Math.round(dotsWidthAvailablePerRow * .3);
+        int[] columnWidths = {a, b};  // Adjust column widths as needed
+
+        int rowSpacing = fontSizeInDots / 2;
+
+        // Define initial positions
+        int xPosition = 0;  // Starting X position for the text
+
+        int line = 1;
+        // Start label format
+//        zpl.append("^XA\n");
+
+        // Iterate over each data entry
+        for (String entry : strings) {
+            // Split the entry into columns based on commas
+            String[] columns = entry.split(";");
+
+            int xOffset = xPosition;  // Reset X position for each row
+
+            // Add each column to ZPL
+            for (int i = 0; i < columnWidths.length; i++) {
+                if (i < columns.length) {
+                    String columnText = columns[i].trim();
+
+                    // Add the text field to ZPL
+                    zpl.append(String.format("^FO%d,%d^A0N,15,15^FD%s^FS\n", xOffset, currentYPosition, columnText));
+
+                    // Update X position for the next column
+                    xOffset += columnWidths[i];
+                }
+            }
+
+            int y = line * fontSizeInDots;
+            currentYPosition = currentYPosition + y + rowSpacing;
+        }
+        return zpl.toString().getBytes();
     }
 
     @Override

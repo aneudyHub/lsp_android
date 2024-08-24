@@ -57,6 +57,13 @@ public class CPCLPrinter extends Printer{
     }
 
     @Override
+    public byte[] printTable(int fontSize, PrinterTextFormat textFormat, String... strings) {
+
+
+        return new byte[0];
+    }
+
+    @Override
     public byte[] feedPaper(int lines) {
         return new byte[0];
     }

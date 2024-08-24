@@ -52,109 +52,54 @@ public class RecieptPrinterDocumentBuilder {
     }
 
     public byte[] getDocument() throws ConnectionException {
-//        byte[] cmd = ConcatByteArrays.concatByteArrays(
-//                printer.initialize(),
-//                printer.fieldOrigin(20, 20),
-//                printer.printText(16, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER, document.getCompanyName()),
-//                printer.printNewline(),
-//                printer.printNewline(),
-//                printer.printText(14, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER, document.getAddress()),
-//                printer.printNewline(),
-//                printer.printText(14, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER, document.getPhone()),
-//                printer.printNewline(),
-//                printer.printNewline(),
-//                printer.printText(14, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER, document.getDocumentType().toString()),
-//                printer.printNewline(),
-//                printer.printText(14, PrinterTextFormat.NORMAL, PrinterTextAlignment.LEFT, document.getRecieptDate()),
-//                printer.printNewline(),
-//                printer.printText(14, PrinterTextFormat.NORMAL,PrinterTextAlignment.LEFT, "Prestamo:"+document.getLoanId()),
-//                printer.printNewline(),
-//                printer.printText(14,PrinterTextFormat.NORMAL, PrinterTextAlignment.LEFT, document.getCustomerFullName()),
-//                printer.feedPaper(3),
-//                printer.end()
-//        );
+        String[] table = new String[]
+                {
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                        "PAGO CUOTA(S) N.12/13;60.00",
+                        "PAGO CUOTA(S) N.13/13;500.00",
+                };
 
-//        String cmd =
-//                PrinterCommands.START.zpl() +
-//                        PrinterCommands.FIELD_ORIGIN.zpl("0", "0") +
-//                        String.format(
-//                                PrinterCommands.FONT_FORMAT.zpl("N", String.valueOf(TextSizeConverter.convertSpToDots(10))) +
-//                                        PrinterCommands.ALIGN_TO_CENTER.zpl("576") +
-//                                        PrinterCommands.START_FIELD.zpl() +
-//                                        "%s" +
-//                                        PrinterCommands.END_FIELD.zpl(),
-//                                String.join("", document.getCompanyName())
-//                        ) +
-//                        PrinterCommands.END.zpl();
-//
-//        zebraPrint.write(cmd.getBytes());
-//
-//
-//        String cmd2 =
-//                PrinterCommands.START.zpl() +
-//                        PrinterCommands.FIELD_ORIGIN.zpl("0", "0") +
-//                        String.format(
-//                                PrinterCommands.FONT_FORMAT.zpl("N", String.valueOf(TextSizeConverter.convertSpToDots(12))) +
-//                                        PrinterCommands.ALIGN_TO_CENTER.zpl("576") +
-//                                        PrinterCommands.START_FIELD.zpl() +
-//                                        "%s" +
-//                                        PrinterCommands.END_FIELD.zpl(),
-//                                String.join("", document.getAddress())
-//                        ) +
-//                        PrinterCommands.END.zpl();
+        String[] table2 = new String[]{
+                "TOTAL;560.00",
+                "DESCUENTO;0.00",
+                "TOTAL PAGADO;560.00"
+        };
 
-
-        /*
-        * start 20
-        * spacing 2
-        * font size
-        *
-        * 1- 20,20
-        * 2- 20,
-        * */
-//        String a ="^XA\n" +
-//                "^FO20,20^A0N,25,25^FDINVERSIONES JOSE CASTILLO SANTOS^FS" +
-//                "^FO20,60^A0N,20,20^FDAv. Antonio Guzman Fernandez.^FS" +
-//                "^FO20,85^A0N,20,20^FDPlaza Dereck Mall #202^FS" +
-//                "^FO20,110^A0N,20,20^FDTel: 809-244-3787^FS" +
-//                "^FO20,140^A0N,25,25^FDPRESTAMO DE PAGO^FS" +
-//                "^FO20,165^A0N,20,20^FDFECHA: 2024-04-26 08:21:06^FS" +
-//                "^FO20,195^GB576,1,1^FS" +
-//                "^FO20,200^A0N,25,25^FD#PRESTAMO: 4009^FS" +
-//                "^FO20,225^A0N,20,20^FDQUINTINO ROSARIO SALAZAR^FS" +
-//                "^FO20,255^GB576,1,1^FS" +
-//                "^FO20,260^A0N,20,20^FDConcepto Monto Pagado^FS" +
-//                "^FO20,285^A0N,20,20^FDPAGO CUOTA(S) N.18/46 140.00^FS" +
-//                "^FO20,310^A0N,20,20^FDABONO CUOTA(S) N.19/46 260.00^FS" +
-//                "^FO20,335^A0N,20,20^FDTOTAL 400.00^FS" +
-//                "^FO20,360^A0N,20,20^FDDESCUENTO 0.00^FS" +
-//                "^FO20,385^A0N,20,20^FDTOTAL PAGADO 400.00^FS" +
-//                "^FO20,415^A0N,20,20^FDraul hernandez^FS" +
-//                "^FO20,440^A0N,20,20^FDBY^FS" +
-//                "^FO20,470^A0N,20,20^FDLE ATENDIO^FS" +
-//                "^FO20,500^A0N,20,20^FDNOTA:^FS" +
-//                "^FO20,525^A0N,20,20^FD***No somos responsable de dinero entregado sin recibo firmado ****^FS" +
-//                "^XZ";
-
-//        String a ="^XA\n" +
-//                "^FO20,20^A0N,25,25^FDINVERSIONES JOSE CASTILLO SANTOS^FS" +
-//                "^FO20,30^A0N,25,25^FDAv. Antonio Guzman Fernandez.^FS" +
-//                "^XZ";
-
-//        String a ="^XA\n" +
-//                "^FO20,20^A0N,25,25"+PrinterCommands.ALIGN_TO_CENTER.zpl("576")+"^FDINVERSIONES JOSEasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfgsdfg CASTILLO SANTOS^FS" +
-//                "^XZ";
-
-//        String text = "This is a sample text to calculate the number of lines needed to print in the center.";
-//        int maxWidth = 80; // Maximum width available for the text
-//        int fontSize = 12; // Font size in points
-//        int averageCharWidth = 8; // Average width of characters in the font (adjust as needed)
-//
-////        int linesNeeded = calculateLinesNeeded(text, maxWidth, fontSize, averageCharWidth);
-
+        int rowSpacing = 60;  // Spacing between rows
+        int fontSize = 12;
         byte[] cmd = ConcatByteArrays.concatByteArrays(
                 printer.initialize(),
-                printer.printLine(12, PrinterTextFormat.NORMAL,"INVERSIONES JOSE CASTILLO SANTOS00000000"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,PrinterTextAlignment.CENTER,"INVERSIONES JOSE CASTILLO SANTOS00000000"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,PrinterTextAlignment.CENTER,"Av. Antonio Guzman Fernandez, plaza Derek Mall #202"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,PrinterTextAlignment.CENTER,"Tel.: 809-244-3787"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,""),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,""),
+                printer.printLine(fontSize, PrinterTextFormat.BOLD, PrinterTextAlignment.CENTER,"*RECIBO DE PAGO*"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,"FECHA: 2024-05-28 10:49:02"),
+                // TODO: 13/8/24 write divider ------------------------
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,""),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,"#Prestamo: 1"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,"SANTIAGO HIDALGO ROSARIO"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,""),
+                printer.printTable(fontSize, PrinterTextFormat.NORMAL, table),
+                printer.printTable(fontSize, PrinterTextFormat.NORMAL, table2),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER,"Wilberto Mercado Taveras"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER,"----------------------------------------"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL, PrinterTextAlignment.CENTER,"LE ATENDIO"),
+                printer.printLine(fontSize, PrinterTextFormat.BOLD,"NOTA:"),
+                printer.printLine(fontSize, PrinterTextFormat.NORMAL,"ESTO ES PROBANDO DE QUE REALMENTE FUNCIONA"),
+                printer.printLine(10, PrinterTextFormat.NORMAL,PrinterTextAlignment.CENTER,"***No somos responsable de dinero entregado sin recibo firmado ****"),
                 printer.end()
         );
 
@@ -189,10 +134,10 @@ public class RecieptPrinterDocumentBuilder {
 
         public Builder setPrinterLanguage(@NotNull PrinterLanguage printerLanguage) {
             if (printerLanguage == PrinterLanguage.ZPL) {
-                printer = new ZPLPrinter(dotsWidthPerRow, TextSizeConverter.convertSpToDots(2), 0,20);
+                printer = new ZPLPrinter(dotsWidthPerRow, TextSizeConverter.convertSpToDots(2), 0,50);
             }
             if (printerLanguage == PrinterLanguage.CPCL) {
-                printer = new CPCLPrinter(dotsWidthPerRow, TextSizeConverter.convertSpToDots(2), 0,20);
+                printer = new CPCLPrinter(dotsWidthPerRow, TextSizeConverter.convertSpToDots(2), 0,50);
             }
 
             return this;

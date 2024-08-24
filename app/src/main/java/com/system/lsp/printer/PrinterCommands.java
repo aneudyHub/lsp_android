@@ -48,7 +48,7 @@ public enum PrinterCommands {
          * */
         @Override
         public String zpl(String... params) {
-            return String.format("^AO%s,%s,%s", params[0], params[1], params[1]);
+            return String.format("^A%s,%s,%s", params[0], params[1], params[1]);
         }
 
         @Override
@@ -100,7 +100,7 @@ public enum PrinterCommands {
          * */
         @Override
         public String zpl(String... params) {
-            return String.format("^FB%s,2,0,C", params[0]);
+            return String.format("^FB%s,1,0,C,0", params[0]);
         }
 
         @Override
