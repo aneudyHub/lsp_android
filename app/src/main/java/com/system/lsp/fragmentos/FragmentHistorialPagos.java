@@ -184,7 +184,7 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
     public void onClick(View view) {
         if(view == fechaBuscar) {
 
-            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
+//            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
             if (operacionesBaseDatos.isCuotasPagasExists()){
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                 // set title
@@ -350,7 +350,7 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_historial_pagos, menu);
-        MenuItem search = menu.findItem(R.id.search);
+        MenuItem search = menu.findItem(R.id.searchMain);
         MenuItem imprmirCuadre = menu.findItem(R.id.imprimirCuadre);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);

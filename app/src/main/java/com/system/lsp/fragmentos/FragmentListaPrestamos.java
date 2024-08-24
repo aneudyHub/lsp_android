@@ -201,7 +201,7 @@ public class FragmentListaPrestamos extends Fragment implements LoaderManager.Lo
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.main, menu);
-        MenuItem search = menu.findItem(R.id.search);
+        MenuItem search = menu.findItem(R.id.searchMain);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
         search(searchView);
 

@@ -30,7 +30,7 @@ public class OperacionesBaseDatos {
     public OperacionesBaseDatos() {
     }
 
-    public static OperacionesBaseDatos obtenerInstancia(Context context){
+    public static OperacionesBaseDatos obtenerInstancia(Context context) {
         if (baseDatos == null) {
             baseDatos = new DatabaseHandler(context);
         }
@@ -50,18 +50,18 @@ public class OperacionesBaseDatos {
 
     private static final String CABECERA_CUOTAS_PAGAS = "cuota_paga ";
 
-    public Double obtenerTotalAPagar(String prestamo){
-        double t=0;
+    public Double obtenerTotalAPagar(String prestamo) {
+        double t = 0;
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Contract.PRESTAMOS_DETALLES);
         Cursor c;
-        String[] proyeccion ={
-                "(SUM("+Contract.PrestamoDetalle.CAPITAL+") + SUM("+Contract.PrestamoDetalle.INTERES+") + SUM("+Contract.PrestamoDetalle.MORA+")) - (SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+")+SUM("+Contract.PrestamoDetalle.ABONO_MORA+")) as total"
+        String[] proyeccion = {
+                "(SUM(" + Contract.PrestamoDetalle.CAPITAL + ") + SUM(" + Contract.PrestamoDetalle.INTERES + ") + SUM(" + Contract.PrestamoDetalle.MORA + ")) - (SUM(" + Contract.PrestamoDetalle.MONTO_PAGADO + ")+SUM(" + Contract.PrestamoDetalle.ABONO_MORA + ")) as total"
         };
-        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{prestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
+        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO + "=? and " + Contract.PrestamoDetalle.PAGADO + "=? and date(" + Contract.PrestamoDetalle.FECHA + ") <= ?", new String[]{prestamo, "0", UTiempo.obtenerFecha()}, null, null, null);
 
-        if(c!=null){
+        if (c != null) {
             c.moveToFirst();
             t = c.getDouble(c.getColumnIndex("total"));
         }
@@ -70,18 +70,18 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Double obtenerTotalCuota(String prestamo){
-        double t=0;
+    public Double obtenerTotalCuota(String prestamo) {
+        double t = 0;
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Contract.PRESTAMOS_DETALLES);
         Cursor c;
-        String[] proyeccion ={
-                "(SUM("+Contract.PrestamoDetalle.CAPITAL+") + SUM("+Contract.PrestamoDetalle.INTERES+")) - SUM("+Contract.PrestamoDetalle.MONTO_PAGADO+") as totalCuota"
+        String[] proyeccion = {
+                "(SUM(" + Contract.PrestamoDetalle.CAPITAL + ") + SUM(" + Contract.PrestamoDetalle.INTERES + ")) - SUM(" + Contract.PrestamoDetalle.MONTO_PAGADO + ") as totalCuota"
         };
-        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{prestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
+        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO + "=? and " + Contract.PrestamoDetalle.PAGADO + "=? and date(" + Contract.PrestamoDetalle.FECHA + ") <= ?", new String[]{prestamo, "0", UTiempo.obtenerFecha()}, null, null, null);
 
-        if(c!=null){
+        if (c != null) {
             c.moveToFirst();
             t = c.getDouble(c.getColumnIndex("totalCuota"));
         }
@@ -90,18 +90,18 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Double obtenerTotalMora(String idPrestamo){
-        double t=0;
+    public Double obtenerTotalMora(String idPrestamo) {
+        double t = 0;
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(Contract.PRESTAMOS_DETALLES);
         Cursor c;
-        String[] proyeccion ={
-                "SUM("+Contract.PrestamoDetalle.MORA+") - SUM("+Contract.PrestamoDetalle.ABONO_MORA+")  as totalMora"
+        String[] proyeccion = {
+                "SUM(" + Contract.PrestamoDetalle.MORA + ") - SUM(" + Contract.PrestamoDetalle.ABONO_MORA + ")  as totalMora"
         };
-        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO+"=? and "+Contract.PrestamoDetalle.PAGADO+"=? and date("+Contract.PrestamoDetalle.FECHA+") <= ?", new String[]{idPrestamo,"0",UTiempo.obtenerFecha()}, null, null, null);
+        c = builder.query(db, proyeccion, Contract.PrestamoDetalle.PRESTAMO + "=? and " + Contract.PrestamoDetalle.PAGADO + "=? and date(" + Contract.PrestamoDetalle.FECHA + ") <= ?", new String[]{idPrestamo, "0", UTiempo.obtenerFecha()}, null, null, null);
 
-        if(c!=null){
+        if (c != null) {
             c.moveToFirst();
             t = c.getDouble(c.getColumnIndex("totalMora"));
         }
@@ -110,15 +110,14 @@ public class OperacionesBaseDatos {
     }
 
 
-
-    public boolean actualizarCuotas(String idPrestamoDetalle,double monto,String MC) {
+    public boolean actualizarCuotas(String idPrestamoDetalle, double monto, String MC) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
 
         ContentValues valores = new ContentValues();
-        if(MC.equals("1")){
-            valores.put(Contract.PrestamoDetalle.ABONO_MORA,monto);
-        }else {
-            valores.put(Contract.PrestamoDetalle.MONTO_PAGADO,monto);
+        if (MC.equals("1")) {
+            valores.put(Contract.PrestamoDetalle.ABONO_MORA, monto);
+        } else {
+            valores.put(Contract.PrestamoDetalle.MONTO_PAGADO, monto);
 
         }
 
@@ -131,9 +130,9 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Cursor ObtenerDatosPrestamoPorId(String id){
+    public Cursor ObtenerDatosPrestamoPorId(String id) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
-        String selection = String.format("%s=?", Contract.PRESTAMOS + "." +Contract.Prestamo.ID,"%s=?");
+        String selection = String.format("%s=?", Contract.PRESTAMOS + "." + Contract.Prestamo.ID, "%s=?");
         String[] selectionArgs = {id};
         Cursor c;
 
@@ -145,15 +144,15 @@ public class OperacionesBaseDatos {
                 Contract.PRESTAMOS + "." + Contract.Prestamo.CAPITAL,
                 Contract.PRESTAMOS + "." + Contract.Prestamo.CUOTAS,
                 Contract.PRESTAMOS + "." + Contract.Prestamo.FECHA_INICIO,
-               "(SUM( " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL + " ) + " +
-                       "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + " ) + " +
-                       "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) as ValorCapital",
+                "(SUM( " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CAPITAL + " ) + " +
+                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + " ) + " +
+                        "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " )) as ValorCapital",
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MONTO_PAGADO,
-                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES+") AS "+Contract.PrestamoDetalle.INTERES,
-                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA+") AS "+Contract.PrestamoDetalle.MORA,
-                };
+                "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES + ") AS " + Contract.PrestamoDetalle.INTERES,
+                "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + ") AS " + Contract.PrestamoDetalle.MORA,
+        };
 
-       c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
+        c = builder.query(db, proyeccion, selection, selectionArgs, null, null, null);
 
         //Nos movemos al primer registro de la consulta
         if (c != null) {
@@ -163,10 +162,10 @@ public class OperacionesBaseDatos {
 
     }
 
-    public Cursor ObtenerInfoPrestamoPorId(String id){
+    public Cursor ObtenerInfoPrestamoPorId(String id) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         String selection;
-        selection = String.format("%s=?", Contract.PRESTAMOS + "." +Contract.Prestamo.ID);
+        selection = String.format("%s=?", Contract.PRESTAMOS + "." + Contract.Prestamo.ID);
         String[] selectionArgs = {id};
         Cursor c;
 
@@ -179,7 +178,7 @@ public class OperacionesBaseDatos {
                 Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.INTERES,
                 Contract.PRESTAMOS + "." + Contract.Prestamo.PLAZO,
                 Contract.PRESTAMOS + "." + Contract.Prestamo.CUOTAS,
-                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PAGADO+") AS CuotaPagada",
+                "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PAGADO + ") AS CuotaPagada",
 
         };
 
@@ -194,20 +193,20 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Cursor ObtenerInfoPrestamoDiasAtrasadoAndMora(String id){
+    public Cursor ObtenerInfoPrestamoDiasAtrasadoAndMora(String id) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
         String selection;
-        selection = String.format("%s=?", Contract.PRESTAMOS + "." +Contract.Prestamo.ID) +
-                " AND "+ Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.PAGADO + " = 0" +
-                " AND "+ Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.DIAS_ATRASADOS + " > 0 IS NOT NULL";
+        selection = String.format("%s=?", Contract.PRESTAMOS + "." + Contract.Prestamo.ID) +
+                " AND " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PAGADO + " = 0" +
+                " AND " + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.DIAS_ATRASADOS + " > 0 IS NOT NULL";
         String[] selectionArgs = {id};
         Cursor c;
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(CABECERA_PRESTAMO_JOIN_DATALLEPRESTAMO);
         String[] proyeccion = {
-                "COUNT("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CUOTA+")  AS CuotasAtrasadas ",
-                "SUM("+Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.DIAS_ATRASADOS+") AS DiasAtrasados ",
+                "COUNT(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.CUOTA + ")  AS CuotasAtrasadas ",
+                "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.DIAS_ATRASADOS + ") AS DiasAtrasados ",
                 "(SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.MORA + " ) - " +
                         "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.ABONO_MORA + " ))  as ValorMora",
                 "SUM(" + Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.ABONO_MORA + " )  as AbonoMora",
@@ -224,13 +223,12 @@ public class OperacionesBaseDatos {
     }
 
 
-
-
-    public Cursor ObtenerCuotasPagasPorCobrador(String id,String fecha){
+    public Cursor ObtenerCuotasPagasPorCobrador(String id, String fecha) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
-        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.COBRADOR_ID) +
-                " AND "+ String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.FECHA_CONSULTA);;
-        String[] selectionArgs = {id,fecha};
+        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.COBRADOR_ID) +
+                " AND " + String.format("%s=?", Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.FECHA_CONSULTA);
+        ;
+        String[] selectionArgs = {id, fecha};
         Cursor c;
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
@@ -256,10 +254,10 @@ public class OperacionesBaseDatos {
     }
 
 
-    public Cursor cuadreCobrador(String cobradorId){
-        Log.e("valorFecha","entre");
+    public Cursor cuadreCobrador(String cobradorId) {
+        Log.e("valorFecha", "entre");
         SQLiteDatabase db = baseDatos.getWritableDatabase();
-        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." +Contract.CuotaPaga.COBRADOR_ID);
+        String selection = String.format("%s=?", Contract.CUOTA_PAGADA + "." + Contract.CuotaPaga.COBRADOR_ID);
         String[] selectionArgs = {cobradorId};
         Cursor c;
 
@@ -284,11 +282,11 @@ public class OperacionesBaseDatos {
 
     }
 
-    public Cursor ObtenerCuotasPendientesOPagadas(String id,String pagado){
+    public Cursor ObtenerCuotasPendientesOPagadas(String id, String pagado) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
-        String selection = String.format("%s=?", Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.PRESTAMO) +
-                " AND "+ String.format("%s=?", Contract.PRESTAMOS_DETALLES + "." +Contract.PrestamoDetalle.PAGADO);
-        String[] selectionArgs = {id,pagado};
+        String selection = String.format("%s=?", Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PRESTAMO) +
+                " AND " + String.format("%s=?", Contract.PRESTAMOS_DETALLES + "." + Contract.PrestamoDetalle.PAGADO);
+        String[] selectionArgs = {id, pagado};
         Cursor c;
 
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
@@ -317,8 +315,7 @@ public class OperacionesBaseDatos {
     }
 
 
-
-    public boolean actualizarSyncTime(String idCobrador,String fecha) {
+    public boolean actualizarSyncTime(String idCobrador, String fecha) {
         SQLiteDatabase db = baseDatos.getWritableDatabase();
 
         ContentValues valores = new ContentValues();
@@ -333,28 +330,32 @@ public class OperacionesBaseDatos {
     }
 
     // [OPERACIONES_FORMA_PAGO]
-    public Cursor obtenerSyncTime(String idCobrador) {
+    public String obtenerSyncTime(String idCobrador) {
         SQLiteDatabase db = baseDatos.getReadableDatabase();
 
-        String sql = String.format("SELECT sync_time FROM %s ", Contract.COBRADOR +" WHERE id = "+idCobrador);
-
-        return db.rawQuery(sql, null);
+        String sql = String.format("SELECT sync_time FROM %s ", Contract.COBRADOR + " WHERE id = " + idCobrador);
+        Cursor cursor = db.rawQuery(sql, null);
+        String syncTime = null;
+        if (cursor.moveToFirst()) {
+            syncTime = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
+        }
+        return syncTime;
     }
 
     // [OPERACIONES_FORMA_PAGO]
     public Cursor obtenerDetallePrestamo(String idPrestamos) {
         SQLiteDatabase db = baseDatos.getReadableDatabase();
 
-        String sql = String.format("SELECT * FROM %s ", Contract.PRESTAMOS_DETALLES +" WHERE prestamos_id = "+idPrestamos);
+        String sql = String.format("SELECT * FROM %s ", Contract.PRESTAMOS_DETALLES + " WHERE prestamos_id = " + idPrestamos);
 
         return db.rawQuery(sql, null);
     }
 
-    public List<CuotaPendiente> getCuotaPendiete(String ipPrestamos,String pagado){
+    public List<CuotaPendiente> getCuotaPendiete(String ipPrestamos, String pagado) {
 
         List<CuotaPendiente> list = new ArrayList<>();
 
-        Cursor c = ObtenerCuotasPendientesOPagadas(ipPrestamos,pagado);
+        Cursor c = ObtenerCuotasPendientesOPagadas(ipPrestamos, pagado);
 
         while (c.moveToNext()) {
             CuotaPendiente cuotaPendiente = new CuotaPendiente();
@@ -369,16 +370,15 @@ public class OperacionesBaseDatos {
             list.add(cuotaPendiente);
 
         }
-        return  list;
+        return list;
 
     }
 
 
-
-    public List<CuotaPaga> getCutaPagas(String idCobrador,String fecha){
+    public List<CuotaPaga> getCutaPagas(String idCobrador, String fecha) {
 
         List<CuotaPaga> list = new ArrayList<>();
-        Cursor c = ObtenerCuotasPagasPorCobrador(idCobrador,fecha);
+        Cursor c = ObtenerCuotasPagasPorCobrador(idCobrador, fecha);
         while (c.moveToNext()) {
             CuotaPaga cuotaPaga = new CuotaPaga();
             cuotaPaga.setFecha(c.getString(0));
@@ -387,15 +387,16 @@ public class OperacionesBaseDatos {
             cuotaPaga.setCadenaString(c.getString(3));
             cuotaPaga.setMonto(c.getDouble(4));
             cuotaPaga.setTotalMora(c.getDouble(5));
-            cuotaPaga.setNombreCobrador(c.getString(6));;
+            cuotaPaga.setNombreCobrador(c.getString(6));
+            ;
             list.add(cuotaPaga);
 
         }
-        return  list;
+        return list;
 
     }
 
-    public ArrayList<CuotaPaga> getImprimirCuadre(String cobradorId){
+    public ArrayList<CuotaPaga> getImprimirCuadre(String cobradorId) {
 
         ArrayList<CuotaPaga> list = new ArrayList<>();
         Cursor c = cuadreCobrador(cobradorId);
@@ -409,10 +410,9 @@ public class OperacionesBaseDatos {
             list.add(cuotaPaga);
 
         }
-        return  list;
+        return list;
 
     }
-
 
 
     // [OPERACIONES_CLIENTE]
@@ -440,13 +440,13 @@ public class OperacionesBaseDatos {
         String insertado = "1";
         boolean result = false;
         try {
-            String[] args = { "" + insertado };
+            String[] args = {"" + insertado};
             StringBuffer sbQuery = new StringBuffer("SELECT * from ").append(
                     Contract.CUOTA_PAGADA).append(" where insertado =?");
             cursor = db.rawQuery(sbQuery.toString(), args);
             if (cursor != null && cursor.moveToFirst()) {
                 result = true;
-            }else {
+            } else {
                 result = false;
             }
         } catch (Exception e) {
@@ -454,9 +454,6 @@ public class OperacionesBaseDatos {
         }
         return result;
     }
-
-
-
 
 
 }

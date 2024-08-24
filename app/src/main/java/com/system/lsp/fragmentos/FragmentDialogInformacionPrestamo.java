@@ -22,6 +22,8 @@ import com.system.lsp.provider.OperacionesBaseDatos;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
+import androidx.annotation.Nullable;
+
 /**
  * Created by Suarez on 24/03/2018.
  */
@@ -31,7 +33,7 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
     private final String LOG_TAG = FragmentDialogInformacionPrestamo.class.getSimpleName();
 
     private OperacionesBaseDatos datos;
-    public Cursor cursor,cursor1;
+    public Cursor cursor, cursor1;
     private String message = "message";
     private String idPrestamo;
     private Context context;
@@ -48,28 +50,31 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.v(LOG_TAG, "onCreateView");
 
+        return inflater.inflate(R.layout.dialog_info_content, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         getDialog().setTitle("INFO PRESTAMO");
-        TextView textView=(TextView) getDialog().findViewById(android.R.id.title);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(30);
 
-        View dialogView = inflater.inflate(R.layout.dialog_info_content, container, false);
+
         // "Got it" button
-        Button buttonPos = (Button) dialogView.findViewById(R.id.pos_button);
-        TextView nombreCliente = (TextView)dialogView.findViewById(R.id.nombre_cliente_dia);
+        Button buttonPos = (Button) view.findViewById(R.id.pos_button);
+        TextView nombreCliente = (TextView) view.findViewById(R.id.nombre_cliente_dia);
         nombreCliente.setText(message);
-        TextView idprestamo = (TextView)dialogView.findViewById(R.id.id_prestamo);
+        TextView idprestamo = (TextView) view.findViewById(R.id.id_prestamo);
         idprestamo.setText(idPrestamo);
-        TextView montoPrestamo = (TextView) dialogView.findViewById(R.id.montoPrestamo);
-        TextView valorCuota = (TextView) dialogView.findViewById(R.id.valorCuota);
-        TextView plasoCuota = (TextView) dialogView.findViewById(R.id.plazoCuota);
-        TextView cuotasPagadas = (TextView) dialogView.findViewById(R.id.cuotasPagadas);
-        TextView diasAtrasados = (TextView) dialogView.findViewById(R.id.diasAtrasados);
-        TextView cuotasAtrasadas = (TextView)dialogView.findViewById(R.id.cuotasAtrasadas);
-        TextView valorMora = (TextView)dialogView.findViewById(R.id.valorMora);
-        TextView abonoMora = (TextView)dialogView.findViewById(R.id.abonoMora);
-        TextView costoPorDias = (TextView)dialogView.findViewById(R.id.valorPorDiasAtrasados);
+        TextView montoPrestamo = (TextView) view.findViewById(R.id.montoPrestamo);
+        TextView valorCuota = (TextView) view.findViewById(R.id.valorCuota);
+        TextView plasoCuota = (TextView) view.findViewById(R.id.plazoCuota);
+        TextView cuotasPagadas = (TextView) view.findViewById(R.id.cuotasPagadas);
+        TextView diasAtrasados = (TextView) view.findViewById(R.id.diasAtrasados);
+        TextView cuotasAtrasadas = (TextView) view.findViewById(R.id.cuotasAtrasadas);
+        TextView valorMora = (TextView) view.findViewById(R.id.valorMora);
+        TextView abonoMora = (TextView) view.findViewById(R.id.abonoMora);
+        TextView costoPorDias = (TextView) view.findViewById(R.id.valorPorDiasAtrasados);
 
 
         datos = OperacionesBaseDatos
@@ -80,14 +85,14 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
         DatabaseUtils.dumpCursor(datos.ObtenerInfoPrestamoPorId(idPrestamo));
 
         DatabaseUtils.dumpCursor(datos.ObtenerInfoPrestamoDiasAtrasadoAndMora(idPrestamo));
-        montoPrestamo.setText("RD$ "+cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)));
+        montoPrestamo.setText("RD$ " + cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL)));
         String capital = cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.CAPITAL));
         String interes = cursor.getString(cursor.getColumnIndex(Contract.PrestamoDetalle.INTERES));
-        int valorCuotas = Integer.parseInt(capital)+Integer.parseInt(interes);
+        int valorCuotas = Integer.parseInt(capital) + Integer.parseInt(interes);
         valorCuota.setText(String.valueOf(valorCuotas));
 
         String plaso = cursor.getString(cursor.getColumnIndex(Contract.Prestamo.PLAZO));
-        switch (plaso){
+        switch (plaso) {
             case "D":
                 plasoCuota.setText(cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CUOTAS)) + " DIAS");
                 break;
@@ -104,18 +109,18 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
                 plasoCuota.setText(" ");
         }
 
-        cuotasPagadas.setText(cursor.getString(cursor.getColumnIndex("CuotaPagada"))+"/"+
+        cuotasPagadas.setText(cursor.getString(cursor.getColumnIndex("CuotaPagada")) + "/" +
                 cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CUOTAS)));
         String capitalPrestamo = cursor.getString(cursor.getColumnIndex(Contract.Prestamo.CAPITAL));
         String porciento = cursor.getString(cursor.getColumnIndex(Contract.Prestamo.PORCIENTO_MORA));
-        int porcientoMora = (Integer.parseInt(capitalPrestamo)*Integer.parseInt(porciento))/1000;
+        int porcientoMora = (Integer.parseInt(capitalPrestamo) * Integer.parseInt(porciento)) / 1000;
         costoPorDias.setText(String.valueOf(porcientoMora));
 
 
         cursor1 = datos.ObtenerInfoPrestamoDiasAtrasadoAndMora(idPrestamo);
         diasAtrasados.setText(cursor1.getString(cursor1.getColumnIndex("DiasAtrasados")));
         cuotasAtrasadas.setText(cursor1.getString(cursor1.getColumnIndex("CuotasAtrasadas")));
-        Log.e("Valor",cursor1.getString(cursor1.getColumnIndex("ValorMora")));
+        Log.e("Valor", cursor1.getString(cursor1.getColumnIndex("ValorMora")));
         valorMora.setText(cursor1.getString(cursor1.getColumnIndex("ValorMora")));
         abonoMora.setText(cursor1.getString(cursor1.getColumnIndex("AbonoMora")));
 
@@ -144,7 +149,6 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
             }
         });*/
 
-        return dialogView;
     }
 
     // If shown as dialog, set the width of the dialog window
@@ -175,7 +179,7 @@ public class FragmentDialogInformacionPrestamo extends DialogFragment {
     // If dialog is dismissed: onDismiss
     @Override
     public void onDismiss(DialogInterface dialog) {
-        Log.v(LOG_TAG,"onDismiss");
+        Log.v(LOG_TAG, "onDismiss");
     }
 
 

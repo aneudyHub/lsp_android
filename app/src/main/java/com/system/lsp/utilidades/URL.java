@@ -5,7 +5,7 @@ package com.system.lsp.utilidades;
  */
 
 public class URL {
-    public final static String SERVER="http://app.hermanoshdez.com/";
+    public final static String SERVER="http://api.hermanoshdez.com/";
     public final static String SAUTORISAR="http://pcentral.hermanoshdez.com/";
     public final static String FOTO="http://www.hermanoshdez.com/storage/archivos/clientes/";
     //public final static String SERVER="http://143.137.83.145:8090/api.prestamos.com/v1/";
