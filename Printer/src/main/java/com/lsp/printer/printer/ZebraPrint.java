@@ -1,29 +1,21 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Looper;
-import android.os.ParcelUuid;
 import android.util.Log;
-import android.widget.EditText;
 
-import com.system.lsp.modelo.Recibo;
-import com.system.lsp.modelo.RecieptDetail;
-import com.system.lsp.utilidades.Resolve;
-import com.system.lsp.utils.BluetoothPermissionHelper;
+import com.lsp.printer.Recibo;
+import com.lsp.printer.Resolve;
 import com.zebra.sdk.comm.BluetoothConnection;
 import com.zebra.sdk.comm.Connection;
 import com.zebra.sdk.comm.ConnectionException;
 import com.zebra.sdk.printer.PrinterLanguage;
-import com.zebra.sdk.printer.PrinterStatus;
 import com.zebra.sdk.printer.ZebraPrinter;
 import com.zebra.sdk.printer.ZebraPrinterFactory;
 import com.zebra.sdk.printer.ZebraPrinterLanguageUnknownException;
@@ -34,8 +26,6 @@ import java.util.List;
 import java.util.Set;
 
 import static java.lang.Thread.sleep;
-
-import androidx.core.app.ActivityCompat;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.system.lsp.printer.utils;
+package com.lsp.printer.printer.utils;
 
 public class TextSizeConverter {
     // DPI of the printer

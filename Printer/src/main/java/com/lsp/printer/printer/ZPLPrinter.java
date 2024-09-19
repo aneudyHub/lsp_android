@@ -1,15 +1,12 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
 import android.util.Log;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 
-import com.system.lsp.printer.utils.TextSizeConverter;
+import com.lsp.printer.printer.utils.TextSizeConverter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ZPLPrinter extends Printer {
 
@@ -137,12 +134,14 @@ public class ZPLPrinter extends Printer {
     }
 
     @Override
-    public byte[] printNewline() {
-        return PrinterCommands.SKIP_LINE.zpl().getBytes();
+    public byte[] skipLine(int fontSize, int lines) {
+        int fontSizeInDots = TextSizeConverter.convertSpToDots(fontSize);
+        currentYPosition = currentYPosition + (fontSizeInDots * lines);
+        return new byte[0];
     }
 
     @Override
-    public byte[] printTable(int fontSize, PrinterTextFormat textFormat, String... strings) {
+    public byte[] printTable(int fontSize, PrinterTextFormat textFormat, String[] table) {
         int fontSizeInDots = TextSizeConverter.convertSpToDots(fontSize);
 
         StringBuilder zpl = new StringBuilder();
@@ -161,7 +160,7 @@ public class ZPLPrinter extends Printer {
 //        zpl.append("^XA\n");
 
         // Iterate over each data entry
-        for (String entry : strings) {
+        for (String entry : table) {
             // Split the entry into columns based on commas
             String[] columns = entry.split(";");
 
@@ -204,6 +203,14 @@ public class ZPLPrinter extends Printer {
     @Override
     public byte[] fieldOrigin(int x, int y) {
         return PrinterCommands.FIELD_ORIGIN.zpl(String.valueOf(x), String.valueOf(y)).getBytes();
+    }
+
+    @Override
+    public byte[] printHorizontalLine(char character) {
+//        String cmd = "^FO"+xStartPosition+","+currentYPosition+"^GD1,"+ dotsWidthAvailablePerRow +",1,3,B3,"+character+":^FS";
+        String cmd = "^FO"+xStartPosition+","+currentYPosition+"^GD100,0,1,3,B3,*:^FS";
+
+        return cmd.getBytes();
     }
 
     private StringBuilder createLineStringBuilder(

@@ -3,27 +3,24 @@ package com.lsp.printer.Bluetooth
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.util.Log
-import androidx.core.content.ContextCompat.registerReceiver
 import com.lsp.logger.LogFactory
-import com.lsp.printer.PrinterActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.lsp.printer.printer.CPCLPrinter
+import com.lsp.printer.printer.Printer
+import com.lsp.printer.printer.ZPLPrinter
+import com.lsp.printer.printer.utils.TextSizeConverter
+import com.zebra.sdk.printer.PrinterLanguage
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.logging.Logger
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withTimeout
+import java.util.concurrent.Flow
 import javax.inject.Inject
 
 class BluetoothFactoryImpl @Inject constructor(
     private val bluetoothAdapter: BluetoothAdapter,
     private val context: Context,
     private val logger: LogFactory
-): BluetoothFactory {
+) : BluetoothFactory {
 
     private val TAG = BluetoothFactory::class.java.simpleName
 
@@ -34,46 +31,76 @@ class BluetoothFactoryImpl @Inject constructor(
     override val enableActionIntent: String
         get() = BluetoothAdapter.ACTION_REQUEST_ENABLE
 
+    private lateinit var printerConnectionHandler: PrinterConnectionHandler
+
     @SuppressLint("MissingPermission")
     override suspend fun discoverDevices(): List<BluetoothDevice> {
-        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         val discoveredDevices = mutableListOf<BluetoothDevice>()
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-        val discoveryReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                when (intent.action) {
-                    BluetoothDevice.ACTION_FOUND -> {
-                        val device =
-                            intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                        if (device != null) {
-                            discoveredDevices.add(device)
-                        }
-                    }
-                }
+        val pairedDevices: Set<BluetoothDevice> = bluetoothAdapter.bondedDevices
+
+        for (device in pairedDevices) {
+            if (device.bluetoothClass.deviceClass == ZEBRA_PRINTER_DEVICE_CLASS_ID) {
+                discoveredDevices.add(device)
             }
-        }
-
-        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        context.registerReceiver(discoveryReceiver, filter)
-
-        // Start device discovery
-        bluetoothAdapter.startDiscovery()
-
-        // Suspend until the discovery is complete (this could be a long-running operation)
-        withContext(Dispatchers.IO) {
-            // Optionally, you can delay for a certain period or use a timeout
-            // to control how long you want to run the discovery process.
-            // delay(10000) // e.g., 10 seconds
-            // Don't forget to unregister the receiver when done.
-            delay(DISCOVERY_DEVICES_REGISTER_TIMEOUT)
-            context.unregisterReceiver(discoveryReceiver)
         }
         return discoveredDevices
     }
 
+    override suspend fun connectToDevice(device: BluetoothDevice) {
+        try {
+            printerConnectionHandler = ZebraPrinterConnectionImpl(device)
+            printerConnectionHandler.connect()
+            printerConnectionHandler.open()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
-    companion object{
+    }
+
+    override fun isDeviceConnected(): Boolean = printerConnectionHandler.isConnected()
+    override fun print(buffer: ByteArray) = flow {
+        emit(PrintingState.Printing)
+        try {
+            printerConnectionHandler.write(buffer)
+            delay(5000L)
+            printerConnectionHandler.close()
+            emit(PrintingState.Done)
+
+        } catch (e: Exception) {
+            printerConnectionHandler.close()
+            emit(PrintingState.Error)
+        }
+    }
+
+    override fun getPrinterFactory(): Printer {
+        return (printerConnectionHandler as ZebraPrinterConnectionImpl).let {
+            val dotsWidthPerRow = 612
+            if (it.getLanguage() == PrinterLanguage.ZPL) {
+                ZPLPrinter(
+                    dotsWidthPerRow,
+                    TextSizeConverter.convertSpToDots(2),
+                    PRINTER_LABEL_START_X_POSITION,
+                    PRINTER_LABEL_START_Y_POSITION
+                );
+            } else {
+                CPCLPrinter(
+                    dotsWidthPerRow,
+                    TextSizeConverter.convertSpToDots(2),
+                    PRINTER_LABEL_START_X_POSITION,
+                    PRINTER_LABEL_START_Y_POSITION
+                );
+            }
+        }
+    }
+
+
+    companion object {
         const val DISCOVERY_DEVICES_REGISTER_TIMEOUT = 10000L
+        const val ZEBRA_PRINTER_DEVICE_CLASS_ID = 1664
+        const val PRINTER_LABEL_START_X_POSITION = 0
+        const val PRINTER_LABEL_START_Y_POSITION = 50
     }
 
 }

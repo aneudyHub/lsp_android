@@ -1,6 +1,6 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
-public class CPCLPrinter extends Printer{
+public class CPCLPrinter extends Printer {
 
     public CPCLPrinter(int dotsWidthAvailablePerRow, int dotsLineSpacing, int xStartPosition, int yStartPosition) {
         super(dotsWidthAvailablePerRow, dotsLineSpacing, xStartPosition, yStartPosition);
@@ -52,7 +52,7 @@ public class CPCLPrinter extends Printer{
     }
 
     @Override
-    public byte[] printNewline() {
+    public byte[] skipLine(int fontSize, int lines) {
         return new byte[0];
     }
 
@@ -80,6 +80,11 @@ public class CPCLPrinter extends Printer{
 
     @Override
     public byte[] fieldOrigin(int x, int y) {
+        return new byte[0];
+    }
+
+    @Override
+    public byte[] printHorizontalLine(char character) {
         return new byte[0];
     }
 }

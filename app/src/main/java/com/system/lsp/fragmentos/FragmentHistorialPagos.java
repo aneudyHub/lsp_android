@@ -43,7 +43,7 @@ import com.system.lsp.ui.AdaptadorHisotiralPagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
-import com.lsp.printer.ZebraPrint;
+//import com.lsp.printer.ZebraPrint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -318,9 +318,9 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
 
         Log.e("CUADRE",""+nombreCobrador+" "+sb.toString() +" Total:"+totalCobrado);
 
-            ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
-                                                    totalCobrado);
-            zebraprint.probarlo();
+//            ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
+//                                                    totalCobrado);
+//            zebraprint.probarlo();
 
 
 

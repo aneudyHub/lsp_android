@@ -1,9 +1,7 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
-import com.system.lsp.modelo.RecieptDetail;
-import com.system.lsp.printer.utils.ConcatByteArrays;
-import com.system.lsp.printer.utils.TextSizeConverter;
-import com.zebra.sdk.comm.Connection;
+import com.lsp.printer.printer.utils.ConcatByteArrays;
+import com.lsp.printer.printer.utils.TextSizeConverter;
 import com.zebra.sdk.comm.ConnectionException;
 import com.zebra.sdk.printer.PrinterLanguage;
 import com.zebra.sdk.printer.PrinterStatus;
@@ -11,7 +9,6 @@ import com.zebra.sdk.printer.ZebraPrinter;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class RecieptPrinterDocumentBuilder {

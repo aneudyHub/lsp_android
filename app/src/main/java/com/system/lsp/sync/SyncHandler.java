@@ -27,9 +27,12 @@ abstract public class SyncHandler {
     protected Context context;
     protected SyncHandlerListener listener;
 
-    public SyncHandler(Context context , SyncHandlerListener listener){
-        this.context = context;
+    protected void setListener(SyncHandlerListener listener) {
         this.listener = listener;
+    }
+
+    public SyncHandler(Context context){
+        this.context = context;
     }
 
     protected abstract void sendRequest();

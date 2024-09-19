@@ -24,17 +24,13 @@ public class BluetoothPermissionHelper {
             // You can proceed with Bluetooth operations here
         } else {
             // Permissions are not granted, request them
-            requestPermission(activity,Manifest.permission.BLUETOOTH);
-            requestPermission(activity,Manifest.permission.BLUETOOTH_ADMIN);
-            requestPermission(activity,Manifest.permission.BLUETOOTH_CONNECT);
+            requestPermission(activity,Manifest.permission.BLUETOOTH,Manifest.permission.BLUETOOTH_ADMIN,Manifest.permission.BLUETOOTH_CONNECT);
         }
     }
 
-    private static void requestPermission(Activity activity, String permission) {
+    private static void requestPermission(Activity activity, String... permissions) {
         ActivityCompat.requestPermissions(activity,
-                new String[]{
-                        permission
-                },
+                permissions,
                 BLUETOOTH_PERMISSION_REQUEST_CODE);
     }
 

@@ -6,6 +6,8 @@ import com.system.lsp.data.remote.api.ApiService
 import com.system.lsp.data.remote.api.PlatformService
 import com.system.lsp.data.repositories.PlatformSessionRepository
 import com.system.lsp.data.repositories.PlatformSessionRepositoryImpl
+import com.system.lsp.data.repositories.SyncDataRepository
+import com.system.lsp.data.repositories.SyncDataRepositoryImpl
 import com.system.lsp.data.repositories.UsersRepository
 import com.system.lsp.data.repositories.UsersRepositoryImpl
 import dagger.Module
@@ -39,5 +41,11 @@ object RepositoriesModule {
             platformSessionSharedPreferences,
             deviceId
         )
+    }
+
+    @Provides
+    @Singleton
+    fun providesSyncDataRepository(apiService: ApiService): SyncDataRepository {
+        return SyncDataRepositoryImpl(apiService)
     }
 }

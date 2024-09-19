@@ -1,4 +1,4 @@
-package com.system.lsp.printer.utils;
+package com.lsp.printer.printer.utils;
 
 public class ConcatByteArrays {
     public static byte[] concatByteArrays(byte[]... arrays) {

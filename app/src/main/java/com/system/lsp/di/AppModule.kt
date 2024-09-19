@@ -1,5 +1,7 @@
 package com.system.lsp.di
 
+import android.content.ContentProvider
+import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
@@ -113,5 +115,15 @@ object AppModule {
     fun providesDeviceId(@ApplicationContext context: Context): String {
         return getDeviceId(context)
     }
+
+    @Provides
+    @Singleton
+    fun provideContentResolver(@ApplicationContext context: Context): ContentResolver {
+        return context.contentResolver
+    }
+
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context = context
 
 }

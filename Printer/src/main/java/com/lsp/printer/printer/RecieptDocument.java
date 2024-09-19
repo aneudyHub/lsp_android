@@ -1,6 +1,4 @@
-package com.system.lsp.printer;
-
-import com.system.lsp.modelo.RecieptDetail;
+package com.lsp.printer.printer;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
 public enum PrinterCommands {
     START {

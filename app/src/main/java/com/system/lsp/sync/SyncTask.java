@@ -62,17 +62,7 @@ public class SyncTask implements Runnable {
             }
         });
 
-        remoteSyncHandler = new RemoteSyncHandler(context, new SyncHandlerListener() {
-            @Override
-            public void onSuccess() {
-                localSyncHandler.run();
-            }
-
-            @Override
-            public void onFailure(String msg) {
-                Resolve.enviarBroadcast(context, false, msg);
-            }
-        });
+        remoteSyncHandler = new RemoteSyncHandler()
     }
 
     @Override

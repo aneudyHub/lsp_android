@@ -7,7 +7,11 @@ import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.lsp.logger.LogFactory
 import com.lsp.printer.PrinterActivity
+import com.lsp.printer.data.models.RecieptData
+import com.lsp.printer.presentation.utils.RecieptDocumentType
+import com.lsp.printer.printer.RecieptDetail
 import com.lsp.printer.ui.PrintingBottomSheet
+import com.lsp.printer.ui.PrintingBottomSheet.Companion.DOCUMENT_SERIALIZABLE
 import com.system.lsp.databinding.ActivitySplashBinding
 import com.system.lsp.ui.Main.MainActivity
 import com.system.lsp.ui.viewmodels.SplashViewModel
@@ -75,8 +79,36 @@ class SplashActivity : BaseActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bottomSheetFragment = PrintingBottomSheet()
-        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+
+//        val details: MutableList<RecieptDetail> = ArrayList()
+//
+//        details.add(RecieptDetail("Pago Cuota(S) N.18/46", 140.00))
+//        details.add(RecieptDetail("Pago Cuota(S) N.18/46", 140.00))
+//        details.add(RecieptDetail("Pago Cuota(S) N.18/46", 140.00))
+//        details.add(RecieptDetail("Pago Cuota(S) N.18/46", 140.00))
+//
+//        val document = RecieptData(
+//            companyName = "Prestamos Hermanos Hdez",
+//            companyAddress = "SFM",
+//            companyPhone = "809000000",
+//            recieptNumber = "0",
+//            recieptDate = "2024-05-28 10:49:02",
+//            recieptItems = details,
+//            customerName = "Jose Perez",
+//            loanNumber = "1234567",
+//            recieptTotal = "1000.00",
+//            discount = "0.00",
+//            totalPaid = "1000.00",
+//            userName = "cobrador",
+//            type = RecieptDocumentType.ORIGINAL_DOCUMENT
+//        )
+//
+//        val bundle = Bundle()
+//        bundle.putSerializable(DOCUMENT_SERIALIZABLE, document)
+//
+//        val bottomSheetFragment = PrintingBottomSheet()
+//        bottomSheetFragment.arguments = bundle
+//        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
     companion object {

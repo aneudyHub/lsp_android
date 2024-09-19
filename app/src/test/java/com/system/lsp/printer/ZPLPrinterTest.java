@@ -1,10 +1,13 @@
 package com.system.lsp.printer;
 
-import com.system.lsp.printer.utils.ConcatByteArrays;
-import com.system.lsp.printer.utils.TextSizeConverter;
+import com.lsp.printer.printer.Printer;
+import com.lsp.printer.printer.PrinterCommands;
+import com.lsp.printer.printer.PrinterTextAlignment;
+import com.lsp.printer.printer.PrinterTextFormat;
+import com.lsp.printer.printer.ZPLPrinter;
+import com.lsp.printer.printer.utils.TextSizeConverter;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Random;

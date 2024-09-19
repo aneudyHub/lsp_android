@@ -1,10 +1,16 @@
-package com.system.lsp.printer;
+package com.lsp.printer.printer;
 
 public abstract class Printer {
     protected int dotsWidthAvailablePerRow;
     protected int dotsLineSpacing;
     protected int xStartPosition;
     protected int yStartPosition;
+
+    public char getTableSeparator() {
+        return tableSeparator;
+    }
+
+    protected char tableSeparator = ';';
 
     public Printer(int dotsWidthAvailablePerRow, int dotsLineSpacing, int xStartPosition, int yStartPosition) {
         this.dotsWidthAvailablePerRow = dotsWidthAvailablePerRow - xStartPosition;
@@ -33,9 +39,9 @@ public abstract class Printer {
     public abstract String[] splitLines(int fontSizeInDots, String text);
 
     // Abstract method to print a newline
-    public abstract byte[] printNewline();
+    public abstract byte[] skipLine(int fontSize, int lines);
 
-    public abstract byte[] printTable(int fontSize, PrinterTextFormat textFormat, String... strings);
+    public abstract byte[] printTable(int fontSize, PrinterTextFormat textFormat, String[] table);
 
     // Abstract method to feed paper
     public abstract byte[] feedPaper(int lines);
@@ -46,5 +52,7 @@ public abstract class Printer {
     public abstract byte[] end();
 
     public abstract byte[] fieldOrigin(int x, int y);
+
+    public abstract byte[] printHorizontalLine(char character);
 
 }

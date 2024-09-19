@@ -1,4 +1,4 @@
-package com.system.lsp.modelo;
+package com.lsp.printer.printer;
 
 public class RecieptDetail {
     private String description;

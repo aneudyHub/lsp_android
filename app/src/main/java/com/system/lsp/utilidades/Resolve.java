@@ -13,7 +13,7 @@ import android.util.Log;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.DatabaseHandler;
 import com.system.lsp.provider.SessionManager;
-import com.system.lsp.ui.Login.LoginActivity;
+//import com.system.lsp.ui.Login.LoginActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,9 +102,9 @@ public class Resolve {
         db.deleteCobrador();
         db.close();
         // Launching the login activity
-        Intent intent = new Intent(context, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, LoginActivity.class);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        context.startActivity(intent);
     }
 
     public static String getValueFromJsonByKey(String json, String key){

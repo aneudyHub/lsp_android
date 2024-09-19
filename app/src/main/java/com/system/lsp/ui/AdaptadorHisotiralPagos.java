@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.system.lsp.R;
 import com.system.lsp.modelo.CuotaPaga;
 import com.system.lsp.utilidades.UPreferencias;
-import com.lsp.printer.ZebraPrint;
+//import com.lsp.printer.ZebraPrint;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,9 +95,9 @@ public class AdaptadorHisotiralPagos extends RecyclerView.Adapter<AdaptadorHisot
                 Log.e("Soy el nombre", nombreCliente);
                 Log.e("STRING:", datos);
                 Log.e("VALOR-TOTAL-MORA", String.valueOf(totalMora));
-                ZebraPrint zebraprint = new ZebraPrint(view.getContext(), "imprimir", fecha,
-                        idPrestamos, nombreCliente, datos, monto, totalMora, nombreCobrador, telefonoCobrador);
-                zebraprint.probarlo();
+//                ZebraPrint zebraprint = new ZebraPrint(view.getContext(), "imprimir", fecha,
+//                        idPrestamos, nombreCliente, datos, monto, totalMora, nombreCobrador, telefonoCobrador);
+//                zebraprint.probarlo();
             }
         });
 
