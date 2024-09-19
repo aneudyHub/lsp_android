@@ -18,6 +18,8 @@ class UsersRepositoryImpl @Inject constructor(
 
     override val currentUser: User?
         get() = userSessionSharedPreferences.retrieveUser()
+    override val token: String?
+        get() = userSessionSharedPreferences.token
 
 
     override suspend fun signIn(userName: String, password: String): Result<Unit?> {

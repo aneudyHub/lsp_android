@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +19,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.system.lsp.R;
+import com.system.lsp.data.repositories.PlatformSessionRepository;
+import com.system.lsp.data.repositories.UsersRepository;
+import com.system.lsp.data.repositories.UsersRepositoryImpl;
 import com.system.lsp.fragmentos.FragmentHistorialPagos;
 import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.fragmentos.FragmentListaPrestamos;
@@ -26,9 +30,16 @@ import com.system.lsp.provider.SessionManager;
 import com.system.lsp.ui.AdaptadorCuotas;
 import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
-import com.lsp.printer.ZebraPrint;
+//import com.lsp.printer.ZebraPrint;
+import com.system.lsp.utils.BluetoothPermissionHelper;
 
+import java.util.Objects;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -37,10 +48,14 @@ public class MainActivity extends AppCompatActivity
     private AdaptadorCuotas mAdapter;
     private TextView nombreUsuario;
 
+    @Inject
+    UsersRepository usersRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,30 +70,39 @@ public class MainActivity extends AppCompatActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView correo = (TextView) hView.findViewById(R.id.nombre_usuario);
-        String nUsuario = UPreferencias.obtenerNombreUsuario(this);
+//        String nUsuario = UPreferencias.obtenerNombreUsuario(this);
 
-        correo.setText(nUsuario);
+        correo.setText(Objects.requireNonNull(usersRepository.getCurrentUser()).getFirstName());
         mHandler = new Handler();
 
         // session manager
-        session = new SessionManager(this);
+//        session = new SessionManager(this);
+//
+//        if (!session.isLoggedIn()) {
+//            logoutUser();
+//        }
 
-        if (!session.isLoggedIn()) {
-            logoutUser();
-        }
 
-
-        Cursor userdb = getContentResolver().query(Contract.Cobrador.URI_CONTENIDO,null,null,null,null);
-
-        if(userdb==null){
-            logoutUser();
-        }
-        userdb.moveToNext();
+//        Cursor userdb = getContentResolver().query(Contract.Cobrador.URI_CONTENIDO,null,null,null,null);
+//
+//        if(userdb==null){
+//            logoutUser();
+//        }
+//        userdb.moveToNext();
 
         // Reemplaza con tu clave
-        UPreferencias.guardarClaveApi(this, userdb.getString(userdb.getColumnIndex(Contract.Cobrador.TOKEN)));
+        // TODO: 7/9/24 find a way out to replace this to new procedure
+        UPreferencias.guardarClaveApi(this, usersRepository.getToken());
 
         setFragment(0);
+
+        BluetoothPermissionHelper.requestBluetoothPermissions(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        BluetoothPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -105,8 +129,9 @@ public class MainActivity extends AppCompatActivity
             /*ZebraprintOld zebraprint = new ZebraprintOld(this,null,"prueba");
             zebraprint.probarlo();*/
 
-            ZebraPrint zebraprint = new ZebraPrint(this,null,"prueba");
-            zebraprint.probarlo();
+
+//            ZebraPrint zebraprint = new ZebraPrint(this,null,"prueba");
+//            zebraprint.probarlo();
 
             return true;
         }

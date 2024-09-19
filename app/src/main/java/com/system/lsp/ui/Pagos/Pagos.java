@@ -35,7 +35,7 @@ import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
-import com.lsp.printer.ZebraPrint;
+//import com.lsp.printer.ZebraPrint;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -360,11 +360,11 @@ public class Pagos extends AppCompatActivity implements LoaderManager.LoaderCall
         setResult(RESULT_OK);
         Log.e("TOTAL-E-MORA",String.valueOf(CuotasAdapter.totalMora));
         Log.e("VALOR-FATURA",CuotasAdapter.datos);
-        ZebraPrint zebraprint = new ZebraPrint(Pagos.this,"imprimir",UTiempo.obtenerFechaHora(),idPrestamos,nombreCliente,
-                detallePago,totalPagado,totalMoraF,
-                UPreferencias.obtenerNombreUsuario(Pagos.this),
-                UPreferencias.obtenerTelefonoCobrador(Pagos.this));
-        zebraprint.probarlo();
+//        ZebraPrint zebraprint = new ZebraPrint(Pagos.this,"imprimir",UTiempo.obtenerFechaHora(),idPrestamos,nombreCliente,
+//                detallePago,totalPagado,totalMoraF,
+//                UPreferencias.obtenerNombreUsuario(Pagos.this),
+//                UPreferencias.obtenerTelefonoCobrador(Pagos.this));
+//        zebraprint.probarlo();
 
         finish();
 

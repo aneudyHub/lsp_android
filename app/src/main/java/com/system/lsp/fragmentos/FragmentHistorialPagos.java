@@ -43,7 +43,7 @@ import com.system.lsp.ui.AdaptadorHisotiralPagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
 import com.system.lsp.utilidades.UTiempo;
-import com.lsp.printer.ZebraPrint;
+//import com.lsp.printer.ZebraPrint;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -184,7 +184,7 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
     public void onClick(View view) {
         if(view == fechaBuscar) {
 
-            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
+//            DatabaseUtils.dumpCursor(operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(getContext())));
             if (operacionesBaseDatos.isCuotasPagasExists()){
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                 // set title
@@ -318,9 +318,9 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
 
         Log.e("CUADRE",""+nombreCobrador+" "+sb.toString() +" Total:"+totalCobrado);
 
-            ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
-                                                    totalCobrado);
-            zebraprint.probarlo();
+//            ZebraPrint zebraprint = new ZebraPrint(getContext(),"imprimirCuadre",nombreCobrador,fechaCobro,sb.toString(),
+//                                                    totalCobrado);
+//            zebraprint.probarlo();
 
 
 
@@ -350,7 +350,7 @@ public class FragmentHistorialPagos extends Fragment implements View.OnClickList
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.menu_historial_pagos, menu);
-        MenuItem search = menu.findItem(R.id.search);
+        MenuItem search = menu.findItem(R.id.searchMain);
         MenuItem imprmirCuadre = menu.findItem(R.id.imprimirCuadre);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);

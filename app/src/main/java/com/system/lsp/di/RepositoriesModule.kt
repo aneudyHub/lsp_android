@@ -10,6 +10,8 @@ import com.system.lsp.data.repositories.CustomerRepository
 import com.system.lsp.data.repositories.CustomerRepositoryImpl
 import com.system.lsp.data.repositories.PlatformSessionRepository
 import com.system.lsp.data.repositories.PlatformSessionRepositoryImpl
+import com.system.lsp.data.repositories.SyncDataRepository
+import com.system.lsp.data.repositories.SyncDataRepositoryImpl
 import com.system.lsp.data.repositories.UsersRepository
 import com.system.lsp.data.repositories.UsersRepositoryImpl
 import dagger.Module
@@ -52,5 +54,11 @@ object RepositoriesModule {
         customersDao: CustomersDao
     ): CustomerRepository {
         return CustomerRepositoryImpl(customersDao, Dispatchers.IO)
+    }
+
+    @Provides
+    @Singleton
+    fun providesSyncDataRepository(apiService: ApiService): SyncDataRepository {
+        return SyncDataRepositoryImpl(apiService)
     }
 }

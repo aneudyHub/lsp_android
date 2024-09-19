@@ -1,0 +1,15 @@
+<resources>
+    <string name="init_bluetooth">Inicializando el Bluetooth.</string>
+    <string name="requesting_bluetooth">Solicitando activacion de Bluetooth.</string>
+    <string name="bluetooth_enabled">Bluetooth esta activado.</string>
+    <string name="bluetooth_not_supported">Este dispositivo no tiene conexion a Bluetooth.</string>
+    <string name="bluetooth_searching_paired_devices">Buscando impresora conectada</string>
+    <string name="bluetooth_no_paired_devices_found">No se encontraron impresoras conectadas"</string>
+    <string name="bluetooth_printing">Imprimiendo...</string>
+    <string name="bluetooth_print_failed">Error al imprimir</string>
+    <string name="bluetooth_print_success">Impresion exitosa</string>
+    <string name="bluetooth_print_cancelled">Impresion cancelada</string>
+    <string name="connection_error">Error de conexion</string>
+    <string name="connecting_to_device">Conectando a impresora...</string>
+    <string name="device_connected">Impresora conectada</string>
+</resources>
