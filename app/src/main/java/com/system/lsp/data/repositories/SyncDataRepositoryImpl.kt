@@ -1,5 +1,6 @@
 package com.system.lsp.data.repositories
 
+import com.system.lsp.data.local.database.dao.PaymentDetailDao
 import com.system.lsp.data.remote.api.ApiService
 import com.system.lsp.data.remote.extensions.handleErrorResponse
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
@@ -27,7 +28,7 @@ class SyncDataRepositoryImpl @Inject constructor(
 
     override suspend fun retrieveData(): Result<SyncDataPullBodyResponse> {
         return try {
-            val response = apiServic.pullData(syncTime = "0")
+            val response = apiService.pullData(syncTime = "0")
             if (response.isSuccessful) {
                 Result.Success(response.body()!!)
             } else {

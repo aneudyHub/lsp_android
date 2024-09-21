@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PagoSyncBody(
     @SerializedName("usuarios_id")
-    val userId: String,
+    val userId: Long,
     @SerializedName("fecha")
     val date: String,
     @SerializedName("prestamos_id")

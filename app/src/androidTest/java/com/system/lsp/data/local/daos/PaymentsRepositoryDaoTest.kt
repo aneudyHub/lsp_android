@@ -29,7 +29,7 @@ import kotlin.math.absoluteValue
 
 @HiltAndroidTest
 @UninstallModules(AppModule::class, RepositoriesModule::class)
-class PaymentsDaoTest {
+class PaymentsRepositoryDaoTest {
 
     @get:Rule
     val hiltRule = HiltAndroidRule(this)

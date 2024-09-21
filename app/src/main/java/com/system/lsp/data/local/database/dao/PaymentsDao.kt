@@ -31,7 +31,10 @@ interface PaymentsDao {
 
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where userId=:userId and date=:sortDate")
-    suspend fun getListByUserIdAndDate(userId: Long, sortDate: Date? = null): List<PaymentWithDetails>
+    suspend fun getListByUserIdAndDate(
+        userId: Long,
+        sortDate: Date? = null
+    ): List<PaymentWithDetails>
 
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where userId=:userId")
@@ -40,4 +43,8 @@ interface PaymentsDao {
     @Transaction
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where loanId=:loanId")
     suspend fun getPaymentsWithDetailsByLoanId(loanId: Long): List<PaymentWithDetails>
+
+    @Transaction
+    @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where isSynced=0 and userId=:userId")
+    suspend fun getNoSyncedPayments(userId: Long): List<PaymentWithDetails>
 }

@@ -1,6 +1,8 @@
 package com.system.lsp.di
 
 import com.system.lsp.data.local.database.dao.CustomersDao
+import com.system.lsp.data.local.database.dao.PaymentDetailDao
+import com.system.lsp.data.local.database.dao.PaymentsDao
 import com.system.lsp.data.local.datasources.CustomerLocalDatasource
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
@@ -8,6 +10,8 @@ import com.system.lsp.data.remote.api.ApiService
 import com.system.lsp.data.remote.api.PlatformService
 import com.system.lsp.data.repositories.CustomerRepository
 import com.system.lsp.data.repositories.CustomerRepositoryImpl
+import com.system.lsp.data.repositories.PaymentsRepository
+import com.system.lsp.data.repositories.PaymentsRepositoryImpl
 import com.system.lsp.data.repositories.PlatformSessionRepository
 import com.system.lsp.data.repositories.PlatformSessionRepositoryImpl
 import com.system.lsp.data.repositories.SyncDataRepository
@@ -60,5 +64,14 @@ object RepositoriesModule {
     @Singleton
     fun providesSyncDataRepository(apiService: ApiService): SyncDataRepository {
         return SyncDataRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPaymentsRepository(
+        paymentsDao: PaymentsDao,
+        paymentDetailDao: PaymentDetailDao
+    ): PaymentsRepository {
+        return PaymentsRepositoryImpl(paymentsDao, paymentDetailDao)
     }
 }

@@ -11,5 +11,5 @@ data class PaymentWithDetails(
         parentColumn = "id",
         entityColumn = "paymentId"
     )
-    val paymentDetailsEntity: PaymentDetailsEntity? = null
+    val paymentDetailsEntity: List<PaymentDetailsEntity>? = null
 )

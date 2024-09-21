@@ -11,18 +11,6 @@ class CustomersRemoteDataSourceImpl @Inject constructor(
     private val coroutineContext: CoroutineContext
 ): CustomersRemoteDataSource {
     override suspend fun create(customer: Customer): Long {
-        return withContext(coroutineContext){
-            try {
-                val response = apiService.createCustomer(customer)
-                if(response.isSuccessful){
-                    
-                }else{
-
-                }
-
-            }catch (e:Exception){
-
-            }
-        }
+        TODO()
     }
 }

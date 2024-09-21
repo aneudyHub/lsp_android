@@ -21,5 +21,6 @@ data class PaymentEntity(
     val date: Date? = null,
     val userId: Long? = 0,
     @ColumnInfo(index = true)
-    val loanId: Long? = 0
+    val loanId: Long? = 0,
+    val isSynced: Boolean? = false
 )

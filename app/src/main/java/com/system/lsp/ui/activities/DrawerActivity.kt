@@ -23,7 +23,7 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
     private val binding: ActivityDrawerBinding by lazy {
         ActivityDrawerBinding.inflate(layoutInflater)
     }
-    private lateinit var navController: NavController;
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

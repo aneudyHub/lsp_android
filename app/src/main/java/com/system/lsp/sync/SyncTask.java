@@ -50,19 +50,19 @@ public class SyncTask implements Runnable {
     ) {
         this.context = context;
 
-        localSyncHandler = new LocalSyncHandler(context, new SyncHandlerListener() {
-            @Override
-            public void onSuccess() {
-                Resolve.enviarBroadcast(context, true, "SINCRONIZACION COMPLETADA");
-            }
+//        localSyncHandler = new LocalSyncHandler(context, new SyncHandlerListener() {
+//            @Override
+//            public void onSuccess() {
+//                Resolve.enviarBroadcast(context, true, "SINCRONIZACION COMPLETADA");
+//            }
+//
+//            @Override
+//            public void onFailure(String msg) {
+//                Resolve.enviarBroadcast(context, false, msg);
+//            }
+//        });
 
-            @Override
-            public void onFailure(String msg) {
-                Resolve.enviarBroadcast(context, false, msg);
-            }
-        });
-
-        remoteSyncHandler = new RemoteSyncHandler()
+//        remoteSyncHandler = new RemoteSyncHandler()
     }
 
     @Override
