@@ -37,6 +37,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:name">
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+
         <activity
             android:name="com.system.lsp.ui.activities.SplashActivity"
             android:exported="true">

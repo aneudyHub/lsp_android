@@ -227,7 +227,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         if (cursor.moveToFirst()) {
             fechaSync = cursor.getString(cursor.getColumnIndex(Contract.Cobrador.SYNC_TIME));
         }
-        if (fechaSync==null){
+        if (fechaSync==null || fechaSync == ""){
             fechaSync="2000-01-01";
         }
         String fechaExtraida = fechaSync.substring(0,10);
@@ -298,20 +298,20 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
     private void search(SearchView searchView) {
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                adaptador.getFilter().filter(newText);
-                return true;
-            }
-        });
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                adaptador.getFilter().filter(newText);
+//                return true;
+//            }
+//        });
     }
 
 

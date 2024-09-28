@@ -66,11 +66,12 @@ object AppModule {
     @Provides
     @Named("baseUrl")
     fun provideBaseUrl(platformSessionSharedPreferences: PlatformSessionSharedPreferences): String? {
-        return if (BuildConfig.DEBUG) {
-            BuildConfig.BASE_URL
-        } else {
-            platformSessionSharedPreferences.apiUrl
-        }
+//        return if (BuildConfig.DEBUG) {
+//            BuildConfig.BASE_URL
+//        } else {
+//            platformSessionSharedPreferences.apiUrl
+//        }
+        return platformSessionSharedPreferences.apiUrl
     }
 
     @Provides

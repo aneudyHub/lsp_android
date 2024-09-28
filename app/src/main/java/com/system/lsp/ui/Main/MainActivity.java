@@ -18,6 +18,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.system.lsp.R;
+import com.system.lsp.data.repositories.PlatformSessionRepository;
+import com.system.lsp.data.repositories.UsersRepository;
 import com.system.lsp.fragmentos.FragmentHistorialPagos;
 import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.fragmentos.FragmentListaPrestamos;
@@ -28,7 +30,12 @@ import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
 import com.lsp.printer.ZebraPrint;
 
+import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,6 +43,12 @@ public class MainActivity extends AppCompatActivity
     private SessionManager session;
     private AdaptadorCuotas mAdapter;
     private TextView nombreUsuario;
+
+    @Inject
+    UsersRepository usersRepository;
+
+    @Inject
+    PlatformSessionRepository platformSessionRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +72,25 @@ public class MainActivity extends AppCompatActivity
 
         correo.setText(nUsuario);
         mHandler = new Handler();
-
-        // session manager
-        session = new SessionManager(this);
-
-        if (!session.isLoggedIn()) {
-            logoutUser();
-        }
-
-
-        Cursor userdb = getContentResolver().query(Contract.Cobrador.URI_CONTENIDO,null,null,null,null);
-
-        if(userdb==null){
-            logoutUser();
-        }
-        userdb.moveToNext();
+//
+//        // session manager
+//        session = new SessionManager(this);
+//
+//        if (!session.isLoggedIn()) {
+//            logoutUser();
+//        }
+//
+//
+//        Cursor userdb = getContentResolver().query(Contract.Cobrador.URI_CONTENIDO,null,null,null,null);
+//
+//        if(userdb==null){
+//            logoutUser();
+//        }
+//        userdb.moveToNext();
 
         // Reemplaza con tu clave
-        UPreferencias.guardarClaveApi(this, userdb.getString(userdb.getColumnIndex(Contract.Cobrador.TOKEN)));
+        UPreferencias.guardarClaveApi(this, usersRepository.getToken());
+//        UPreferencias.guardaUrlAPP(this, platformSessionRepository.getApiUrl());
 
         setFragment(0);
     }

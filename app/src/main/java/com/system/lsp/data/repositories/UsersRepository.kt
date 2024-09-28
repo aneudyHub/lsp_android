@@ -5,6 +5,7 @@ import com.system.lsp.data.remote.models.Result
 
 interface UsersRepository {
     val currentUser: User?
+    val token: String?
     suspend fun signIn(userName: String, password: String): Result<Unit?>
     suspend fun logOut(): Result<Unit?>
 }
