@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.system.lsp.data.local.database.AppDatabase
-import java.util.Date
+import java.sql.Date
 
 
 @Entity(tableName = AppDatabase.CUSTOMERS_TABLE_NAME)
@@ -12,7 +12,6 @@ data class CustomerEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Long? = 0,
     val name: String? = "",
-    val lastName: String? = "",
     val documentId: String? = "",
     val phoneNumber: String? = "",
     val pictureUrl: String? = "",

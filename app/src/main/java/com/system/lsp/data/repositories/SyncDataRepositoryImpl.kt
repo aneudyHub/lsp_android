@@ -22,6 +22,7 @@ class SyncDataRepositoryImpl @Inject constructor(
                 Result.Error(error)
             }
         } catch (e: Exception) {
+            e.printStackTrace()
             return Result.Error(HttpResponseErrorCode.THROWN_EXCEPTION)
         }
     }

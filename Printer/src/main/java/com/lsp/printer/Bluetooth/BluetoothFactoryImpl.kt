@@ -18,7 +18,6 @@ import javax.inject.Inject
 
 class BluetoothFactoryImpl @Inject constructor(
     private val bluetoothAdapter: BluetoothAdapter,
-    private val context: Context,
     private val logger: LogFactory
 ) : BluetoothFactory {
 

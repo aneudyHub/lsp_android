@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class SyncDataPushBodyRequest(
     @SerializedName("inserciones")
-    val insertions: ArrayList<PagoSyncBody>
+    val insertions: List<PagoSyncBody>? = null
 )

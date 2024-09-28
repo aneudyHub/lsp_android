@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.system.lsp.data.local.database.AppDatabase
-import java.util.Date
+import java.sql.Date
 
 @Entity(
     tableName = AppDatabase.PAYMENTS_TABLE_NAME,

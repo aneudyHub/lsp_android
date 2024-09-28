@@ -1,5 +1,6 @@
 package com.system.lsp.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -12,9 +13,17 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.system.lsp.R
+import com.system.lsp.data.remote.network.LogoutCallback
 import com.system.lsp.databinding.ActivityDrawerBinding
+import com.system.lsp.sync.DataSyncWorker
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListener {
@@ -45,6 +54,25 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
         val navInflater = navController.navInflater
         val graph = navInflater.inflate(R.navigation.mobile_navigation)
         navController.graph = graph
+    }
+
+    override fun onStart() {
+        super.onStart()
+//        val constraints = Constraints.Builder()
+//            .setRequiredNetworkType(NetworkType.CONNECTED)
+//            .build()
+//
+//        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
+//            1, TimeUnit.MINUTES
+//        )
+//            .setConstraints(constraints)
+//            .build()
+//
+//        WorkManager.getInstance(this).enqueue(syncRequest)
+
+        val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>().build()
+        WorkManager.getInstance(this).enqueue(workRequest)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

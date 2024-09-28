@@ -1,89 +1,121 @@
 package com.system.lsp.sync
 
-import android.content.ContentProviderOperation
-import android.content.ContentResolver
-import android.content.Context
-import android.content.OperationApplicationException
-import android.os.RemoteException
-import android.util.Log
-import com.system.lsp.provider.Contract
-import com.system.lsp.provider.OperacionesBaseDatos
-import com.system.lsp.provider.ProcesadorLocal
-import com.system.lsp.utilidades.UPreferencias
-import com.system.lsp.utilidades.URL
-import com.system.lsp.utilidades.UTiempo
-import com.system.lsp.web.RESTService
-import org.json.JSONException
-import org.json.JSONObject
-import java.util.ArrayList
-import java.util.HashMap
+import com.system.lsp.data.local.database.dao.CustomersDao
+import com.system.lsp.data.local.database.dao.LoanDetailsDao
+import com.system.lsp.data.local.database.dao.LoansDao
+import com.system.lsp.data.local.database.entities.CustomerEntity
+import com.system.lsp.data.local.database.entities.LoanEntity
+import com.system.lsp.data.local.database.entities.LoansDetailsEntity
+import com.system.lsp.data.remote.models.Result
+import com.system.lsp.data.repositories.SyncDataRepository
+import java.sql.Date
+import java.text.SimpleDateFormat
+import javax.inject.Inject
 
-class LocalSyncHandler(context: Context) : SyncHandler(context) {
+class LocalSyncHandler @Inject constructor(
+    private val syncDataRepository: SyncDataRepository,
+    private val loansDao: LoansDao,
+    private val loanDetailsDao: LoanDetailsDao,
+    private val customersDao: CustomersDao
+) : SyncHandler() {
 
-    private val TAG = LocalSyncHandler::class.java.simpleName
-    private val RESPONSE_CUSTOMERS_ARRAY_KEY = "clientes"
-    private val RESPONSE_LOANS_ARRAY_KEY = "prestamos"
-    private val RESPONSE_LOANS_DETAILS_ARRAY_KEY = "prestamos_detalles"
-    private val RESPONSE_PAYMENTS_ARRAY_KEY = "cuotas_pagas"
-    private val contentResolver: ContentResolver = context.contentResolver
-    private val operacionesBaseDatos: OperacionesBaseDatos = OperacionesBaseDatos.obtenerInstancia(context)
 
-    override fun run() {
-        sendRequest()
-    }
+    override suspend fun run(): SyncResponse {
+        return try {
+            when (val response = syncDataRepository.retrieveData()) {
+                is Result.Error -> {
+                    SyncResponse.Error
+                }
 
-    override fun sendRequest() {
-        val syncTime = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(this.context))
+                is Result.Success -> {
+                    val customers = response.data.customers.map { customer ->
+                        CustomerEntity(
+                            id = customer.id.toLong(),
+                            name = customer.fullName,
+                            documentId = customer.document,
+                            phoneNumber = customer.phone,
+                            pictureUrl = customer.photo,
+                            address = customer.address,
+                            location = "${customer.latitude},${customer.latitude}",
+                        )
+                    }
+                    customersDao.insertCustomersBatch(customers)
 
-        val cabeceras = HashMap<String, String>()
-        cabeceras["Authorization"] = UPreferencias.obtenerClaveApi(this.context)
-        cabeceras["sync_time"] = syncTime
 
-        RESTService(context).get(
-                URL.SERVER + URL.SYNC,
-                { response -> handleResponse(response) },
-                { error -> handleErrors(error) },
-                cabeceras
-        )
-    }
+                    val loans = response.data.loans.map { loan ->
 
-    override fun handleResponse(response: JSONObject) {
-        try {
-            val ops = ArrayList<ContentProviderOperation>()
+                        LoanEntity(
+                            id = loan.id.toLong(),
+                            customerId = loan.clientId.toLong(),
+                            capitalAmount = loan.capital,
+                            interestPercentage = loan.interestPercentage,
+                            delayInterestPercentage = loan.defaultInterestPercentage,
+                            termType = loan.term,
+                            quotes = loan.quotes,
+//                        createdDate ="",
+//                        startDate = "",
+//                        updatedAt = ""
+                            isPaid = loan.paidOff,
+//                        endDate = ""
+                            createdBy = ""
+                        )
+                    }
 
-            Log.e("response", response.toString())
+                    loansDao.insertBatch(loans)
 
-            val manejadorContactos = ProcesadorLocal()
-            manejadorContactos.procesar(
-                    response.getJSONArray(RESPONSE_CUSTOMERS_ARRAY_KEY),
-                    response.getJSONArray(RESPONSE_LOANS_ARRAY_KEY),
-                    response.getJSONArray(RESPONSE_LOANS_DETAILS_ARRAY_KEY),
-                    response.getJSONArray(RESPONSE_PAYMENTS_ARRAY_KEY)
-            )
-            manejadorContactos.procesarOperaciones_Clientes(ops, contentResolver)
-            manejadorContactos.procesarOperaciones_Prestamos(ops, contentResolver)
-            manejadorContactos.procesarOperaciones_Prestamos_Detalle(ops, contentResolver)
+                    val loanDetails = response.data.loanQuotes.map {
+                        LoansDetailsEntity(
+                            id = it.id.toLong(),
+                            loanId = it.loanId.toLong(),
+                            capital = it.capital,
+                            interest = it.interest,
+                            delayInterest = it.defaultInterest,
+//                        dueDate = it.date
+                        )
+                    }
 
-            if (ops.isNotEmpty()) {
-                Log.d(TAG, "# Cambios en 'contacto': ${ops.size} ops.")
-                contentResolver.applyBatch(Contract.AUTORIDAD, ops)
-                contentResolver.notifyChange(Contract.URI_CONTENIDO_BASE, null, false)
+                    loanDetailsDao.insertBatch(loanDetails)
+
+
+
+
+                    println("terminoooooo")
+                    val a = customersDao.getAll()
+                    println(a)
+
+                    val b = loansDao.getAll()
+                    println(b)
+
+                    val c = loanDetailsDao.getAll()
+                    println(c)
+
+
+                    val x = b.filter { loan -> loan.customerId !in a.map { it.id } }
+                    println("result fiter" + x)
+                    println(x.size)
+
+                    val v = response.data.customers.filter { it.id == 903 }
+
+                    println(v)
+
+                    println("clientes remote "+response.data.customers.size+" local + "+a.size)
+                    println("prestamos remote "+response.data.loans.size+" local + "+b.size)
+                    println("cuotas remote "+response.data.loanQuotes.size+" local + "+c.size)
+
+
+
+                    SyncResponse.Success
+                }
             }
-
-            operacionesBaseDatos.actualizarSyncTime(
-                    UPreferencias.obtenerIdUsuario(this.context),
-                    UTiempo.obtenerFechaHora()
-            )
-            listener.onSuccess()
-        } catch (e: RemoteException) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            listener.onFailure("Error inesperado")
-        } catch (e: OperationApplicationException) {
-            e.printStackTrace()
-            listener.onFailure("Error inesperado")
-        } catch (e: JSONException) {
-            e.printStackTrace()
-            listener.onFailure("Error inesperado")
+            SyncResponse.Error
         }
     }
+
+//    private fun stringToDate(value: String): Date{
+//        val format = SimpleDateFormat("yyyy-MM-dd")
+//        val date = format.parse(value)
+//        return date
+//    }
 }

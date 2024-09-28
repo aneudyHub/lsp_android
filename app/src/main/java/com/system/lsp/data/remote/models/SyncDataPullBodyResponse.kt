@@ -3,15 +3,15 @@ package com.system.lsp.data.remote.models
 import com.google.gson.annotations.SerializedName
 
 data class SyncDataPullBodyResponse(
-    @SerializedName("clientes") val customer: ArrayList<Customer>,
-    @SerializedName("prestamos") val loans: ArrayList<Loan>,
-    @SerializedName("prestamos_detalles") val loanQuotes: ArrayList<LoanQuote>,
+    @SerializedName("clientes") val customers: List<Customer>,
+    @SerializedName("prestamos") val loans: List<Loan>,
+    @SerializedName("prestamos_detalles") val loanQuotes: List<LoanQuote>,
     @SerializedName("estado") val state: String,
     @SerializedName("mensaje") val message: String
 )
 
 data class Customer(
-    @SerializedName("id") val id: String,
+    @SerializedName("id") val id: Int,
     @SerializedName("nombre_completo") val fullName: String,
     @SerializedName("documento") val document: String,
     @SerializedName("telefono") val phone: String,
@@ -25,13 +25,13 @@ data class Customer(
 
 
 data class Loan(
-    @SerializedName("id") val id: String,
-    @SerializedName("clientes_id") val clientId: String,
-    @SerializedName("capital") val capital: String,
-    @SerializedName("porciento_interes") val interestPercentage: String,
-    @SerializedName("porciento_mora") val defaultInterestPercentage: String,
+    @SerializedName("id") val id: Int,
+    @SerializedName("clientes_id") val clientId: Int,
+    @SerializedName("capital") val capital: Double,
+    @SerializedName("porciento_interes") val interestPercentage: Float,
+    @SerializedName("porciento_mora") val defaultInterestPercentage: Float,
     @SerializedName("plazo") val term: String,
-    @SerializedName("cuotas") val installments: String,
+    @SerializedName("cuotas") val quotes: Int,
     @SerializedName("fecha_registro") val registrationDate: String,
     @SerializedName("fecha_inicio") val startDate: String,
     @SerializedName("fecha_aprobado") val approvalDate: String? = null,
@@ -40,7 +40,7 @@ data class Loan(
     @SerializedName("activo") val active: String,
     @SerializedName("fecha_creacion") val creationDate: String,
     @SerializedName("estado") val status: String,
-    @SerializedName("saldado") val paidOff: String,
+    @SerializedName("saldado") val paidOff: Boolean,
     @SerializedName("plantilla") val template: String,
     @SerializedName("updated_at") val updatedAt: String,
     @SerializedName("capital_amortizable") val amortizableCapital: String,
@@ -49,19 +49,19 @@ data class Loan(
 
 
 data class LoanQuote(
-    @SerializedName("id") val id: String,
-    @SerializedName("prestamos_id") val loanId: String,
+    @SerializedName("id") val id: Int,
+    @SerializedName("prestamos_id") val loanId: Int,
     @SerializedName("cuota") val installmentNumber: String,
-    @SerializedName("capital") val capital: String,
-    @SerializedName("interes") val interest: String,
-    @SerializedName("mora") val defaultInterest: String,
+    @SerializedName("capital") val capital: Double,
+    @SerializedName("interes") val interest: Double,
+    @SerializedName("mora") val defaultInterest: Double,
     @SerializedName("fecha") val date: String,
     @SerializedName("dias") val days: String,
     @SerializedName("fecha_pagado") val paidDate: String? = null,
-    @SerializedName("pagado") val paid: String,
+    @SerializedName("pagado") val isPaid: Boolean,
     @SerializedName("activo") val active: String,
-    @SerializedName("monto_pagado") val amountPaid: String,
-    @SerializedName("abono_mora") val defaultInterestPayment: String,
-    @SerializedName("mora_acumulada") val accumulatedDefaultInterest: String,
+    @SerializedName("monto_pagado") val amountPaid: Double,
+    @SerializedName("abono_mora") val defaultInterestPayment: Double,
+    @SerializedName("mora_acumulada") val accumulatedDefaultInterest: Double,
     @SerializedName("updated_at") val updatedAt: String
 )

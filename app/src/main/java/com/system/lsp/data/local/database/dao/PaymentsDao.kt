@@ -33,7 +33,7 @@ interface PaymentsDao {
     @Query("SELECT * FROM ${AppDatabase.PAYMENTS_TABLE_NAME} where userId=:userId and date=:sortDate")
     suspend fun getListByUserIdAndDate(
         userId: Long,
-        sortDate: Date? = null
+        sortDate: Long
     ): List<PaymentWithDetails>
 
     @Transaction

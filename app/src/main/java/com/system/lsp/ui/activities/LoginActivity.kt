@@ -54,7 +54,7 @@ class LoginActivity : BaseActivity() {
                     hideProgressBar()
                     val intent = Intent(
                         this@LoginActivity,
-                        MainActivity::class.java
+                        DrawerActivity::class.java
                     )
                     startActivity(intent)
                     finish()

@@ -1,7 +1,7 @@
 package com.system.lsp.data.local.database.utils
 
 import androidx.room.TypeConverter
-import java.util.Date
+import java.sql.Date
 
 class Converters {
     @TypeConverter

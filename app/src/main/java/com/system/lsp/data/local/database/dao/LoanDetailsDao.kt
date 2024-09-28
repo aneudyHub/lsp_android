@@ -12,6 +12,9 @@ interface LoanDetailsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAndUpdate(vararg loansDetailsEntity: LoansDetailsEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertBatch(loansDetailsEntity: List<LoansDetailsEntity>)
+
     @Query("SELECT * FROM ${AppDatabase.LOANS_DETAILS_TABLE_NAME} where id=:id")
     suspend fun getById(id: Long): LoansDetailsEntity?
 
@@ -23,4 +26,7 @@ interface LoanDetailsDao {
 
     @Query("DELETE FROM ${AppDatabase.LOANS_DETAILS_TABLE_NAME}")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM ${AppDatabase.LOANS_DETAILS_TABLE_NAME}")
+    suspend fun getAll(): List<LoansDetailsEntity>
 }

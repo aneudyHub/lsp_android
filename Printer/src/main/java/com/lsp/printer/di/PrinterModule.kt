@@ -29,10 +29,9 @@ object PrinterModule {
     @Singleton
     fun providesBluetoothFactory(
         bluetoothAdapter: BluetoothAdapter,
-        @ApplicationContext context: Context,
         logger: LogFactory
     ): BluetoothFactory {
-        return BluetoothFactoryImpl(bluetoothAdapter, context, logger)
+        return BluetoothFactoryImpl(bluetoothAdapter, logger)
     }
 
     @Provides

@@ -9,7 +9,9 @@ import com.system.lsp.data.remote.models.LoginUserBody
 import com.system.lsp.data.remote.models.Result
 import java.lang.Exception
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class UsersRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
     private val userSessionSharedPreferences: UserSessionSharedPreferences

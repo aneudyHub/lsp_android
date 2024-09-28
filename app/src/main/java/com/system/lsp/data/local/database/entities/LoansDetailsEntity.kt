@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.system.lsp.data.local.database.AppDatabase.Companion.LOANS_DETAILS_TABLE_NAME
-import java.util.Date
+import java.sql.Date
 
 
 @Entity(
@@ -28,5 +28,6 @@ data class LoansDetailsEntity(
     val dueDate: Date? = null,
     val paidDate: Date? = null,
     val paidAmount: Double? = 0.0,
-    val updateAt: Date? = null
+    val updateAt: Date? = null,
+    val isPaid: Boolean? = false,
 )

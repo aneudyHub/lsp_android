@@ -7,15 +7,15 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import com.system.lsp.data.local.database.AppDatabase
-import java.util.Date
+import java.sql.Date
 
 @Entity(
     tableName = AppDatabase.LOANS_TABLE_NAME,
-    foreignKeys = [ForeignKey(
-        entity = CustomerEntity::class,
-        parentColumns = ["id"],
-        childColumns = ["customerId"]
-    )]
+//    foreignKeys = [ForeignKey(
+//        entity = CustomerEntity::class,
+//        parentColumns = ["id"],
+//        childColumns = ["customerId"]
+//    )]
 )
 data class LoanEntity(
     @PrimaryKey(autoGenerate = false)
@@ -27,11 +27,11 @@ data class LoanEntity(
     val delayInterestPercentage: Float? = 0f,
     val termType: String? = "",
     val quotes: Int? = 0,
-    val startDate: Date? = Date(),
-    val createdDate: Date? = Date(),
-    val updatedAt: Date? = Date(),
+    val startDate: Date? = null,
+    val createdDate: Date? = null,
+    val updatedAt: Date? = null,
     val isPaid: Boolean? = false,
-    val endDate: Date? = Date(),
+    val endDate: Date? = null,
     val createdBy: String? = "",
     val isInserted: Boolean? = false,
     val isUpdated: Boolean? = false,

@@ -18,7 +18,7 @@ class UserSessionSharedPreferencesImpl @Inject constructor(
 
     override fun saveUser(user: User) {
         with(sharedPreferences.edit()) {
-            putInt(KEY_USER_ID, user.id)
+            putLong(KEY_USER_ID, user.id)
             putString(KEY_USER_FIRST_NAME, user.firstName)
             putString(KEY_USER_LAST_NAME, user.lastName)
             putString(KEY_USER_EMAIL, user.email)
@@ -30,7 +30,7 @@ class UserSessionSharedPreferencesImpl @Inject constructor(
         if (token.isNullOrBlank()) return null
 
         return with(sharedPreferences) {
-            val id = getInt(KEY_USER_ID, 0)
+            val id = getLong(KEY_USER_ID, 0)
             val firstName = getString(KEY_USER_FIRST_NAME, DEFAULT_VALUE)
             val lastName = getString(KEY_USER_LAST_NAME, DEFAULT_VALUE)
             val email = getString(KEY_USER_EMAIL, DEFAULT_VALUE)

@@ -3,6 +3,7 @@ package com.system.lsp.data.remote.api
 import com.system.lsp.data.remote.models.CreateCustomerResponse
 import com.system.lsp.data.remote.models.LoginResponse
 import com.system.lsp.data.remote.models.LoginUserBody
+import com.system.lsp.data.remote.models.PushDataSyncResponse
 import com.system.lsp.data.repositories.models.Customer
 import com.system.lsp.data.remote.models.SyncDataPullBodyResponse
 import com.system.lsp.data.remote.models.SyncDataPushBodyRequest
@@ -21,7 +22,7 @@ interface ApiService {
     suspend fun createCustomer(@Body customer: Customer): Response<CreateCustomerResponse>
 
     @POST("sync")
-    suspend fun pushData(@Body syncDataPushBodyRequest: SyncDataPushBodyRequest): Response<Nothing>
+    suspend fun pushData(@Body syncDataPushBodyRequest: SyncDataPushBodyRequest): Response<PushDataSyncResponse>
 
     @GET("sync")
     suspend fun pullData(@Header("sync_time") syncTime: String): Response<SyncDataPullBodyResponse>

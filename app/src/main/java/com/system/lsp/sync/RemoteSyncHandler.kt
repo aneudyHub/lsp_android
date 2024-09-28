@@ -1,24 +1,12 @@
 package com.system.lsp.sync
 
-import android.content.ContentResolver
-import android.content.Context
 import android.util.Log
-import android.widget.HeaderViewListAdapter
 import com.system.lsp.data.remote.models.PagoSyncBody
 import com.system.lsp.data.remote.models.Result
+import com.system.lsp.data.remote.models.SyncDataPushBodyRequest
 import com.system.lsp.data.repositories.PaymentsRepository
 import com.system.lsp.data.repositories.SyncDataRepository
 import com.system.lsp.data.repositories.UsersRepository
-import com.system.lsp.provider.OperacionesBaseDatos
-import com.system.lsp.provider.ProcesadorRemoto
-import com.system.lsp.utilidades.Resolve
-import com.system.lsp.utilidades.UPreferencias
-import com.system.lsp.utilidades.URL
-import com.system.lsp.web.RESTService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 class RemoteSyncHandler @Inject constructor(
@@ -28,58 +16,44 @@ class RemoteSyncHandler @Inject constructor(
 ) : SyncHandler() {
 
     private val TAG = RemoteSyncHandler::class.java.simpleName
-    override suspend fun sendRequest() {
-        val currentUser = usersRepository.currentUser?: return
+    override suspend fun run(): SyncResponse {
+        Log.e(TAG, "inicio sendRequest")
+        val currentUser = usersRepository.currentUser ?: return SyncResponse.Error
         val paymentsResponse = paymentsRepository.getNoSyncedPayments(currentUser.id)
-        val requestBody = when(paymentsResponse){
-            is Result.Error -> TODO()
+        val requestBody = when (paymentsResponse) {
+            is Result.Error -> {
+                SyncDataPushBodyRequest()
+            }
+
             is Result.Success -> {
                 val insertions = paymentsResponse.data.map { paymentWithDetails ->
                     PagoSyncBody(
                         userId = paymentWithDetails.paymentEntity?.userId!!,
                         date = paymentWithDetails.paymentEntity.date.toString(),
                         loanId = paymentWithDetails.paymentEntity.loanId?.toInt()!!,
-                        amount = paymentWithDetails.paymentDetailsEntity?.sumOf { (it.capital + it.interest + it.delayInterest) }?: 0.0, // TODO: sumarize the total here
+                        amount = paymentWithDetails.paymentDetailsEntity?.sumOf { it.capital!! + it.interest!! + it.delayInterest!! }
+                            ?: 0.0,
                         note = ""
                     )
                 }
+
+                SyncDataPushBodyRequest(
+                    insertions = insertions.toList()
+                )
             }
         }
 
+        val syncResponse = syncDataRepository.sendData(requestBody)
 
-//        val datos = procesadorRemoto.crearPayload(contentResolver)
-//        if (datos == null) {
-//            listener.onSuccess()
-//            return
-//        }
-//        Log.d(TAG, "Payload de para subir: $datos")
-//
-//        val cabeceras = HashMap<String, String>()
-//        cabeceras["Authorization"] = UPreferencias.obtenerClaveApi(context)
-//        val syncTime = operacionesBaseDatos.obtenerSyncTime(UPreferencias.obtenerIdUsuario(context))
-//        cabeceras["sync_time"] = syncTime
-//
-//        RESTService(this.context).post(
-//            URL.SERVER + URL.SYNC, datos,
-//            { handleResponse(null) },
-//            { handleErrors(it) },
-//            cabeceras
-//        )
-    }
+        return when (syncResponse) {
+            is Result.Error -> {
+                Log.e(TAG, "Error sending data")
+                SyncResponse.Error
+            }
 
-//    override fun handleResponse(response: JSONObject?) {
-//        procesadorRemoto.desmarcarContactos(contentResolver)
-////        listener.onSuccess()
-//    }
-
-    override suspend fun run() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                syncDataRepository.retrieveData()
-            } catch (e: Exception) {
-                Log.e("Error", "Error sending data", e)
+            is Result.Success -> {
+                SyncResponse.Success
             }
         }
-        sendRequest()
     }
 }

@@ -21,7 +21,11 @@ import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferencesImpl
 import com.system.lsp.data.remote.api.ApiService
 import com.system.lsp.data.remote.api.PlatformService
+import com.system.lsp.data.repositories.PaymentsRepository
+import com.system.lsp.data.repositories.SyncDataRepository
+import com.system.lsp.data.repositories.UsersRepository
 import com.system.lsp.data.utils.getDeviceId
+import com.system.lsp.sync.RemoteSyncHandler
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,7 +42,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-    private const val PLATFORM_BASE_URL = BuildConfig.PLATFORM_URL
+
 
     @Provides
     @Singleton
@@ -47,60 +51,6 @@ object AppModule {
             .build()
     }
 
-    @Singleton
-    @Provides
-    fun provideHttpLoggingInterceptor() = HttpLoggingInterceptor()
-        .apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-
-    @Singleton
-    @Provides
-    fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
-        OkHttpClient
-            .Builder()
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
-
-    @Singleton
-    @Provides
-    @Named("apiService")
-    fun provideRetrofit(okHttpClient: OkHttpClient, @Named("baseUrl") baseUrl: String?): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-
-    @Singleton
-    @Provides
-    @Named("baseUrl")
-    fun provideBaseUrl(platformSessionSharedPreferences: PlatformSessionSharedPreferences): String? {
-        return if (BuildConfig.DEBUG) {
-            BuildConfig.BASE_URL
-        } else {
-            platformSessionSharedPreferences.apiUrl
-        }
-    }
-
-    @Provides
-    @Singleton
-    @Named("platformService")
-    fun providePlatformRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(PLATFORM_BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(okHttpClient)
-        .build()
-
-    @Provides
-    fun provideApiService(@Named("apiService") retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
-
-    @Provides
-    fun providePlatformService(@Named("platformService") retrofit: Retrofit): PlatformService {
-        return retrofit.create(PlatformService::class.java)
-    }
 
     @Provides
     @Singleton
@@ -163,8 +113,15 @@ object AppModule {
         return context.contentResolver
     }
 
+
     @Provides
     @Singleton
-    fun provideContext(@ApplicationContext context: Context): Context = context
+    fun provideRemoteSyncHandler(
+        syncDataRepository: SyncDataRepository,
+        paymentsRepository: PaymentsRepository,
+        usersRepository: UsersRepository
+    ): RemoteSyncHandler {
+        return RemoteSyncHandler(syncDataRepository, paymentsRepository, usersRepository)
+    }
 
 }

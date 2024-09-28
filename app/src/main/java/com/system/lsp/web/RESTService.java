@@ -53,27 +53,4 @@ public class RESTService {
         VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
     }
 
-    public void post(String uri, String datos, Response.Listener<JSONObject> jsonListener,
-                     Response.ErrorListener errorListener, final HashMap<String, String> cabeceras) {
-
-        // Crear petición POST
-        JsonObjectRequest peticion = new JsonObjectRequest(
-                Request.Method.POST,
-                uri,
-                datos,
-                jsonListener,
-                errorListener
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                return cabeceras;
-            }
-        };
-
-        // Añadir petición a la pila
-        peticion.setRetryPolicy(new DefaultRetryPolicy(36000,2,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        peticion.setShouldCache(false);
-        VolleySingleton.getInstance(contexto).addToRequestQueue(peticion);
-    }
-
 }

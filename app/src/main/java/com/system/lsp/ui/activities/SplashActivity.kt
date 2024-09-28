@@ -42,7 +42,7 @@ class SplashActivity : BaseActivity() {
                 }
 
                 SplashViewModel.UiState.AuthorizedAndSignedIn -> {
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, DrawerActivity::class.java))
                     finish()
                 }
 

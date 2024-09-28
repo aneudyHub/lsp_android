@@ -68,7 +68,7 @@ public class SyncTask implements Runnable {
     @Override
     public void run() {
         // remote runs first then local applies
-        remoteSyncHandler.run();
+//        remoteSyncHandler.run();
     }
 
 
