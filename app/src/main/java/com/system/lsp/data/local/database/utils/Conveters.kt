@@ -6,7 +6,7 @@ import java.sql.Date
 class Converters {
     @TypeConverter
     fun fromTimestamp(value: Long?): Date? {
-        return value?.let { Date(it) }
+        return value?.let { Date(it) } // Correctly handles null values
     }
 
     @TypeConverter

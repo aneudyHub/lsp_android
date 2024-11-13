@@ -47,14 +47,13 @@ object NetworkModule {
     fun provideOkHttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
         userSessionSharedPreferences: UserSessionSharedPreferences,
-        logoutCallback: LogoutCallback // Add callback
+        logoutCallback: LogoutCallback
     ): OkHttpClient {
-        val authInterceptor = AuthInterceptor(userSessionSharedPreferences.token ?: "")
         return OkHttpClient
             .Builder()
-            .addInterceptor(authInterceptor)
+            .addInterceptor(AuthInterceptor(userSessionSharedPreferences))
             .addInterceptor(ResponseInterceptor(userSessionSharedPreferences, logoutCallback))
-//            .addInterceptor(httpLoggingInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
             .build()
     }
 
@@ -77,6 +76,8 @@ object NetworkModule {
         } else {
             platformSessionSharedPreferences.apiUrl
         }
+//        return platformSessionSharedPreferences.apiUrl
+
     }
 
     @Provides

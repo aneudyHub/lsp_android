@@ -14,7 +14,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.Date
+import java.sql.Date
 import javax.inject.Inject
 
 
@@ -34,15 +34,14 @@ class CustomersDaoTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     val customerMock = CustomerEntity(
-        1,
-        "aneudy",
-        "vargas",
-        "000000000000",
-        "0000000000",
-        "https://foto.png",
-        "Calle principal #5, urb. caonabo",
-        "0.00,0.00",
-        Date(),
+        id = 1,
+        name = "aneudy",
+        phoneNumber = "000000000000",
+        documentId = "0000000000",
+        pictureUrl = "https://foto.png",
+        address = "Calle principal #5, urb. caonabo",
+        location = "0.00,0.00",
+        createdAt = null,
         isInserted = false,
         isUpdated = false,
         isDeleted = false
@@ -70,7 +69,7 @@ class CustomersDaoTest {
 
         Assert.assertEquals(customerMock, customerSaved)
 
-        val customerUpdated = customerMock.copy(name = "Jose Luis", lastName = "Thais")
+        val customerUpdated = customerMock.copy(name = "Jose Luis")
 
         customersDao.insertAndUpdate(customerUpdated)
 
@@ -100,7 +99,6 @@ class CustomersDaoTest {
             val customer = CustomerEntity(
                 id = i.toLong(),
                 name = "juan",
-                lastName = "lopez"
             )
 
             customersDao.insertAndUpdate(customer)
@@ -123,15 +121,14 @@ class CustomersDaoTest {
 
         list.add(
             CustomerEntity(
-                1,
-                "aneudy",
-                "vargas",
-                "40223011293",
-                "8093962555",
-                "https://foto.png",
-                "Calle principal #5, urb. caonabo",
-                "0.00,0.00",
-                null,
+                id = 1,
+                name = "aneudy",
+                documentId = "40223011293",
+                phoneNumber = "8093962555",
+                pictureUrl = "https://foto.png",
+                address = "Calle principal #5, urb. caonabo",
+                location = "0.00,0.00",
+                createdAt = null,
                 isInserted = false,
                 isUpdated = false,
                 isDeleted = false
@@ -140,15 +137,14 @@ class CustomersDaoTest {
 
         list.add(
             CustomerEntity(
-                2,
-                "kevin",
-                "vargas",
-                "05600833080",
-                "0000000000",
-                "https://foto.png",
-                "Calle j #3 , las flores",
-                "0.00,0.00",
-                null,
+                id = 2,
+                name = "kevin",
+                documentId = "05600833080",
+                phoneNumber = "0000000000",
+                pictureUrl = "https://foto.png",
+                address = "Calle j #3 , las flores",
+                location = "0.00,0.00",
+                createdAt = null,
                 isInserted = false,
                 isUpdated = false,
                 isDeleted = false
@@ -157,15 +153,14 @@ class CustomersDaoTest {
 
         list.add(
             CustomerEntity(
-                3,
-                "Maria",
-                "Lopez",
-                "40225963781",
-                "8092445528",
-                "https://foto.png",
-                "Calle antonio guzman fernandez #2",
-                "0.00,0.00",
-                null,
+                id = 3,
+                name = "Maria",
+                documentId = "40225963781",
+                phoneNumber = "8092445528",
+                pictureUrl = "https://foto.png",
+                address = "Calle antonio guzman fernandez #2",
+                location = "0.00,0.00",
+                createdAt = null,
                 isInserted = false,
                 isUpdated = false,
                 isDeleted = false
@@ -174,15 +169,14 @@ class CustomersDaoTest {
 
         list.add(
             CustomerEntity(
-                4,
-                "jose",
-                "alberto",
-                "05697853692",
-                "8096937894",
-                "https://foto.png",
-                "Calle k #25",
-                "0.00,0.00",
-                null,
+                id = 4,
+                name = "jose",
+                documentId = "05697853692",
+                phoneNumber = "8096937894",
+                pictureUrl = "https://foto.png",
+                address = "Calle k #25",
+                location = "0.00,0.00",
+                createdAt = null,
                 isInserted = false,
                 isUpdated = false,
                 isDeleted = false

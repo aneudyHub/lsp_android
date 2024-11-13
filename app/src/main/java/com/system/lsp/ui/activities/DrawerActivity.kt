@@ -70,8 +70,8 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
 //
 //        WorkManager.getInstance(this).enqueue(syncRequest)
 
-        val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>().build()
-        WorkManager.getInstance(this).enqueue(workRequest)
+//        val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>().build()
+//        WorkManager.getInstance(this).enqueue(workRequest)
 
     }
 

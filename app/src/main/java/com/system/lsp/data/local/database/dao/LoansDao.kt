@@ -45,7 +45,7 @@ interface LoansDao {
 //    suspend fun getAllLoansWithDetails(): List<LoanWithDetails>
 
     @Query("""
-        SELECT l.id AS loanId, c.name AS customerName, ld.*
+        SELECT l.id AS loanId, c.name AS customerName, c.documentId as customerDocumentId, c.address as customerAddress, c.phoneNumber as customerPhone, ld.*
         FROM ${AppDatabase.LOANS_DETAILS_TABLE_NAME} ld
         JOIN ${AppDatabase.LOANS_TABLE_NAME} l ON ld.loanId = l.id
         JOIN ${AppDatabase.CUSTOMERS_TABLE_NAME} c ON l.customerId = c.id

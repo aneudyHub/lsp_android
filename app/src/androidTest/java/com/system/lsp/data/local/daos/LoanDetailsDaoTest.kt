@@ -49,7 +49,6 @@ class LoanDetailsDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -85,7 +84,6 @@ class LoanDetailsDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -129,7 +127,6 @@ class LoanDetailsDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)

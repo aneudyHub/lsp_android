@@ -20,9 +20,9 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.sql.Date
 import java.time.LocalDate
 import java.time.ZoneId
-import java.util.Date
 import java.util.Random
 import javax.inject.Inject
 import kotlin.math.absoluteValue
@@ -53,7 +53,6 @@ class PaymentsRepositoryDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -68,9 +67,9 @@ class PaymentsRepositoryDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(loan)
@@ -84,7 +83,7 @@ class PaymentsRepositoryDaoTest {
 
         val payment = PaymentEntity(
             id = 1,
-            date = Date(),
+            date = Date.valueOf("2022-01-01"),
             userId = 1,
             loanId = loanId
         )
@@ -100,7 +99,7 @@ class PaymentsRepositoryDaoTest {
 
         val payment = PaymentEntity(
             id = 1,
-            date = Date(),
+            date = Date.valueOf("2022-01-01"),
             userId = 1,
             loanId = loanId
         )
@@ -119,7 +118,7 @@ class PaymentsRepositoryDaoTest {
         for (i in 1..10) {
             val payment = PaymentEntity(
                 id = i.toLong(),
-                date = Date(),
+                date = Date.valueOf("2022-01-01"),
                 userId = 1,
                 loanId = loanId
             )
@@ -143,7 +142,7 @@ class PaymentsRepositoryDaoTest {
         val userId: Long = 1
         for (i in 1..10) {
             val localDate = LocalDate.of(2023, 1, 1 + i)
-            val date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+            val date = Date.valueOf("2023-01-01")
             val payment = PaymentEntity(
                 id = i.toLong(),
                 date = date,
@@ -158,12 +157,12 @@ class PaymentsRepositoryDaoTest {
         // filtering by Date
         var localDate = LocalDate.of(2023, 1, 1)
         var date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        var paymentsFilterResult = paymentsDao.getListByUserIdAndDate(userId, date)
+        var paymentsFilterResult = paymentsDao.getListByUserIdAndDate(userId, date.time)
         Assert.assertEquals(0, paymentsFilterResult.size)
 
         localDate = LocalDate.of(2023, 1, 2)
         date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
-        paymentsFilterResult = paymentsDao.getListByUserIdAndDate(userId, date)
+        paymentsFilterResult = paymentsDao.getListByUserIdAndDate(userId, date.time)
         Assert.assertEquals(1, paymentsFilterResult.size)
     }
 
@@ -178,7 +177,7 @@ class PaymentsRepositoryDaoTest {
                 for (a in 1..5) {
                     val payment = PaymentEntity(
                         id = Random().nextLong().absoluteValue,
-                        date = Date(),
+                        date = Date.valueOf("2022-01-01"),
                         userId = 1,
                         loanId = loanId
                     )

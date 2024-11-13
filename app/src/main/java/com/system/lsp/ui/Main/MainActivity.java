@@ -1,7 +1,6 @@
 package com.system.lsp.ui.Main;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -19,15 +18,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.system.lsp.R;
-import com.system.lsp.data.repositories.PlatformSessionRepository;
 import com.system.lsp.data.repositories.UsersRepository;
-import com.system.lsp.data.repositories.UsersRepositoryImpl;
 import com.system.lsp.fragmentos.FragmentHistorialPagos;
 import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.fragmentos.FragmentListaPrestamos;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.SessionManager;
-import com.system.lsp.ui.AdaptadorCuotas;
+import com.system.lsp.ui.adapters.HomeCustomerAdapter;
 import com.system.lsp.ui.activities.LoginActivity;
 import com.system.lsp.utilidades.UPreferencias;
 //import com.lsp.printer.ZebraPrint;
@@ -45,7 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     private Handler mHandler;
     private SessionManager session;
-    private AdaptadorCuotas mAdapter;
+    private HomeCustomerAdapter mAdapter;
     private TextView nombreUsuario;
 
     @Inject

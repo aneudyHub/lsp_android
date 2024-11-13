@@ -39,7 +39,7 @@ import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
-import com.system.lsp.ui.AdaptadorCuotas;
+import com.system.lsp.ui.adapters.HomeCustomerAdapter;
 import com.system.lsp.ui.Main.MainActivity;
 import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
@@ -55,14 +55,14 @@ import java.util.TimerTask;
  * Created by aneudy on 22/6/2017.
  */
 
-public class FragmentListaCoutas extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, AdaptadorCuotas.OnItemClickListener,SearchView.OnQueryTextListener{
+public class FragmentListaCoutas extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,SearchView.OnQueryTextListener{
 
     public static final String TAG = MainActivity.class.getSimpleName();
     private int REQ_DET=100;
     // Referencias UI
     private RecyclerView reciclador;
     private LinearLayoutManager layoutManager;
-    private AdaptadorCuotas adaptador;
+    private HomeCustomerAdapter adaptador;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ConstraintLayout mInfoNoData;
     private BroadcastReceiver receptorSync;
@@ -185,7 +185,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
             //items = nuevoCursor;
 
         }
-        adaptador = new AdaptadorCuotas(getContext(),this,mArrayList);
+//        adaptador = new HomeCustomerAdapter(getContext(),this,mArrayList);
         reciclador.setAdapter(adaptador);
         if(adaptador.getItemCount()>0){
             mInfoNoData.setVisibility(View.GONE);
@@ -271,7 +271,7 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                adaptador.getFilter().filter(newText);
+//                adaptador.getFilter().filter(newText);
                 return true;
             }
         });
@@ -288,35 +288,35 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
         return false;
     }
 
-    @Override
-    public void onClick(String idContacto,double montoPendiente,double totalCuota,String nombre) {
-        Log.e("idcontacto",idContacto);
-        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,totalCuota,nombre);
-    }
-
-    @Override
-    public void showFoto(String documento) {
-        final AlertDialog pDialog;
-
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Foto");
-        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_foto_layout,null);
-        builder.setView(view);
-        ImageView foto = (ImageView) view.findViewById(R.id.DialogFoto_Foto);
-
-        RequestOptions options = new RequestOptions()
-                .fitCenter()
-                .placeholder(getResources().getDrawable(R.drawable.index))
-                .error(getResources().getDrawable(R.drawable.index));
-
-        String Url = URL.FOTO+documento+".jpg";
-        Glide.with(this).load(Url).apply(options).into(foto);
-
-
-        pDialog = builder.create();
-        pDialog.show();
-    }
+//    @Override
+//    public void onClick(String idContacto,double montoPendiente,double totalCuota,String nombre) {
+//        Log.e("idcontacto",idContacto);
+//        mostrarDetalles(Contract.PrestamoDetalle.crearUriPrestamoDetalle(idContacto),montoPendiente,totalCuota,nombre);
+//    }
+//
+//    @Override
+//    public void showFoto(String documento) {
+//        final AlertDialog pDialog;
+//
+//
+//        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("Foto");
+//        View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_foto_layout,null);
+//        builder.setView(view);
+//        ImageView foto = (ImageView) view.findViewById(R.id.DialogFoto_Foto);
+//
+//        RequestOptions options = new RequestOptions()
+//                .fitCenter()
+//                .placeholder(getResources().getDrawable(R.drawable.index))
+//                .error(getResources().getDrawable(R.drawable.index));
+//
+//        String Url = URL.FOTO+documento+".jpg";
+//        Glide.with(this).load(Url).apply(options).into(foto);
+//
+//
+//        pDialog = builder.create();
+//        pDialog.show();
+//    }
 
     @Override
     public void onDestroy() {

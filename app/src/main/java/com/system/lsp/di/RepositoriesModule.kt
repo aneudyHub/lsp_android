@@ -1,5 +1,6 @@
 package com.system.lsp.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.system.lsp.data.local.database.dao.CustomersDao
 import com.system.lsp.data.local.database.dao.PaymentDetailDao
 import com.system.lsp.data.local.database.dao.PaymentsDao
@@ -41,12 +42,12 @@ object RepositoriesModule {
     @Provides
     @Singleton
     fun providesPlatformSessionRepository(
-        platformService: PlatformService,
+        firestore: FirebaseFirestore,
         platformSessionSharedPreferences: PlatformSessionSharedPreferences,
         deviceId: String
     ): PlatformSessionRepository {
         return PlatformSessionRepositoryImpl(
-            platformService,
+            firestore,
             platformSessionSharedPreferences,
             deviceId
         )

@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
+import com.google.firebase.firestore.FirebaseFirestore
 import com.system.lsp.BuildConfig
 import com.system.lsp.data.local.database.AppDatabase
 import com.system.lsp.data.local.database.AppDatabase.Companion.DATABASE_NAME
@@ -92,13 +93,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providesPaymentsDao(appDatabase: AppDatabase): PaymentsDao{
+    fun providesPaymentsDao(appDatabase: AppDatabase): PaymentsDao {
         return appDatabase.paymentsDao()
     }
 
     @Provides
     @Singleton
-    fun providesPaymentsDetailsDao(appDatabase: AppDatabase): PaymentDetailDao{
+    fun providesPaymentsDetailsDao(appDatabase: AppDatabase): PaymentDetailDao {
         return appDatabase.paymentsDetailsDao()
     }
 
@@ -122,6 +123,12 @@ object AppModule {
         usersRepository: UsersRepository
     ): RemoteSyncHandler {
         return RemoteSyncHandler(syncDataRepository, paymentsRepository, usersRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesFireStore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 
 }

@@ -9,23 +9,34 @@ class GetLoansDueToTodayUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): List<LoanSummary> {
-        val today = Date(System.currentTimeMillis())
         val expiredLoans = loansDao.getExpiredUnpaidLoans()
-        // Agrupar por loanId y cliente, y calcular el total de cuotas vencidas y el total a pagar
         return expiredLoans.groupBy { it.loanId }.map { (loanId, details) ->
             val customerName = details.first().customerName
             val totalExpiredQuotas = details.size
-            val totalAmountToPay = details.sumOf { it.capital + it.interest + it.delayInterest }
+            val totalAmountToPay = details.filter { !it.isPaid }.sumOf { (it.capital + it.interest + it.delayInterest ) - it.paidAmount }
 
-            LoanSummary(loanId, customerName, totalExpiredQuotas, totalAmountToPay)
-        }
+            LoanSummary(
+                loanId = loanId,
+                totalExpiredQuotas = totalExpiredQuotas,
+                customerName = customerName,
+                customerDocumentId = details.first().customerDocumentId,
+                dueDate = details.first().dueDate.toString(),
+                customerAddress = details.first().customerAddress,
+                customerPhone = details.first().customerPhone,
+                totalAmountToPay = totalAmountToPay
+                )
+        }.sortedBy { it.loanId }
     }
 
 }
 
 data class LoanSummary(
     val loanId: Long,
-    val customerName: String,
     val totalExpiredQuotas: Int,
+    val customerName: String,
+    val customerDocumentId: String,
+    val dueDate: String,
+    val customerAddress: String,
+    val customerPhone: String,
     val totalAmountToPay: Double
 )

@@ -9,6 +9,7 @@ import com.system.lsp.data.local.database.dao.LoanDetailsDao
 import com.system.lsp.data.local.database.dao.LoansDao
 import com.system.lsp.data.local.database.dao.PaymentDetailDao
 import com.system.lsp.data.local.database.dao.PaymentsDao
+import com.system.lsp.data.local.database.utils.Converters
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferencesImpl
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
@@ -42,7 +43,7 @@ object TestModule {
     fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
         return Room.inMemoryDatabaseBuilder(
             appContext, AppDatabase::class.java
-        ).allowMainThreadQueries().build()
+        ).allowMainThreadQueries().addTypeConverter(Converters::class).build()
     }
 
     @Singleton
@@ -133,7 +134,7 @@ object TestModule {
 
     @Provides
     @Singleton
-    fun providesLoanDetailsDao(appDatabase: AppDatabase): LoanDetailsDao{
+    fun providesLoanDetailsDao(appDatabase: AppDatabase): LoanDetailsDao {
         return appDatabase.loansDetailsDao()
     }
 

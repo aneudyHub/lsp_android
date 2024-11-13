@@ -1,6 +1,5 @@
 package com.system.lsp.data.local.database.entities
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.system.lsp.data.local.database.AppDatabase

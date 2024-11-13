@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.Date
+import java.sql.Date
 import javax.inject.Inject
 
 @HiltAndroidTest
@@ -49,7 +49,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -62,9 +61,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         for (i in 1..10){
@@ -84,7 +83,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -97,9 +95,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(loan)
@@ -122,7 +120,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -135,9 +132,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         val secondLoan = LoanEntity(
@@ -148,9 +145,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(firstLoan)
@@ -167,7 +164,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -180,9 +176,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(firstLoan)
@@ -195,9 +191,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
 
@@ -211,9 +207,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(thirdLoan)
@@ -228,7 +224,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -241,9 +236,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         val secondLoan = LoanEntity(
@@ -254,9 +249,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(firstLoan)
@@ -277,9 +272,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(thirdLoan)
@@ -296,7 +291,6 @@ class LoansDaoTest {
         val customer = CustomerEntity(
             id = 1,
             name = "Alex",
-            lastName = "gomez",
             address = ""
         )
         customersDao.insertAndUpdate(customer)
@@ -309,9 +303,9 @@ class LoansDaoTest {
             delayInterestPercentage = 1.0f,
             termType = "M",
             quotes = 10,
-            startDate = Date(),
-            createdDate = Date(),
-            updatedAt = Date()
+            startDate = Date.valueOf("2022-01-01"),
+            createdDate = Date.valueOf("2022-01-01"),
+            updatedAt = Date.valueOf("2022-01-01")
         )
 
         loansDao.insertAndUpdate(loan)

@@ -2,6 +2,7 @@ package com.system.lsp.data.repositories
 
 import com.system.lsp.data.local.models.PlatformSession
 import com.system.lsp.data.remote.models.Result
+import kotlinx.coroutines.flow.Flow
 
 interface PlatformSessionRepository {
     val apiUrl: String?
