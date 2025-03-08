@@ -10,6 +10,6 @@ interface CustomerRepository {
     suspend fun filterByCriteria(criteria: String): Result<List<CustomerEntity>>
     suspend fun create(customer: Customer): Result<Nothing>
     suspend fun delete(id: Long): Result<Nothing>
-    suspend fun getById(id: Long): Result<Customer>
+    suspend fun getById(id: Long): Result<CustomerEntity>
     suspend fun update(customer: Customer): Result<Nothing>
 }

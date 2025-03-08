@@ -4,7 +4,11 @@ import androidx.test.runner.AndroidJUnit4
 import com.google.gson.Gson
 import com.system.lsp.data.repositories.CustomerRepository
 import com.system.lsp.di.AppModule
+import com.system.lsp.di.DatabaseModule
+import com.system.lsp.di.NetworkModule
 import com.system.lsp.di.RepositoriesModule
+import com.system.lsp.di.SyncModule
+import com.system.lsp.di.UseCasesModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -19,7 +23,14 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-@UninstallModules(AppModule::class, RepositoriesModule::class)
+@UninstallModules(
+    AppModule::class,
+    DatabaseModule::class,
+    NetworkModule::class,
+    RepositoriesModule::class,
+    SyncModule::class,
+    UseCasesModule::class
+)
 class CustomerRepositoryTest {
 
     private val gson = Gson()

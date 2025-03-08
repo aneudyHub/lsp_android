@@ -25,7 +25,7 @@
             android:paddingTop="8dp">
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/quota_total_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -35,10 +35,10 @@
                 android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/Cuota_Numero" />
+                app:layout_constraintTop_toBottomOf="@+id/quota" />
 
             <TextView
-                android:id="@+id/Cuot_Monto"
+                android:id="@+id/quota_total"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
@@ -50,13 +50,13 @@
                 android:text="RD$ 100.00"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/Cuota_Modificacion"
-                app:layout_constraintStart_toEndOf="@+id/textView6"
-                app:layout_constraintTop_toBottomOf="@+id/Cuota_Numero" />
+                app:layout_constraintEnd_toStartOf="@+id/quota_check"
+                app:layout_constraintStart_toEndOf="@+id/quota_total_label"
+                app:layout_constraintTop_toBottomOf="@+id/quota" />
 
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/delay_interest_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -66,10 +66,10 @@
                 android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
+                app:layout_constraintTop_toBottomOf="@+id/quota_total_label" />
 
             <TextView
-                android:id="@+id/Mora_Monto"
+                android:id="@+id/delay_interest"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
@@ -81,13 +81,13 @@
                 android:text="RD$ 300.00"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/Cuota_Modificacion"
-                app:layout_constraintStart_toEndOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/Cuot_Monto" />
+                app:layout_constraintEnd_toStartOf="@+id/quota_check"
+                app:layout_constraintStart_toEndOf="@+id/delay_interest_label"
+                app:layout_constraintTop_toBottomOf="@+id/quota_total" />
 
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/quota_total_paid_label"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -97,10 +97,10 @@
                 android:textColor="#000"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                app:layout_constraintTop_toBottomOf="@+id/delay_interest_label" />
 
             <TextView
-                android:id="@+id/Abonado"
+                android:id="@+id/quota_total_paid"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
@@ -112,9 +112,9 @@
                 android:text="RD$ 200.00"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/Cuota_Modificacion"
-                app:layout_constraintStart_toEndOf="@+id/textView9"
-                app:layout_constraintTop_toBottomOf="@+id/Mora_Monto" />
+                app:layout_constraintEnd_toStartOf="@+id/quota_check"
+                app:layout_constraintStart_toEndOf="@+id/quota_total_paid_label"
+                app:layout_constraintTop_toBottomOf="@+id/delay_interest" />
 
 
             <TextView
@@ -127,11 +127,11 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:textColor="@color/colorPrimaryDark"
-                app:layout_constraintEnd_toStartOf="@+id/Total_Monto"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintEnd_toStartOf="@+id/quota_total_due"
+                app:layout_constraintTop_toBottomOf="@+id/quota_total_paid_label" />
 
             <TextView
-                android:id="@+id/Total_Monto"
+                android:id="@+id/quota_total_due"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -140,12 +140,12 @@
                 android:text="RD$ 15000.00"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/Cuota_Modificacion"
-                app:layout_constraintTop_toBottomOf="@+id/Abonado" />
+                app:layout_constraintEnd_toStartOf="@+id/quota_check"
+                app:layout_constraintTop_toBottomOf="@+id/quota_total_paid" />
 
 
             <TextView
-                android:id="@+id/d"
+                android:id="@+id/delay_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -158,7 +158,7 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <TextView
-                android:id="@+id/dias_atrasados"
+                android:id="@+id/quota_days_delay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -171,7 +171,7 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <TextView
-                android:id="@+id/Cuota_Numero"
+                android:id="@+id/quota"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -184,7 +184,7 @@
                 tools:layout_editor_absoluteY="0dp" />
 
             <TextView
-                android:id="@+id/Cuota_Fecha"
+                android:id="@+id/quota_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -197,7 +197,7 @@
 
 
             <ImageView
-                android:id="@+id/Cuota_Modificacion"
+                android:id="@+id/quota_check"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"

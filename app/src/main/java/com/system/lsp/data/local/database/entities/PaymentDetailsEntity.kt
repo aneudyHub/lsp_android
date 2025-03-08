@@ -22,12 +22,12 @@ import com.system.lsp.data.local.database.AppDatabase
 )
 data class PaymentDetailsEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long? = 0,
+    var id: Long? = 0,
     @ColumnInfo(index = true)
-    val paymentId: Long? = 0,
+    var paymentId: Long? = 0,
     @ColumnInfo(index = true)
-    val quoteId: Long? = null,
-    val capital: Double? = 0.00,
-    val interest: Double? = 0.00,
-    val delayInterest: Double? = 0.00
+    var quoteId: Long? = null,
+    var capital: Double? = 0.00,
+    var interest: Double? = 0.00,
+    var delayInterest: Double? = 0.00
 )

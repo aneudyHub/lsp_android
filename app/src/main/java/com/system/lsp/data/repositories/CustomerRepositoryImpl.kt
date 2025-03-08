@@ -38,8 +38,15 @@ class CustomerRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getById(id: Long): Result<Customer> {
-        TODO("Not yet implemented")
+    override suspend fun getById(id: Long): Result<CustomerEntity> {
+        return withContext(coroutineContext){
+            try {
+                val customer = customersDao.getById(id)
+                Result.Success(customer)
+            } catch (e:Exception){
+                Result.Error(HttpResponseErrorCode.UNKNOWN)
+            }
+        }
     }
 
     override suspend fun update(customer: Customer): Result<Nothing> {

@@ -24,8 +24,10 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.6'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.8.4"
     }
 }
+
 
 allprojects {
     repositories {

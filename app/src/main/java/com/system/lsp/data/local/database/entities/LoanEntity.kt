@@ -19,21 +19,21 @@ import java.sql.Date
 )
 data class LoanEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Long? = 0,
+    var id: Long? = 0,
     @ColumnInfo(index = true)
-    val customerId: Long? = 0,
-    val capitalAmount: Double? = 0.0,
-    val interestPercentage: Float? = 0f,
-    val delayInterestPercentage: Float? = 0f,
-    val termType: String? = "",
-    val quotes: Int? = 0,
-    val startDate: Date? = null,
-    val createdDate: Date? = null,
-    val updatedAt: Date? = null,
-    val isPaid: Boolean? = false,
-    val endDate: Date? = null,
-    val createdBy: String? = "",
-    val isInserted: Boolean? = false,
-    val isUpdated: Boolean? = false,
-    val isDeleted: Boolean? = false
+    var customerId: Long? = 0,
+    var capitalAmount: Double? = 0.0,
+    var interestPercentage: Float? = 0f,
+    var delayInterestPercentage: Float? = 0f,
+    var termType: String? = "",
+    var quotes: Int? = 0,
+    var startDate: Date? = null,
+    var createdDate: Date? = null,
+    var updatedAt: Date? = null,
+    var isPaid: Boolean? = false,
+    var endDate: Date? = null,
+    var createdBy: String? = "",
+    var isInserted: Boolean? = false,
+    var isUpdated: Boolean? = false,
+    var isDeleted: Boolean? = false
 )

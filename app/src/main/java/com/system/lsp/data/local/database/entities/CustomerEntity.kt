@@ -9,15 +9,15 @@ import java.sql.Date
 @Entity(tableName = AppDatabase.CUSTOMERS_TABLE_NAME)
 data class CustomerEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Long? = 0,
-    val name: String? = "",
-    val documentId: String? = "",
-    val phoneNumber: String? = "",
-    val pictureUrl: String? = "",
-    val address: String? = "",
-    val location: String? = "",
-    val createdAt: Date? = null,
-    val isInserted: Boolean? = false,
-    val isUpdated: Boolean? = false,
-    val isDeleted: Boolean? = false
+    var id: Long? = 0,
+    var name: String? = "",
+    var documentId: String? = "",
+    var phoneNumber: String? = "",
+    var pictureUrl: String? = "",
+    var address: String? = "",
+    var location: String? = "",
+    var createdAt: Date? = null,
+    var isInserted: Boolean? = false,
+    var isUpdated: Boolean? = false,
+    var isDeleted: Boolean? = false
 )

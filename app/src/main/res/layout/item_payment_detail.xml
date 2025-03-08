@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:id="@+id/Layout"
+    android:layout_width="match_parent"
+    android:layout_height="165dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/quota_total_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:text="Cuota:"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/quota" />
+
+        <TextView
+            android:id="@+id/quota_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="RD$ 100.00"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/quota_total_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.7"
+            app:layout_constraintStart_toEndOf="@+id/quota_total_label"
+            app:layout_constraintTop_toTopOf="@+id/quota_total_label" />
+
+
+        <TextView
+            android:id="@+id/delay_interest_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="Mora:"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/quota_total_label"
+            app:layout_constraintTop_toBottomOf="@+id/quota_total_label" />
+
+        <TextView
+            android:id="@+id/delay_interest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="RD$ 300.00"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/delay_interest_label"
+            app:layout_constraintStart_toStartOf="@+id/quota_total"
+            app:layout_constraintTop_toTopOf="@+id/delay_interest_label" />
+
+
+        <TextView
+            android:id="@+id/quota_total_paid_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="Abono Cuota:"
+            android:textColor="#000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/delay_interest_label"
+            app:layout_constraintTop_toBottomOf="@+id/delay_interest_label" />
+
+        <TextView
+            android:id="@+id/quota_total_paid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="RD$ 200.00"
+            android:textSize="16sp"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toBottomOf="@+id/quota_total_paid_label"
+            app:layout_constraintStart_toStartOf="@+id/delay_interest"
+            app:layout_constraintTop_toTopOf="@+id/quota_total_paid_label" />
+
+
+        <TextView
+            android:id="@+id/Restante"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginStart="-8dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintStart_toStartOf="@+id/quota_total_paid"
+            app:layout_constraintTop_toBottomOf="@+id/quota_total_paid" />
+
+        <TextView
+            android:id="@+id/quota_total_due"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="RD$ 15000.00"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/Restante"
+            app:layout_constraintStart_toEndOf="@+id/Restante"
+            app:layout_constraintTop_toTopOf="@+id/Restante" />
+
+
+        <TextView
+            android:id="@+id/delay_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="D:"
+            android:textColor="@color/negro87"
+            app:layout_constraintBottom_toBottomOf="@+id/quota"
+            app:layout_constraintStart_toEndOf="@+id/quota"
+            app:layout_constraintTop_toTopOf="@+id/quota" />
+
+        <TextView
+            android:id="@+id/quota_days_delay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="200"
+            android:textColor="@color/mr"
+            app:layout_constraintBottom_toBottomOf="@+id/delay_days"
+            app:layout_constraintStart_toEndOf="@+id/delay_days"
+            app:layout_constraintTop_toTopOf="@+id/delay_days" />
+
+        <TextView
+            android:id="@+id/quota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="#1"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/quota_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="01/01/2017"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>

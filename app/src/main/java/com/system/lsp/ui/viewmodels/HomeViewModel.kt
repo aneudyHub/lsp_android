@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(
     private val getLoansDueToTodayUseCase: GetLoansDueToTodayUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(UiState())
+    private val _uiState = MutableStateFlow<UiState>(UiState.Init)
     val uiState = _uiState.asStateFlow()
 
     init {
@@ -24,15 +24,36 @@ class HomeViewModel @Inject constructor(
     }
 
     fun getList() {
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.value = UiState.OnLoading(true)
         viewModelScope.launch {
+            _uiState.value = UiState.OnLoading(false)
             val list = getLoansDueToTodayUseCase()
-            _uiState.update { it.copy(isLoading = false, customersList = list) }
+            _uiState.value = UiState.OnResult(list)
         }
     }
 
-    data class UiState(
-        val isLoading: Boolean = false,
-        val customersList: List<LoanSummary> = arrayListOf()
-    )
+    fun onItemClicked(loanSummary: LoanSummary) {
+        _uiState.value = UiState.OnNavToLoan(loanSummary)
+        _uiState.value = UiState.Init
+    }
+
+    fun onPhotoClicked(documentId: String) {
+        _uiState.value = UiState.OnShowDocumentPhoto(documentId)
+        _uiState.value = UiState.Init
+    }
+
+    fun onPhoneClicked(phoneList: List<String>) {
+        _uiState.value = UiState.OnShowPhoneModal(phoneList)
+        _uiState.value = UiState.Init
+    }
+
+    sealed class UiState {
+        object Init : UiState()
+        data class OnLoading(val isLoading: Boolean) : UiState()
+        data class OnResult(val customersList: List<LoanSummary>) : UiState()
+        data class OnShowDocumentPhoto(val documentId: String) : UiState()
+
+        data class OnShowPhoneModal(val phones: List<String>) : UiState()
+        data class OnNavToLoan(val loanSummary: LoanSummary): UiState()
+    }
 }

@@ -18,16 +18,17 @@ import java.sql.Date
 )
 data class LoansDetailsEntity(
     @PrimaryKey(autoGenerate = false)
-    val id: Long? = 0,
+    var id: Long? = 0,
     @ColumnInfo(index = true)
-    val loanId: Long? = 0,
-    val quota: Int? = 0,
-    val capital: Double? = 0.0,
-    val interest: Double? = 0.0,
-    val delayInterest: Double? = 0.0,
-    val dueDate: Date? = null,
-    val paidDate: Date? = null,
-    val paidAmount: Double? = 0.0,
-    val updateAt: Date? = null,
-    val isPaid: Boolean? = false,
+    var loanId: Long? = 0,
+    var quota: Int? = 0,
+    var capital: Double? = 0.0,
+    var interest: Double? = 0.0,
+    var delayInterest: Double? = 0.0,
+    var delayInterestPaid: Double? = 0.0,
+    var dueDate: Date? = null,
+    var paidDate: Date? = null,
+    var paidAmount: Double? = 0.0,
+    var updateAt: Date? = null,
+    var isPaid: Boolean? = false,
 )

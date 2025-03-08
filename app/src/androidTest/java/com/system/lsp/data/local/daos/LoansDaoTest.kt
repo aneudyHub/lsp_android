@@ -8,7 +8,11 @@ import com.system.lsp.data.local.database.entities.CustomerEntity
 import com.system.lsp.data.local.database.entities.LoanEntity
 import com.system.lsp.data.local.database.entities.LoansDetailsEntity
 import com.system.lsp.di.AppModule
+import com.system.lsp.di.DatabaseModule
+import com.system.lsp.di.NetworkModule
 import com.system.lsp.di.RepositoriesModule
+import com.system.lsp.di.SyncModule
+import com.system.lsp.di.UseCasesModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -21,7 +25,14 @@ import java.sql.Date
 import javax.inject.Inject
 
 @HiltAndroidTest
-@UninstallModules(AppModule::class, RepositoriesModule::class)
+@UninstallModules(
+    AppModule::class,
+    DatabaseModule::class,
+    NetworkModule::class,
+    RepositoriesModule::class,
+    SyncModule::class,
+    UseCasesModule::class
+)
 class LoansDaoTest {
 
     @get:Rule

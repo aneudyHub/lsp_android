@@ -17,10 +17,10 @@ import java.sql.Date
 )
 data class PaymentEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long? = 0,
-    val date: Date? = null,
-    val userId: Long? = 0,
+    var id: Long? = 0,
+    var date: Date? = null,
+    var userId: Long? = 0,
     @ColumnInfo(index = true)
-    val loanId: Long? = 0,
-    val isSynced: Boolean? = false
+    var loanId: Long? = 0,
+    var isSynced: Boolean? = false
 )

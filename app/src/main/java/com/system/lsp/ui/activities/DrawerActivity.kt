@@ -63,13 +63,13 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
 //            .build()
 //
 //        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
-//            1, TimeUnit.MINUTES
+//            1, TimeUnit.DAYS
 //        )
 //            .setConstraints(constraints)
 //            .build()
 //
 //        WorkManager.getInstance(this).enqueue(syncRequest)
-
+//
 //        val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>().build()
 //        WorkManager.getInstance(this).enqueue(workRequest)
 
@@ -81,7 +81,6 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_drawer)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 

@@ -4,7 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.system.lsp.data.local.database.dao.CustomersDao
 import com.system.lsp.data.local.database.entities.CustomerEntity
 import com.system.lsp.di.AppModule
+import com.system.lsp.di.DatabaseModule
+import com.system.lsp.di.NetworkModule
 import com.system.lsp.di.RepositoriesModule
+import com.system.lsp.di.SyncModule
+import com.system.lsp.di.UseCasesModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -19,7 +23,14 @@ import javax.inject.Inject
 
 
 @HiltAndroidTest
-@UninstallModules(AppModule::class, RepositoriesModule::class)
+@UninstallModules(
+    AppModule::class,
+    DatabaseModule::class,
+    NetworkModule::class,
+    RepositoriesModule::class,
+    SyncModule::class,
+    UseCasesModule::class
+)
 @OptIn(ExperimentalCoroutinesApi::class)
 class CustomersDaoTest {
 
@@ -187,7 +198,7 @@ class CustomersDaoTest {
             customersDao.insertAndUpdate(customer)
         }
 
-        Assert.assertEquals(4 , customersDao.getAll().size)
+        Assert.assertEquals(4, customersDao.getAll().size)
 
         // filter by name = aneudy , it should returns just 1 result
 

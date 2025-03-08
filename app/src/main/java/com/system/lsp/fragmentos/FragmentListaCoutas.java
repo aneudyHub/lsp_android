@@ -17,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -32,8 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.system.lsp.R;
 import com.system.lsp.modelo.DatosCliente;
@@ -41,10 +38,8 @@ import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
 import com.system.lsp.ui.adapters.HomeCustomerAdapter;
 import com.system.lsp.ui.Main.MainActivity;
-import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.Resolve;
 import com.system.lsp.utilidades.UPreferencias;
-import com.system.lsp.utilidades.URL;
 import com.system.lsp.utilidades.UTiempo;
 
 import java.util.ArrayList;
@@ -244,15 +239,15 @@ public class FragmentListaCoutas extends Fragment implements LoaderManager.Loade
 
 
     void mostrarDetalles(Uri uri,double montoPendiente,double totalCuota,String nombre) {
-        Intent intent = new Intent(getActivity(), Pagos.class);
-        if (null != uri) {
-            intent.putExtra(Contract.PRESTAMOS, uri.toString());
-            intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
-            intent.putExtra("TotalCuota",totalCuota);
-            intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
-            intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
-        }
-        startActivityForResult(intent,REQ_DET);
+//        Intent intent = new Intent(getActivity(), Pagos.class);
+//        if (null != uri) {
+//            intent.putExtra(Contract.PRESTAMOS, uri.toString());
+//            intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
+//            intent.putExtra("TotalCuota",totalCuota);
+//            intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
+//            intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
+//        }
+//        startActivityForResult(intent,REQ_DET);
     }
 
     @Override

@@ -29,7 +29,6 @@ import com.system.lsp.fragmentos.FragmentPrestamoPediente;
 import com.system.lsp.fragmentos.FragmentTodasLasCuotas;
 import com.system.lsp.provider.Contract;
 import com.system.lsp.provider.OperacionesBaseDatos;
-import com.system.lsp.ui.Pagos.Pagos;
 import com.system.lsp.utilidades.UPreferencias;
 
 public class DetallePrestamo extends AppCompatActivity {
@@ -136,25 +135,25 @@ public class DetallePrestamo extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(DetallePrestamo.this, Pagos.class);
-                Uri uri;
-
-                uri = Contract.PrestamoDetalle.crearUriPrestamoDetalle(idPrestamos);
-                Log.e("URI-PRE",uri.toString());
-                Log.e("ID-PRESTAMO",Contract.Prestamo.obtenerIdPrestamo(uri));
-                Log.e("URI-PRE",nombre.getText().toString());
-                if (null != uri) {
-                    intent.putExtra(Contract.PRESTAMOS, uri.toString());
-                    intent.putExtra(Contract.Cobrador.TOTAL,monto);
-                    intent.putExtra("TotalCuota",totalCuota);
-                    intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
-                    intent.putExtra(Contract.Cobrador.CLIENTE,nombre.getText());
-
-
-
-
-                }
-                startActivityForResult(intent,REQ_DET);
+//                Intent intent = new Intent(DetallePrestamo.this, Pagos.class);
+//                Uri uri;
+//
+//                uri = Contract.PrestamoDetalle.crearUriPrestamoDetalle(idPrestamos);
+//                Log.e("URI-PRE",uri.toString());
+//                Log.e("ID-PRESTAMO",Contract.Prestamo.obtenerIdPrestamo(uri));
+//                Log.e("URI-PRE",nombre.getText().toString());
+//                if (null != uri) {
+//                    intent.putExtra(Contract.PRESTAMOS, uri.toString());
+//                    intent.putExtra(Contract.Cobrador.TOTAL,monto);
+//                    intent.putExtra("TotalCuota",totalCuota);
+//                    intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
+//                    intent.putExtra(Contract.Cobrador.CLIENTE,nombre.getText());
+//
+//
+//
+//
+//                }
+//                startActivityForResult(intent,REQ_DET);
             }
         });
 
@@ -163,14 +162,14 @@ public class DetallePrestamo extends AppCompatActivity {
     }
 
     void mostrarDetalles(Uri uri, double montoPendiente, String nombre) {
-        Intent intent = new Intent(this, Pagos.class);
-        if (null != uri) {
-            intent.putExtra(Contract.PRESTAMOS, uri.toString());
-            intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
-            intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
-            intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
-        }
-        startActivityForResult(intent,REQ_DET);
+//        Intent intent = new Intent(this, Pagos.class);
+//        if (null != uri) {
+//            intent.putExtra(Contract.PRESTAMOS, uri.toString());
+//            intent.putExtra(Contract.Cobrador.TOTAL,montoPendiente);
+//            intent.putExtra(Contract.Prestamo.ID, Contract.Prestamo.obtenerIdPrestamo(uri));
+//            intent.putExtra(Contract.Cobrador.CLIENTE,nombre);
+//        }
+//        startActivityForResult(intent,REQ_DET);
     }
 
 

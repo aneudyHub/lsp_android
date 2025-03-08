@@ -10,7 +10,7 @@ class GetLoansDueToTodayUseCase @Inject constructor(
 
     suspend operator fun invoke(): List<LoanSummary> {
         val expiredLoans = loansDao.getExpiredUnpaidLoans()
-        return expiredLoans.groupBy { it.loanId }.map { (loanId, details) ->
+        return expiredLoans.filter { it.loanId == 4565L }.groupBy { it.loanId }.map { (loanId, details) ->
             val customerName = details.first().customerName
             val totalExpiredQuotas = details.size
             val totalAmountToPay = details.filter { !it.isPaid }.sumOf { (it.capital + it.interest + it.delayInterest ) - it.paidAmount }

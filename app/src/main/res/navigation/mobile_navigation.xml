@@ -8,5 +8,17 @@
     <fragment
         android:id="@+id/menu_item_home"
         android:name="com.system.lsp.ui.fragments.HomeFragment"
-        android:label="@string/fragment_label_home" />
+        android:label="@string/fragment_label_home" >
+        <action
+            android:id="@+id/action_menu_item_home_to_paymentsFragment"
+            app:destination="@id/paymentsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentsFragment"
+        android:name="com.system.lsp.ui.fragments.PaymentsFragment"
+        android:label="PaymentsFragment" >
+        <argument
+            android:name="loanId"
+            app:argType="long" />
+    </fragment>
 </navigation>

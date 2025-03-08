@@ -144,15 +144,15 @@ public class CuotasAdapter extends RecyclerView.Adapter<CuotasAdapter.CuotaViewH
         public CuotaViewHolder(View itemView) {
             super(itemView);
             mLayout=(CardView)itemView.findViewById(R.id.Layout);
-            mFecha=(TextView)itemView.findViewById(R.id.Cuota_Fecha);
-            cuota_monto=(TextView)itemView.findViewById(R.id.Cuot_Monto);
-            moraMonto=(TextView)itemView.findViewById(R.id.Mora_Monto);
-            total_monto=(TextView)itemView.findViewById(R.id.Total_Monto);
-            mNumero=(TextView)itemView.findViewById(R.id.Cuota_Numero);
-            mIcon =(ImageView)itemView.findViewById(R.id.Cuota_Modificacion);
+            mFecha=(TextView)itemView.findViewById(R.id.quota_date);
+            cuota_monto=(TextView)itemView.findViewById(R.id.quota_total);
+            moraMonto=(TextView)itemView.findViewById(R.id.delay_interest);
+            total_monto=(TextView)itemView.findViewById(R.id.quota_total_due);
+            mNumero=(TextView)itemView.findViewById(R.id.quota);
+            mIcon =(ImageView)itemView.findViewById(R.id.quota_check);
             mRestante=(TextView)itemView.findViewById(R.id.Restante);
-            mAbonado=(TextView)itemView.findViewById(R.id.Abonado);
-            diasAtrasados = (TextView)itemView.findViewById(R.id.dias_atrasados);
+            mAbonado=(TextView)itemView.findViewById(R.id.quota_total_paid);
+            diasAtrasados = (TextView)itemView.findViewById(R.id.quota_days_delay);
         }
     }
 

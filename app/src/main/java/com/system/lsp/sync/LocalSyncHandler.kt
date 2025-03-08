@@ -10,6 +10,7 @@ import com.system.lsp.data.remote.models.Result
 import com.system.lsp.data.repositories.SyncDataRepository
 import java.sql.Date
 import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 class LocalSyncHandler @Inject constructor(
@@ -69,8 +70,13 @@ class LocalSyncHandler @Inject constructor(
                             loanId = it.loanId.toLong(),
                             capital = it.capital,
                             interest = it.interest,
-                            delayInterest = it.defaultInterest,
-//                        dueDate = it.date
+                            delayInterest = it.delayInterest,
+                            delayInterestPaid = it.defaultInterestPayment,
+                            dueDate = it.date.toSqlDate(),
+                            paidDate = it.paidDate?.toSqlDate(),
+                            paidAmount = it.amountPaid,
+                            isPaid = it.isPaid,
+                            quota = it.installmentNumber,
                         )
                     }
 
@@ -98,9 +104,9 @@ class LocalSyncHandler @Inject constructor(
 
                     println(v)
 
-                    println("clientes remote "+response.data.customers.size+" local + "+a.size)
-                    println("prestamos remote "+response.data.loans.size+" local + "+b.size)
-                    println("cuotas remote "+response.data.loanQuotes.size+" local + "+c.size)
+                    println("clientes remote " + response.data.customers.size + " local + " + a.size)
+                    println("prestamos remote " + response.data.loans.size + " local + " + b.size)
+                    println("cuotas remote " + response.data.loanQuotes.size + " local + " + c.size)
 
 
 
@@ -112,10 +118,15 @@ class LocalSyncHandler @Inject constructor(
             SyncResponse.Error
         }
     }
+}
 
-//    private fun stringToDate(value: String): Date{
-//        val format = SimpleDateFormat("yyyy-MM-dd")
-//        val date = format.parse(value)
-//        return date
-//    }
+fun String.toSqlDate(): Date? {
+    return try {
+        val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val utilDate = format.parse(this) // Parse as java.util.Date
+        utilDate?.let { Date(it.time) } // Convert to java.sql.Date
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }

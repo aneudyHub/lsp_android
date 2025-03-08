@@ -1,8 +1,11 @@
 package com.system.lsp.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.system.lsp.data.local.database.AppDatabase
 import com.system.lsp.data.local.database.dao.CustomersDao
 import com.system.lsp.data.local.database.dao.LoansDao
+import com.system.lsp.data.local.database.dao.PaymentDetailDao
+import com.system.lsp.data.local.database.dao.PaymentsDao
 import com.system.lsp.data.local.datasources.CustomerLocalDatasource
 import com.system.lsp.data.local.datasources.CustomerLocalDatasourceImpl
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferences
@@ -11,8 +14,12 @@ import com.system.lsp.data.remote.api.ApiService
 import com.system.lsp.data.remote.api.PlatformService
 import com.system.lsp.data.repositories.CustomerRepository
 import com.system.lsp.data.repositories.CustomerRepositoryImpl
+import com.system.lsp.data.repositories.PaymentsRepository
+import com.system.lsp.data.repositories.PaymentsRepositoryImpl
 import com.system.lsp.data.repositories.PlatformSessionRepository
 import com.system.lsp.data.repositories.PlatformSessionRepositoryImpl
+import com.system.lsp.data.repositories.SyncDataRepository
+import com.system.lsp.data.repositories.SyncDataRepositoryImpl
 import com.system.lsp.data.repositories.UsersRepository
 import com.system.lsp.data.repositories.UsersRepositoryImpl
 import dagger.Module
@@ -38,37 +45,37 @@ object RepositoriesTestModule {
     @Provides
     @Singleton
     fun providesPlatformSessionRepository(
-        platformService: PlatformService,
+        firestore: FirebaseFirestore,
         platformSessionSharedPreferences: PlatformSessionSharedPreferences,
         deviceId: String
     ): PlatformSessionRepository {
         return PlatformSessionRepositoryImpl(
-            platformService,
+            firestore,
             platformSessionSharedPreferences,
             deviceId
         )
     }
-
 
     @Provides
     @Singleton
     fun providesCustomerRepository(
         customersDao: CustomersDao
     ): CustomerRepository {
-        return CustomerRepositoryImpl(
-            customersDao,
-            Dispatchers.IO
-        )
+        return CustomerRepositoryImpl(customersDao, Dispatchers.IO)
     }
 
     @Provides
     @Singleton
-    fun providesCustomerLocalDatasource(
-        customersDao: CustomersDao
-    ): CustomerLocalDatasource {
-        return CustomerLocalDatasourceImpl(
-            customersDao,
-            Dispatchers.IO
-        )
+    fun providesSyncDataRepository(apiService: ApiService): SyncDataRepository {
+        return SyncDataRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun providesPaymentsRepository(
+        paymentsDao: PaymentsDao,
+        paymentDetailDao: PaymentDetailDao
+    ): PaymentsRepository {
+        return PaymentsRepositoryImpl(paymentsDao, paymentDetailDao)
     }
 }

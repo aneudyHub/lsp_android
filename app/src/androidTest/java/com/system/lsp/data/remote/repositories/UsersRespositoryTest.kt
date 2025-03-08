@@ -14,7 +14,11 @@ import org.junit.Before
 import org.junit.Test
 import com.system.lsp.data.remote.models.Result
 import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.di.DatabaseModule
+import com.system.lsp.di.NetworkModule
 import com.system.lsp.di.RepositoriesModule
+import com.system.lsp.di.SyncModule
+import com.system.lsp.di.UseCasesModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -25,7 +29,14 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-@UninstallModules(AppModule::class, RepositoriesModule::class)
+@UninstallModules(
+    AppModule::class,
+    DatabaseModule::class,
+    NetworkModule::class,
+    RepositoriesModule::class,
+    SyncModule::class,
+    UseCasesModule::class
+)
 class UsersRepositoryTest {
 
     @Inject

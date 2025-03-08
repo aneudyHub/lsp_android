@@ -5,6 +5,7 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id "androidx.navigation.safeargs.kotlin"
 }
 
 android {
@@ -115,8 +116,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.android.material:material:1.9.0'
-    implementation 'androidx.room:room-ktx:2.5.1'
-    kapt "androidx.room:room-compiler:2.5.1"
+    implementation 'androidx.room:room-ktx:2.6.1'
+    kapt "androidx.room:room-compiler:2.6.1"
 
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
