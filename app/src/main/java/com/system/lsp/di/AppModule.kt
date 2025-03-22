@@ -11,9 +11,9 @@ import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferen
 import com.system.lsp.data.local.sharedpreferences.PlatformSessionSharedPreferencesImpl
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferences
 import com.system.lsp.data.local.sharedpreferences.UserSessionSharedPreferencesImpl
-import com.system.lsp.data.repositories.PaymentsRepository
-import com.system.lsp.data.repositories.SyncDataRepository
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.PaymentsRepository
+import com.system.lsp.domain.repository.SyncDataRepository
+import com.system.lsp.domain.repository.UsersRepository
 import com.system.lsp.data.utils.getDeviceId
 import com.system.lsp.sync.RemoteSyncHandler
 import dagger.Module

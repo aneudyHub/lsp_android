@@ -4,6 +4,7 @@ package com.system.lsp.ui.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -31,6 +32,7 @@ import com.system.lsp.ui.adapters.PhoneNumbersAdapter
 import com.system.lsp.ui.viewmodels.HomeViewModel
 import com.system.lsp.utilidades.URL
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
@@ -53,8 +55,8 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collect {
+        lifecycleScope.launchWhenCreated {
+            viewModel.uiState.collectLatest {
                 when (it) {
                     HomeViewModel.UiState.Init -> {}
                     is HomeViewModel.UiState.OnLoading -> viewBinding.refreshLayout.isRefreshing =
@@ -161,9 +163,8 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun goToPaymentActivity(loanSummary: LoanSummary) {
+        Log.e("ANEUDY","HERE ENTROOOOOO")
         val action = HomeFragmentDirections.actionMenuItemHomeToPaymentsFragment(loanSummary.loanId)
         findNavController().navigate(action)
     }
-
-
 }

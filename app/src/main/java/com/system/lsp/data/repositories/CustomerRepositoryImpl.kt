@@ -2,11 +2,10 @@ package com.system.lsp.data.repositories
 
 import com.system.lsp.data.local.database.dao.CustomersDao
 import com.system.lsp.data.local.database.entities.CustomerEntity
-import com.system.lsp.data.local.datasources.CustomerLocalDatasource
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
 import com.system.lsp.data.remote.models.Result
 import com.system.lsp.data.repositories.models.Customer
-import kotlinx.coroutines.flow.Flow
+import com.system.lsp.domain.repository.CustomerRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext

@@ -1,4 +1,4 @@
-package com.system.lsp.data.repositories
+package com.system.lsp.domain.repository
 
 import com.system.lsp.data.local.database.entities.relations.PaymentWithDetails
 import com.system.lsp.data.remote.models.Result

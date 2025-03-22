@@ -5,6 +5,7 @@ import com.system.lsp.data.local.database.dao.PaymentsDao
 import com.system.lsp.data.local.database.entities.relations.PaymentWithDetails
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
 import com.system.lsp.data.remote.models.Result
+import com.system.lsp.domain.repository.PaymentsRepository
 import javax.inject.Inject
 
 class PaymentsRepositoryImpl @Inject constructor(

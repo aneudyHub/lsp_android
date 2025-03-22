@@ -13,7 +13,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import com.system.lsp.data.remote.models.Result
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import com.system.lsp.di.DatabaseModule
 import com.system.lsp.di.NetworkModule
 import com.system.lsp.di.RepositoriesModule

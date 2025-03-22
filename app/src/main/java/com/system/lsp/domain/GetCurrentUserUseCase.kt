@@ -1,7 +1,7 @@
 package com.system.lsp.domain
 
 import com.system.lsp.data.local.models.User
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import java.lang.Exception
 import javax.inject.Inject
 

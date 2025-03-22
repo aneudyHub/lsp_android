@@ -7,7 +7,7 @@ import com.system.lsp.data.local.database.entities.CustomerEntity
 import com.system.lsp.data.local.database.entities.LoanEntity
 import com.system.lsp.data.local.database.entities.LoansDetailsEntity
 import com.system.lsp.data.remote.models.Result
-import com.system.lsp.data.repositories.SyncDataRepository
+import com.system.lsp.domain.repository.SyncDataRepository
 import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.Locale

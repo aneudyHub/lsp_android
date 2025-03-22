@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
@@ -58,21 +59,29 @@ class DrawerActivity : BaseActivity(), NavController.OnDestinationChangedListene
 
     override fun onStart() {
         super.onStart()
-//        val constraints = Constraints.Builder()
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .build()
-//
-//        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
-//            1, TimeUnit.DAYS
-//        )
-//            .setConstraints(constraints)
-//            .build()
-//
-//        WorkManager.getInstance(this).enqueue(syncRequest)
-//
-//        val workRequest = OneTimeWorkRequestBuilder<DataSyncWorker>().build()
-//        WorkManager.getInstance(this).enqueue(workRequest)
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
 
+        val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
+            1, TimeUnit.HOURS
+        )
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "DataSyncWork",
+            ExistingPeriodicWorkPolicy.KEEP,
+            syncRequest
+        )
+
+        WorkManager.getInstance(this).getWorkInfosForUniqueWorkLiveData("DataSyncWork")
+            .observe(this) { workInfos ->
+                if (workInfos.isNotEmpty()) {
+                    val workInfo = workInfos[0]
+                    Log.d("WorkManager", "Work state: ${workInfo.state}")
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

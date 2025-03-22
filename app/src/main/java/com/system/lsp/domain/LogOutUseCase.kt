@@ -1,6 +1,6 @@
 package com.system.lsp.domain
 
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import javax.inject.Inject
 import java.lang.Exception
 

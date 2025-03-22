@@ -4,9 +4,9 @@ import android.util.Log
 import com.system.lsp.data.remote.models.PagoSyncBody
 import com.system.lsp.data.remote.models.Result
 import com.system.lsp.data.remote.models.SyncDataPushBodyRequest
-import com.system.lsp.data.repositories.PaymentsRepository
-import com.system.lsp.data.repositories.SyncDataRepository
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.PaymentsRepository
+import com.system.lsp.domain.repository.SyncDataRepository
+import com.system.lsp.domain.repository.UsersRepository
 import javax.inject.Inject
 
 class RemoteSyncHandler @Inject constructor(

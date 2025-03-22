@@ -1,19 +1,24 @@
 package com.system.lsp.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.system.lsp.domain.GetLoansDueToTodayUseCase
 import com.system.lsp.domain.LoanSummary
+import com.system.lsp.domain.model.SyncWorkerState
+import com.system.lsp.domain.repository.SyncDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getLoansDueToTodayUseCase: GetLoansDueToTodayUseCase
+    private val getLoansDueToTodayUseCase: GetLoansDueToTodayUseCase,
+    private val syncDataRepository: SyncDataRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Init)
@@ -21,6 +26,20 @@ class HomeViewModel @Inject constructor(
 
     init {
         getList()
+
+        viewModelScope.launch {
+            syncDataRepository.syncState.collect {
+                Log.e("SyncDataRepository", "state:$it")
+                when (it) {
+                    SyncWorkerState.Failure -> _uiState.value = UiState.OnLoading(false)
+                    SyncWorkerState.Started -> _uiState.value = UiState.OnLoading(true)
+                    SyncWorkerState.Success -> {
+                        _uiState.value = UiState.OnLoading(false)
+                        getList()
+                    }
+                }
+            }
+        }
     }
 
     fun getList() {
@@ -54,6 +73,6 @@ class HomeViewModel @Inject constructor(
         data class OnShowDocumentPhoto(val documentId: String) : UiState()
 
         data class OnShowPhoneModal(val phones: List<String>) : UiState()
-        data class OnNavToLoan(val loanSummary: LoanSummary): UiState()
+        data class OnNavToLoan(val loanSummary: LoanSummary) : UiState()
     }
 }

@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 import com.system.lsp.R;
-import com.system.lsp.data.repositories.UsersRepository;
+import com.system.lsp.domain.repository.UsersRepository;
 import com.system.lsp.fragmentos.FragmentHistorialPagos;
 import com.system.lsp.fragmentos.FragmentListaCoutas;
 import com.system.lsp.fragmentos.FragmentListaPrestamos;

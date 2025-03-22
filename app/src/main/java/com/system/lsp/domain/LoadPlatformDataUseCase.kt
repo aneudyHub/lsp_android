@@ -3,7 +3,7 @@ package com.system.lsp.domain
 import com.system.lsp.data.local.models.PlatformSession
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
 import com.system.lsp.data.remote.models.Result
-import com.system.lsp.data.repositories.PlatformSessionRepository
+import com.system.lsp.domain.repository.PlatformSessionRepository
 import javax.inject.Inject
 
 class LoadPlatformDataUseCase @Inject constructor(

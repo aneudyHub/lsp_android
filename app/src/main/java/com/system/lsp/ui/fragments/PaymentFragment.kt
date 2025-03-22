@@ -11,8 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.system.lsp.databinding.FragmentPaymentsBinding
+import com.system.lsp.ui.viewmodels.PaymentDetail
 import com.system.lsp.ui.viewmodels.PaymentViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
@@ -33,36 +35,28 @@ class PaymentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setupRecyclerView()
         setupObservers()
-        viewModel.loadLoanData(args.loanId)
-
-//        binding..setOnClickListener {
-//            val amount = binding.paymentAmount.text.toString().toDoubleOrNull() ?: 0.0
-//            viewModel.processPayment(amount)
-//        }
     }
 
-    private fun setupRecyclerView() {
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadLoanData(args.loanId)
+    }
+
+    private fun setupRecyclerView(paymentDetails: List<PaymentDetail>) {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val adapter = PaymentDetailsAdapter()
         binding.recyclerView.adapter = adapter
-
-        lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collectLatest { uiState ->
-                adapter.updateList(uiState.paymentDetails)
-            }
-        }
+        adapter.updateList(paymentDetails)
     }
 
     private fun setupObservers() {
         lifecycleScope.launchWhenStarted {
-            viewModel.uiState.collectLatest { uiState ->
+            viewModel.uiState.collect { uiState ->
                 binding.totalFine.text = uiState.totalFine.toString()
                 binding.totalInstallment.text = uiState.totalInstallment.toString()
                 binding.totalPending.text = uiState.totalPending.toString()
-//                binding.clientName.text = uiState.clientName
+                setupRecyclerView(uiState.paymentDetails)
             }
         }
     }

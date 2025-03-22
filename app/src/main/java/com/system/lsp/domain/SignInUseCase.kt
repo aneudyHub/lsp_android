@@ -1,7 +1,7 @@
 package com.system.lsp.domain
 
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import java.lang.Exception
 import javax.inject.Inject
 import com.system.lsp.data.remote.models.Result

@@ -4,7 +4,7 @@ import com.lsp.logger.LogFactory
 import com.system.lsp.R
 import com.system.lsp.data.remote.models.HttpResponseErrorCode
 import com.system.lsp.data.remote.models.Result
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import com.system.lsp.domain.SignInUseCase
 import com.system.lsp.ui.viewmodels.LoginViewModel
 import kotlinx.coroutines.CoroutineScope

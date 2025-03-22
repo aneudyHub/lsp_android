@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.system.lsp.data.local.database.dao.LoansDao
 import com.system.lsp.data.remote.models.Result
-import com.system.lsp.data.repositories.CustomerRepository
+import com.system.lsp.domain.repository.CustomerRepository
 import com.system.lsp.ui.viewmodels.exts.calculateDaysFromNow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

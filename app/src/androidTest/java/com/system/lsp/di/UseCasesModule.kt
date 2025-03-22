@@ -1,6 +1,6 @@
 package com.system.lsp.di
 
-import com.system.lsp.data.repositories.UsersRepository
+import com.system.lsp.domain.repository.UsersRepository
 import com.system.lsp.domain.GetCurrentUserUseCase
 import com.system.lsp.domain.SignInUseCase
 import dagger.Module

@@ -9,11 +9,9 @@ import com.system.lsp.data.remote.api.PlatformService
 import com.system.lsp.data.remote.network.AuthInterceptor
 import com.system.lsp.data.remote.network.LogoutCallback
 import com.system.lsp.data.remote.network.ResponseInterceptor
-import com.system.lsp.data.repositories.UsersRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
